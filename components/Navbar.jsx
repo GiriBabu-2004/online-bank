@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-8xl  mx-auto  px-4 sm:px-6 lg:px-4">
-        <div className="flex justify-between items-center h-24"> {/* increased height for larger logo */}
+        <div className="flex justify-between items-center h-20"> {/* increased height for larger logo */}
           
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
