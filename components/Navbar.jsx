@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-md border-b border-gray-300">
       <div className="max-w-8xl  mx-auto  px-4 sm:px-6 lg:px-4">
         <div className="flex justify-between items-center h-20"> {/* increased height for larger logo */}
           
