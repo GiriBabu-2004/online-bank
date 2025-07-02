@@ -25,15 +25,6 @@ export default function Navbar({ className = "" }) {
         {/* Logo: light and dark variants */}
         <div>
           <Link href="/" className="flex items-center">
-            {/* Light mode logo */}
-            <Image
-              src="/logo2.png"
-              alt="Bank Logo Light"
-              width={230}
-              height={60}
-              className="object-contain mt-2 block dark:hidden transition-all scale-95"
-            />
-            {/* Dark mode logo */}
             <Image
               src="/logo1.png"
               alt="Bank Logo Dark"
@@ -46,7 +37,7 @@ export default function Navbar({ className = "" }) {
 
         {/* Nav Links */}
         <div
-          className="hidden md:flex pr-22 space-x-10 text-lg"
+          className="hidden md:flex pr-22 space-x-10 text-lg pt-10"
           style={{ fontFamily: "Montserrat, sans-serif" }}
         >
           <Link
@@ -73,7 +64,7 @@ export default function Navbar({ className = "" }) {
         <div>
           <Link href="/login">
             <button
-              className="bg-black  text-white px-5 py-1 rounded-md border-2 border-white hover:bg-white hover:text-black hover:border-black cursor-pointer transition-all font-semibold"
+              className="bg-black  text-white px-5 py-1 rounded-md border-2 border-white hover:bg-white hover:text-black hover:border-black cursor-pointer transition-all font-semibold mt-10"
               style={{ fontFamily: "Montserrat, sans-serif" }}
             >
               Login
