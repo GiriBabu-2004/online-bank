@@ -1,36 +1,84 @@
-import Image from 'next/image';
-import Link from 'next/link';
+"use client"; // Required if using Next.js app directory
 
-export default function Navbar() {
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+export default function Navbar({ className = "" }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 0);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const borderClass = scrolled
+    ? "border-b border-green-200/30 dark:border-green-200/30"
+    : "border-b-0";
+
   return (
-    <nav className="bg-white shadow-md border-b border-gray-300">
-      <div className="max-w-8xl  mx-auto  px-4 sm:px-6 lg:px-4">
-        <div className="flex justify-between items-center h-20"> {/* increased height for larger logo */}
-          
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/">
-              <Image
-                src="/bank-logo.png"
-                alt="Bank Logo"
-                width={250}
-                height={60} // you can tweak height if logo looks too tall
-                className="object-contain mt-[-30px]" 
-              />
-            </Link>
-          </div>
+    <nav
+      className={`bg-white text-black transition-all ${borderClass} ${className}`}
+    >
+      <div className="max-w-screen-xl h-20 mx-auto flex items-center justify-between font-[Caveat] px-4">
+        {/* Logo: light and dark variants */}
+        <div>
+          <Link href="/" className="flex items-center">
+            {/* Light mode logo */}
+            <Image
+              src="/logo2.png"
+              alt="Bank Logo Light"
+              width={230}
+              height={60}
+              className="object-contain mt-2 block dark:hidden transition-all scale-95"
+            />
+            {/* Dark mode logo */}
+            <Image
+              src="/logo1.png"
+              alt="Bank Logo Dark"
+              width={230}
+              height={60}
+              className="object-contain mt-2hidden dark:block transition-all scale-70"
+            />
+          </Link>
+        </div>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8 text-gray-700 font-medium">
-            <Link href="/" className="hover:text-blue-600 transition">Home</Link>
-            <Link href="/customer-care" className="hover:text-blue-600 transition">Customer Care</Link>
-            <Link href="/about" className="hover:text-blue-600 transition">About Us</Link>
-            <Link href="/login">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                Login
-              </button>
-            </Link>
-          </div>
+        {/* Nav Links */}
+        <div
+          className="hidden md:flex pr-22 space-x-10 text-lg"
+          style={{ fontFamily: "Montserrat, sans-serif" }}
+        >
+          <Link
+            href="/"
+            className="px-3 py-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+          >
+            Home
+          </Link>
+          <Link
+            href="/customer-care"
+            className="px-3 py-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+          >
+            Customer Care
+          </Link>
+          <Link
+            href="/about"
+            className="px-3 py-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+          >
+            About Us
+          </Link>
+        </div>
+
+        {/* Login Button */}
+        <div>
+          <Link href="/login">
+            <button
+              className="bg-black  text-white px-5 py-1 rounded-md border-2 border-white hover:bg-white hover:text-black hover:border-black cursor-pointer transition-all font-semibold"
+              style={{ fontFamily: "Montserrat, sans-serif" }}
+            >
+              Login
+            </button>
+          </Link>
         </div>
       </div>
     </nav>

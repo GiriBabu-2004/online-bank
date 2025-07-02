@@ -2,6 +2,8 @@
 
 export default function JourneySection() {
   return (
+    <div className="bg-white">
+      
     <section id="our-journey" className="py-20 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Our Journey</h2>
@@ -60,5 +62,6 @@ export default function JourneySection() {
         </div>
       </div>
     </section>
+    </div>
   );
 }
