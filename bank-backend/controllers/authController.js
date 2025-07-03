@@ -35,23 +35,43 @@ exports.sendOtp = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-  if (!email || !otp) return res.status(400).json({ error: "Email and OTP required" });
+
+  console.log("verifyOtp endpoint hit");
+
+  if (!email || !otp) {
+    return res.status(400).json({ error: "Email and OTP required" });
+  }
 
   try {
     const user = await User.findOne({ email });
+
     if (!user) return res.status(400).json({ error: "Invalid email or OTP" });
 
-    if (user.otp !== otp || user.otpExpires < new Date()) {
+    // ✅ Don't check against already null fields
+    if (
+      !user.otp ||
+      !user.otpExpires ||
+      user.otp !== otp ||
+      user.otpExpires < new Date()
+    ) {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
+    // ✅ Only update after validation
+    user.isVerified = true;
     user.otp = null;
     user.otpExpires = null;
-    await user.save();
 
+    await user.save(); // ← this must be after setting isVerified
+
+    console.log("User marked as verified:", user.email);
     res.json({ message: "OTP verified" });
   } catch (error) {
-    console.error(error);
+    console.error("Verify OTP Error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
+
+
+
+
