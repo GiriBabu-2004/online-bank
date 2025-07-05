@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     passwordHash: String, // hashed password, don't store plaintext
   },
 
-  videoVerificationImageUrl: String,
+  videoVerificationImageUrls: [String],
   videoVerificationSubmittedAt: Date,
   isVerified: { type: Boolean, default: false },
 }, { timestamps: true });

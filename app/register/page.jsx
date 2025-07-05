@@ -187,60 +187,77 @@ const emailFromPersonalDetails = personalDetails.email;
 
 
   // Start camera and capture snapshot after timeout
-  function startVideoVerification() {
-    setVideoStarted(true);
-    setVerificationMessage("");
+ function startVideoVerification() {
+  setVideoStarted(true);
+  setVerificationMessage("");
 
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+      const video = videoRef.current;
+      video.srcObject = stream;
 
-        setTimeout(() => {
-          stream.getTracks().forEach(track => track.stop());
-          captureSnapshotAndUpload();
-        }, 60000); // 60 seconds
-      })
-      .catch((err) => alert("Cannot access camera: " + err.message));
-  }
+      video.onloadedmetadata = () => {
+        video.play();
 
-  // Capture frame & send to backend
-  function captureSnapshotAndUpload() {
-    const video = videoRef.current;
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
+        let snapshots = [];
+        let captureCount = 0;
 
-    canvas.toBlob(async (blob) => {
-      const formData = new FormData();
-      formData.append("videoImage", blob, "snapshot.jpg");
-       formData.append("email", personalDetails.email);
-       if (!personalDetails.email) {
-  alert("Email missing, cannot upload verification");
-  return;
+        const interval = setInterval(() => {
+          if (video.videoWidth > 0 && video.videoHeight > 0) {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext("2d").drawImage(video, 0, 0);
+
+            canvas.toBlob((blob) => {
+              if (blob) {
+                snapshots.push(blob);
+                captureCount++;
+              }
+
+              if (captureCount >= 5) {
+                clearInterval(interval);
+                stream.getTracks().forEach((track) => track.stop());
+                uploadSnapshots(snapshots);
+              }
+            }, "image/jpeg");
+          }
+        }, 6000); // Take snapshot every 6 seconds (5 times in 30 seconds)
+      };
+    })
+    .catch((err) => alert("Cannot access camera: " + err.message));
 }
 
-
-      try {
-        const res = await fetch(`${API_BASE}/api/register/video-verification`, {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setVerificationMessage(
-            "Your application is under verification. Please wait for 48 hours."
-          );
-          setStep(5);
-        } else {
-          alert(data.message || "Verification upload failed.");
-        }
-      } catch (err) {
-        alert("Error uploading video snapshot: " + err.message);
-      }
-    }, "image/jpeg");
+function uploadSnapshots(blobs) {
+  if (!personalDetails.email) {
+    alert("Email missing, cannot upload verification");
+    return;
   }
+
+  const formData = new FormData();
+  blobs.forEach((blob, index) => {
+    formData.append(`videoImage${index + 1}`, blob, `snapshot${index + 1}.jpg`);
+  });
+  formData.append("email", personalDetails.email);
+
+  fetch(`${API_BASE}/api/register/video-verification`, {
+    method: "POST",
+    body: formData,
+  })
+    .then(async (res) => {
+      const data = await res.json();
+      if (res.ok) {
+        setVerificationMessage("Your application is under verification. Please wait for 48 hours.");
+        setStep(5);
+      } else {
+        alert(data.message || "Verification upload failed.");
+      }
+    })
+    .catch((err) => {
+      alert("Error uploading video snapshots: " + err.message);
+    });
+}
+
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
