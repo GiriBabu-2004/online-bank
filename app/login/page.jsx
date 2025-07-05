@@ -7,11 +7,44 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Handle login logic here (e.g., call an API)
-    console.log({ email, password, role });
-  };
+  const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password, role }),
+    });
+
+    // Try parsing JSON safely
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      const text = await res.text();
+      console.error("Non-JSON response:", text);
+      alert("Server returned an unexpected response");
+      return;
+    }
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
+    }
+
+    if (data.redirectUrl) {
+      window.location.href = data.redirectUrl;
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Server error. Please try again later.");
+  }
+};
+
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
