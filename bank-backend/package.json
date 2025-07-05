@@ -4,8 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node --experimental-specifier-resolution=node server.js",
-    "dev": "nodemon --experimental-specifier-resolution=node server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

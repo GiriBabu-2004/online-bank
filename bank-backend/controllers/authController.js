@@ -59,7 +59,7 @@ exports.verifyOtp = async (req, res) => {
     }
 
     // ✅ Only update after validation
-    user.isVerified = true;
+    user.isVerified = false;
     user.otp = null;
     user.otpExpires = null;
 
