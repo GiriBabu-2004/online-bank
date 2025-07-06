@@ -13,7 +13,8 @@ const uploadToS3 = (fileBuffer, fileName, mimetype) => {
     Body: fileBuffer,
     ContentType: mimetype,
     
-    // ✅ Removed ACL
+
+
   };
 
   return s3.upload(params).promise();
