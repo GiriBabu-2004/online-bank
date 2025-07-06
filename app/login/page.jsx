@@ -39,7 +39,11 @@ export default function LoginPage() {
      localStorage.setItem("user", JSON.stringify({ email }));
 
       // Redirect to dashboard using Next.js router
+      if(role === "user") {
       router.push("/user-dashboard");
+      }else if(role === "admin") {
+      router.push("/admin-dashboard");
+      }
   } catch (error) {
     console.error("Login error:", error);
     alert("Server error. Please try again later.");

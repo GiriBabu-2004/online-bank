@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
+import { Flex, Input, Typography } from 'antd';
 
+const { Title } = Typography;
 export default function RegisterPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
@@ -258,6 +260,9 @@ function uploadSnapshots(blobs) {
     });
 }
 
+const handleChange = (value) => {
+    setOtp(value);
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
@@ -284,17 +289,17 @@ function uploadSnapshots(blobs) {
             </button>
           ) : (
             <>
-              <label className="block">
-                <span>Enter 6-digit OTP *</span>
-                <input
-                  type="text"
-                  className="w-full border rounded p-2 mt-1"
-                  value={otp}
-                  onChange={e => setOtp(e.target.value)}
-                  maxLength={6}
-                />
-              </label>
-              <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={verifyOtp}>
+              <Flex gap="middle" align="flex-start" vertical>
+      <Title level={5}>Enter 6-digit OTP *</Title>
+      <Input.OTP
+        length={6}
+        value={otp}
+        onChange={handleChange}
+        formatter={(str) => str.replace(/\D/g, '')} // Only digits
+        inputMode="numeric"
+      />
+    </Flex>
+              <button className="bg-green-600 text-white mt-4 px-4 py-2 rounded" onClick={verifyOtp}>
                 Submit
               </button>
             </>
