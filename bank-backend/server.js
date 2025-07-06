@@ -6,12 +6,14 @@ const connectDB = require("./config/db");
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
+
 app.use(express.json());
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/register", require("./routes/register"));
+app.use("/api/admin", require("./routes/admin"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

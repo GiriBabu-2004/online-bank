@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const generateOtp = require("../utils/generateOTP");
 const transporter = require("../config/nodemailer");
+const bcrypt = require("bcrypt");
 
 exports.sendOtp = async (req, res) => {
   const { email } = req.body;
@@ -35,23 +36,84 @@ exports.sendOtp = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-  if (!email || !otp) return res.status(400).json({ error: "Email and OTP required" });
+
+  console.log("verifyOtp endpoint hit");
+
+  if (!email || !otp) {
+    return res.status(400).json({ error: "Email and OTP required" });
+  }
 
   try {
     const user = await User.findOne({ email });
+
     if (!user) return res.status(400).json({ error: "Invalid email or OTP" });
 
-    if (user.otp !== otp || user.otpExpires < new Date()) {
+    // ✅ Don't check against already null fields
+    if (
+      !user.otp ||
+      !user.otpExpires ||
+      user.otp !== otp ||
+      user.otpExpires < new Date()
+    ) {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
+    // ✅ Only update after validation
+    user.isVerified = false;
     user.otp = null;
     user.otpExpires = null;
-    await user.save();
 
+    await user.save(); // ← this must be after setting isVerified
+
+    console.log("User marked as verified:", user.email);
     res.json({ message: "OTP verified" });
   } catch (error) {
-    console.error(error);
+    console.error("Verify OTP Error:", error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+
+
+
+const ADMIN_EMAIL = "bossofbank@gmail.com";
+const ADMIN_PASSWORD = "12345678";
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password, role } = req.body;
+
+    if (!email || !password || !role) {
+      return res.status(400).json({ message: "Email, password, and role are required" });
+    }
+
+    if (role === "admin") {
+      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        return res.json({ message: "Admin login successful", redirectUrl: "/admin-dashboard" });
+      } else {
+        return res.status(401).json({ message: "Invalid admin credentials" });
+      }
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const passwordMatches = await bcrypt.compare(password, user.accountDetails.passwordHash);
+    if (!passwordMatches) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(403).json({ message: "User not verified yet. Please wait for admin approval." });
+    }
+
+    return res.json({ message: "User login successful", redirectUrl: "/user-dashboard" });
+
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };

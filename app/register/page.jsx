@@ -1,70 +1,85 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 export default function RegisterPage() {
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+
   const [step, setStep] = useState(1);
 
-  // Step 1 - Email & OTP
   const [email, setEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
 
-  // Step 2 - Personal Details
   const [personalDetails, setPersonalDetails] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    phone: "",
-    dob: "",
-    address: "",
-    state: "",
-    country: "",
-    city: "",
-    pincode: "",
-    policeStation: "",
-    postOffice: "",
-    govIdType: "",
-    govIdNumber: "",
-    govIdFront: null,
-    govIdBack: null,
-    termsAccepted: false,
+    email: "", 
+    firstName: "", middleName: "", lastName: "", phone: "", dob: "",
+    address: "", state: "", country: "", city: "", pincode: "",
+    policeStation: "", postOffice: "", govIdType: "", govIdNumber: "",
+    govIdFront: null, govIdBack: null, termsAccepted: false,
   });
 
-  // Step 3 - Account Details
   const [accountDetails, setAccountDetails] = useState({
-    accountType: "",
-    nomineeName: "",
-    nomineeRelation: "",
-    nomineeAddress: "",
-    nomineePhone: "",
-    nomineeEmail: "",
-    password: "",
-    confirmPassword: "",
+    accountType: "", nomineeName: "", nomineeRelation: "",
+    nomineeAddress: "", nomineePhone: "", nomineeEmail: "",
+    password: "", confirmPassword: "",
   });
 
-  // Step 4 - Video Verification
   const [videoStarted, setVideoStarted] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState("");
   const videoRef = useRef();
 
-  // Fake send OTP function
-  function sendOtp() {
+  // Send OTP to email
+  async function sendOtp() {
     if (!email) return alert("Please enter your email");
-    // Here you would call your backend API to send OTP
-    setOtpSent(true);
-    alert(`OTP sent to ${email}`);
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setOtpSent(true);
+        alert("OTP sent to your email.");
+      } else {
+        alert(data.message || "Failed to send OTP");
+      }
+    } catch (err) {
+      alert("Error sending OTP: " + err.message);
+    }
   }
 
-  // Fake verify OTP function
-  function verifyOtp() {
-    // Here you would verify the OTP entered with backend
-    if (otp.length !== 6) return alert("Enter 6-digit OTP");
-    setOtpVerified(true);
-    setStep(2);
-  }
+  // Verify OTP
+  async function verifyOtp() {
+  if (otp.length !== 6) return alert("Enter 6-digit OTP");
 
-  // Handle personal details change
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, otp })
+    });
+
+    const data = await res.json();
+    console.log("OTP Verify Response:", data); // ✅ log backend response
+
+    if (res.ok) {
+      setOtpVerified(true);
+      setStep(2); // ✅ move to Step 2
+      setPersonalDetails(prev => ({ ...prev, email }));
+    } else {
+      alert(data.error || "OTP verification failed");
+    }
+  } catch (err) {
+    console.error("OTP Verify Error:", err);
+    alert("Network error: " + err.message);
+  }
+}
+
+
   function handlePersonalChange(e) {
     const { name, value, type, checked, files } = e.target;
     if (type === "checkbox") {
@@ -76,53 +91,173 @@ export default function RegisterPage() {
     }
   }
 
-  // Handle account details change
   function handleAccountChange(e) {
     const { name, value } = e.target;
     setAccountDetails((prev) => ({ ...prev, [name]: value }));
   }
 
-  // Start video & take snapshot
-  function startVideoVerification() {
-    setVideoStarted(true);
-    setVerificationMessage("");
-
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-
-        // After 1 minute stop video and show verification message
-        setTimeout(() => {
-          stream.getTracks().forEach(track => track.stop());
-          setVerificationMessage(
-            "Your application is under verification. Please wait for 48 hours. You will be notified by email."
-          );
-          setStep(5); // Consider step 5 as confirmation page
-        }, 60000); // 60 seconds
-      })
-      .catch((err) => alert("Cannot access camera: " + err.message));
-  }
-
-  // Submit personal details
-  function submitPersonalDetails() {
-    // Validation example: Required fields
-    if (!personalDetails.firstName || !personalDetails.lastName || !personalDetails.phone || !personalDetails.dob || !personalDetails.address || !personalDetails.termsAccepted) {
-      alert("Please fill all required fields and accept terms.");
-      return;
+  // Submit personal details with files
+  async function submitPersonalDetails() {
+  const requiredFields = ["firstName", "lastName", "phone", "dob", "address"];
+  for (let field of requiredFields) {
+    if (!personalDetails[field]) {
+      return alert("Please fill all required fields.");
     }
-    setStep(3);
   }
+  if (!personalDetails.termsAccepted) return alert("Please accept terms and conditions.");
+ console.log("Submitting personal details with email:", personalDetails.email); 
+  const formData = new FormData();
+
+  // Append regular text fields
+  for (let key in personalDetails) {
+    if (personalDetails[key] != null) {
+      // Skip file fields here, handled separately
+      if (key === "govIdFront" || key === "govIdBack") continue;
+
+      if (personalDetails[key] instanceof Date) {
+        formData.append(key, personalDetails[key].toISOString());
+      } else {
+        formData.append(key, personalDetails[key]);
+      }
+    }
+  }
+
+  // Append files if present
+  if (personalDetails.govIdFront instanceof File) {
+    formData.append("govIdFront", personalDetails.govIdFront);
+  }
+  if (personalDetails.govIdBack instanceof File) {
+    formData.append("govIdBack", personalDetails.govIdBack);
+  }
+
+  // Append email (must be present)
+  if (personalDetails.email) {
+    formData.append("email", personalDetails.email);
+  } else {
+    return alert("User email missing!");
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/register/personal-details`, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setStep(3);
+    } else {
+      alert(data.error || data.message || "Failed to save personal details");
+    }
+  } catch (err) {
+    alert("Error submitting personal details: " + err.message);
+  }
+}
+
+
 
   // Submit account details
-  function submitAccountDetails() {
-    // Basic validation
-    if (!accountDetails.accountType || !accountDetails.nomineeName || !accountDetails.password || accountDetails.password !== accountDetails.confirmPassword) {
-      alert("Please fill all required fields and ensure passwords match.");
-      return;
+  async function submitAccountDetails() {
+  const { accountType, nomineeName, password, confirmPassword } = accountDetails;
+const emailFromPersonalDetails = personalDetails.email;
+
+
+  if (!emailFromPersonalDetails || !accountType || !nomineeName || !password || password !== confirmPassword) {
+  alert("Please complete required fields and ensure passwords match.");
+  return;
+}
+
+  try {
+    const res = await fetch("http://localhost:5000/api/register/account-details", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...accountDetails, email: emailFromPersonalDetails }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setStep(4);
+    } else {
+      alert(data.error || "Failed to save account details");
     }
-    setStep(4);
+  } catch (err) {
+    alert("Error submitting account details: " + err.message);
   }
+}
+
+
+  // Start camera and capture snapshot after timeout
+ function startVideoVerification() {
+  setVideoStarted(true);
+  setVerificationMessage("");
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+      const video = videoRef.current;
+      video.srcObject = stream;
+
+      video.onloadedmetadata = () => {
+        video.play();
+
+        let snapshots = [];
+        let captureCount = 0;
+
+        const interval = setInterval(() => {
+          if (video.videoWidth > 0 && video.videoHeight > 0) {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext("2d").drawImage(video, 0, 0);
+
+            canvas.toBlob((blob) => {
+              if (blob) {
+                snapshots.push(blob);
+                captureCount++;
+              }
+
+              if (captureCount >= 5) {
+                clearInterval(interval);
+                stream.getTracks().forEach((track) => track.stop());
+                uploadSnapshots(snapshots);
+              }
+            }, "image/jpeg");
+          }
+        }, 6000); // Take snapshot every 6 seconds (5 times in 30 seconds)
+      };
+    })
+    .catch((err) => alert("Cannot access camera: " + err.message));
+}
+
+function uploadSnapshots(blobs) {
+  if (!personalDetails.email) {
+    alert("Email missing, cannot upload verification");
+    return;
+  }
+
+  const formData = new FormData();
+  blobs.forEach((blob, index) => {
+    formData.append(`videoImage${index + 1}`, blob, `snapshot${index + 1}.jpg`);
+  });
+  formData.append("email", personalDetails.email);
+
+  fetch(`${API_BASE}/api/register/video-verification`, {
+    method: "POST",
+    body: formData,
+  })
+    .then(async (res) => {
+      const data = await res.json();
+      if (res.ok) {
+        setVerificationMessage("Your application is under verification. Please wait for 48 hours.");
+        setStep(5);
+      } else {
+        alert(data.message || "Verification upload failed.");
+      }
+    })
+    .catch((err) => {
+      alert("Error uploading video snapshots: " + err.message);
+    });
+}
+
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
@@ -144,10 +279,7 @@ export default function RegisterPage() {
           </label>
 
           {!otpSent ? (
-            <button
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-              onClick={sendOtp}
-            >
+            <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={sendOtp}>
               Register
             </button>
           ) : (
@@ -162,10 +294,7 @@ export default function RegisterPage() {
                   maxLength={6}
                 />
               </label>
-              <button
-                className="bg-green-600 text-white px-4 py-2 rounded"
-                onClick={verifyOtp}
-              >
+              <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={verifyOtp}>
                 Submit
               </button>
             </>
@@ -380,7 +509,7 @@ export default function RegisterPage() {
       )}
 
       {/* Step 3 */}
-      {step === 3 && (
+            {step === 3 && (
         <form className="space-y-6" onSubmit={e => { e.preventDefault(); submitAccountDetails(); }}>
           <h2 className="text-xl font-semibold">Account Details</h2>
 
@@ -491,22 +620,15 @@ export default function RegisterPage() {
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">Video Verification</h2>
           {!videoStarted && (
-            <button
-              className="bg-green-600 text-white px-6 py-2 rounded"
-              onClick={startVideoVerification}
-            >
+            <button className="bg-green-600 text-white px-6 py-2 rounded" onClick={startVideoVerification}>
               Start Video Verification
             </button>
           )}
 
-          {videoStarted && (
-            <video ref={videoRef} className="w-full rounded shadow" />
-          )}
+          {videoStarted && <video ref={videoRef} className="w-full rounded shadow" />}
 
           {verificationMessage && (
-            <p className="text-center text-green-700 font-semibold mt-4">
-              {verificationMessage}
-            </p>
+            <p className="text-center text-green-700 font-semibold mt-4">{verificationMessage}</p>
           )}
         </div>
       )}

@@ -24,10 +24,12 @@ exports.savePersonalDetails = async (req, res) => {
       termsAccepted,
     } = req.body;
 
+    if (!email) return res.status(400).json({ error: "Email is required" });
+
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Upload govIdFront and govIdBack to S3
+    // Upload govIdFront and govIdBack to S3 if files present
     const govIdFrontFile = req.files?.govIdFront?.[0];
     const govIdBackFile = req.files?.govIdBack?.[0];
 
@@ -35,11 +37,19 @@ exports.savePersonalDetails = async (req, res) => {
     let govIdBackUrl = null;
 
     if (govIdFrontFile) {
-      const frontUpload = await uploadToS3(govIdFrontFile.buffer, `govIdFront_${email}_${Date.now()}`, govIdFrontFile.mimetype);
+      const frontUpload = await uploadToS3(
+        govIdFrontFile.buffer,
+        `govIdFront_${email}_${Date.now()}`,
+        govIdFrontFile.mimetype
+      );
       govIdFrontUrl = frontUpload.Location;
     }
     if (govIdBackFile) {
-      const backUpload = await uploadToS3(govIdBackFile.buffer, `govIdBack_${email}_${Date.now()}`, govIdBackFile.mimetype);
+      const backUpload = await uploadToS3(
+        govIdBackFile.buffer,
+        `govIdBack_${email}_${Date.now()}`,
+        govIdBackFile.mimetype
+      );
       govIdBackUrl = backUpload.Location;
     }
 
@@ -48,7 +58,7 @@ exports.savePersonalDetails = async (req, res) => {
       middleName,
       lastName,
       phone,
-      dob,
+      dob: dob ? new Date(dob) : null,
       address,
       state,
       country,
@@ -60,7 +70,7 @@ exports.savePersonalDetails = async (req, res) => {
       govIdNumber,
       govIdFrontUrl,
       govIdBackUrl,
-      termsAccepted,
+      termsAccepted: termsAccepted === "true" || termsAccepted === true,
     };
 
     await user.save();
@@ -70,6 +80,7 @@ exports.savePersonalDetails = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
 
 exports.saveAccountDetails = async (req, res) => {
   try {
@@ -113,31 +124,42 @@ exports.saveVideoVerification = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // videoImage file
-    const videoImageFile = req.file;
-    let videoVerificationImageUrl = null;
+    const uploadedUrls = [];
 
-    if (videoImageFile) {
-      const videoUpload = await uploadToS3(videoImageFile.buffer, `videoVerification_${email}_${Date.now()}`, videoImageFile.mimetype);
-      videoVerificationImageUrl = videoUpload.Location;
+    for (let i = 1; i <= 5; i++) {
+      const fieldName = `videoImage${i}`;
+      const file = req.files?.[fieldName]?.[0];
+
+      if (file) {
+        const uploadResult = await uploadToS3(
+          file.buffer,
+          `videoVerification_${email}_${fieldName}_${Date.now()}`,
+          file.mimetype
+        );
+        uploadedUrls.push(uploadResult.Location);
+      }
     }
 
-    user.videoVerificationImageUrl = videoVerificationImageUrl;
+    if (uploadedUrls.length === 0) {
+      return res.status(400).json({ error: "No video snapshots received" });
+    }
+
+    user.videoVerificationImageUrls = uploadedUrls;
     user.videoVerificationSubmittedAt = new Date();
 
     await user.save();
 
-    // Send email notification for new application
     await transporter.sendMail({
       from: process.env.SMTP_USER,
-      to: process.env.NOTIFICATION_EMAIL, // your verification team email
+      to: process.env.NOTIFICATION_EMAIL,
       subject: "New Account Verification Application",
       text: `A new application has been submitted by ${email} and is under verification.`,
     });
 
-    res.json({ message: "Video verification data saved" });
+    res.json({ message: "Video verification snapshots uploaded successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    console.error("Video Verification Error:", error);
+    res.status(500).json({ error: "Server error while saving video verification" });
   }
 };
+

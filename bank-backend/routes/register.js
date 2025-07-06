@@ -16,7 +16,17 @@ router.post("/personal-details", upload.fields([
 // Account details
 router.post("/account-details", express.json(), saveAccountDetails);
 
-// Video verification image (single file)
-router.post("/video-verification", upload.single("videoImage"), saveVideoVerification);
+// ✅ Updated: Video verification – allow 5 snapshots
+router.post(
+  "/video-verification",
+  upload.fields([
+    { name: "videoImage1", maxCount: 1 },
+    { name: "videoImage2", maxCount: 1 },
+    { name: "videoImage3", maxCount: 1 },
+    { name: "videoImage4", maxCount: 1 },
+    { name: "videoImage5", maxCount: 1 },
+  ]),
+  saveVideoVerification
+);
 
 module.exports = router;

@@ -12,7 +12,8 @@ const uploadToS3 = (fileBuffer, fileName, mimetype) => {
     Key: fileName,
     Body: fileBuffer,
     ContentType: mimetype,
-    ACL: "public-read", // or your preferred ACL
+    
+    // ✅ Removed ACL
   };
 
   return s3.upload(params).promise();
