@@ -1,12 +1,13 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
-
+  const router = useRouter();
   const handleLogin = async (e) => {
   e.preventDefault();
 
@@ -35,9 +36,10 @@ export default function LoginPage() {
       return;
     }
 
-    if (data.redirectUrl) {
-      window.location.href = data.redirectUrl;
-    }
+     localStorage.setItem("user", JSON.stringify({ email }));
+
+      // Redirect to dashboard using Next.js router
+      router.push("/user-dashboard");
   } catch (error) {
     console.error("Login error:", error);
     alert("Server error. Please try again later.");

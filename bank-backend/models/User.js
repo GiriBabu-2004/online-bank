@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
   videoVerificationImageUrls: [String],
   videoVerificationSubmittedAt: Date,
   isVerified: { type: Boolean, default: false },
+  accountNumber: { type: String, unique: true, sparse: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);
