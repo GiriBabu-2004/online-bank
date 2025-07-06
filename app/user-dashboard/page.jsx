@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 export default function Dashboard() {
   const router = useRouter();
-  const [user, setUser] = useState(null);       // Full user data from backend
+  const [user, setUser] = useState(null); // Full user data from backend
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null);
 
@@ -27,7 +27,9 @@ export default function Dashboard() {
     const { email } = JSON.parse(loggedUser);
 
     // Fetch user details from backend by email
-    fetch(`http://localhost:5000/api/user/by-email/${encodeURIComponent(email)}`)
+    fetch(
+      `http://localhost:5000/api/user/by-email/${encodeURIComponent(email)}`
+    )
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch user data");
         return res.json();
@@ -57,35 +59,37 @@ export default function Dashboard() {
   const maskedBalance = showBalance ? `₹${balance}` : "₹XXXX.XX";
 
   const handleVerifyPassword = async () => {
-  try {
-    const res = await fetch("http://localhost:5000/api/user/verify-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: user?.email,
-        password: inputPassword,
-      }),
-    });
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/user/verify-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user?.email,
+            password: inputPassword,
+          }),
+        }
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Password verification failed");
-      return;
+      if (!res.ok) {
+        alert(data.message || "Password verification failed");
+        return;
+      }
+
+      // Password matched
+      setShowAccountNumber(true);
+      setPasswordModalOpen(false);
+      setInputPassword("");
+    } catch (err) {
+      console.error("Password check error:", err);
+      alert("Server error");
     }
-
-    // Password matched
-    setShowAccountNumber(true);
-    setPasswordModalOpen(false);
-    setInputPassword("");
-  } catch (err) {
-    console.error("Password check error:", err);
-    alert("Server error");
-  }
-};
-
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -93,12 +97,51 @@ export default function Dashboard() {
       <aside className="w-64 bg-white p-4 shadow-md">
         <h2 className="text-xl font-bold mb-6">MyBank</h2>
         <ul className="space-y-4">
-          <li className="hover:text-blue-600 cursor-pointer">Dashboard</li>
-          <li className="hover:text-blue-600 cursor-pointer">Statement</li>
-          <li className="hover:text-blue-600 cursor-pointer">Account Info</li>
-          <li className="hover:text-blue-600 cursor-pointer">FD Calculator</li>
-          <li className="hover:text-blue-600 cursor-pointer">Mutual Fund Calculator</li>
-          <li className="hover:text-blue-600 cursor-pointer">Contact Us</li>
+          <li>
+            <Link href="/user-dashboard" className="hover:text-blue-600 block">
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/user-dashboard/statement"
+              className="hover:text-blue-600 block"
+            >
+              Statement
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/user-dashboard/account-info"
+              className="hover:text-blue-600 block"
+            >
+              Account Info
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/user-dashboard/fd-calculator"
+              className="hover:text-blue-600 block"
+            >
+              FD Calculator
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/user-dashboard/mf-calculator"
+              className="hover:text-blue-600 block"
+            >
+              Mutual Fund Calculator
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/customer-care"
+              className="hover:text-blue-600 block"
+            >
+              Contact Us
+            </Link>
+          </li>
         </ul>
       </aside>
 
@@ -109,28 +152,36 @@ export default function Dashboard() {
           <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-full uppercase">
             {user?.email?.charAt(0)}
           </div>
-           <button
-    onClick={() => {
-      localStorage.removeItem("user"); // Clear user data
-      router.replace("/login"); // Redirect to login
-    }}
-    className="text-sm text-red-600 underline hover:text-red-800"
-  >
-    Logout
-  </button>
+          <button
+            onClick={() => {
+              localStorage.removeItem("user"); // Clear user data
+              router.replace("/login"); // Redirect to login
+            }}
+            className="text-sm text-red-600 underline hover:text-red-800"
+          >
+            Logout
+          </button>
         </div>
 
         {/* User Info */}
         <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto mt-16">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">User Details</h3>
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            User Details
+          </h3>
 
-          <p><strong>Name:</strong> {user?.personalDetails?.firstName}</p>
-          <p><strong>Email:</strong> {user?.email}</p>
+          <p>
+            <strong>Name:</strong> {user?.personalDetails?.firstName}
+          </p>
+          <p>
+            <strong>Email:</strong> {user?.email}
+          </p>
 
           {/* Account Info */}
           <div className="mt-6 border-t pt-4">
             <h4 className="font-semibold mb-2">Account Details</h4>
-            <p><strong>Account Type:</strong> {user?.accountDetails?.accountType  }</p>
+            <p>
+              <strong>Account Type:</strong> {user?.accountDetails?.accountType}
+            </p>
             <p>
               <strong>Account Number:</strong> {maskedAccount}{" "}
               {!showAccountNumber && (
