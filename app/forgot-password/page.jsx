@@ -1,50 +1,39 @@
 "use client";
 import { useState } from 'react';
 
-export default function ForgotPasswordPage() {
+export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const handleForgotPassword = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate email sent (you can integrate API call here)
-    setSubmitted(true);
+    const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+    setMessage(data.message);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">Forgot Password</h2>
-
-        {!submitted ? (
-          <form onSubmit={handleForgotPassword} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Enter your email
-              </label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-            >
-              Send Reset Link
-            </button>
-          </form>
-        ) : (
-          <div className="text-center text-green-600 font-medium">
-            Password reset email will be sent to your email. Please check your email.
-          </div>
-        )}
-      </div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl mb-4">Forgot Password</h2>
+        <input
+          type="email"
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <button className="w-full bg-blue-500 text-white p-2 rounded" type="submit">
+          Send Reset Link
+        </button>
+        {message && <p className="mt-4 text-green-500">{message}</p>}
+      </form>
     </div>
   );
 }

@@ -4,6 +4,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   otp: { type: String }, // store latest OTP for verification
   otpExpires: { type: Date },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 
   personalDetails: {
     firstName: String,
