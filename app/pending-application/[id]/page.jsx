@@ -39,7 +39,7 @@ export default function PendingApplicationPage() {
   if (!app) return <p className="p-6">Loading...</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-800 shadow rounded">
+    <div className="max-w-4xl mx-auto p-6  shadow rounded">
       <h1 className="text-2xl font-bold mb-4">Application Details</h1>
 
       {/* Email */}
