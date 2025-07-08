@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { WordRotate } from "./magicui/word-rotate";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
+import Iphone from "@/components/magicui/Iphone"; // adjust path based on your project
 
 export default function HeroSection() {
   return (
     <div className="bg-white">
-      <section className="w-full bg-white py-20 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
+      <section className="w-full bg-white py-20 mt-10 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
         {/* Headline */}
-        <div className="pt-10 pb-10">
+        <div className=" -mt-18">
           <Link
             href=""
             className="inline-flex items-center gap-2 rounded-full border border-[#ddd9ec] px-4 py-1 mb-6 text-sm font-medium text-black shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
@@ -31,7 +32,7 @@ export default function HeroSection() {
               />
             </svg>
           </Link>
-          <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-4">
+          <h1 className="text-xl md:text-6xl font-bold text-gray-800 mb-4">
             Your Financial Future,&nbsp;
             <WordRotate
               words={["Simplified", "Effortless", "Streamlined"]}
@@ -48,15 +49,107 @@ export default function HeroSection() {
 
           {/* Buttons */}
           <div className="flex gap-4 mb-16 flex-wrap justify-center">
-            <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition">
+            {/* <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition">
               Get Started
-            </button>
+            </button> */}
             <Link href="/register">
-              <button className="border border-black text-black px-6 py-3 rounded-lg hover:bg-blue-50 transition">
+              <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition">
                 Open Account
               </button>
             </Link>
           </div>
+          {/* iPhone Component */}
+          <Iphone className="mx-auto mt-[-1rem]">
+            <div className="h-full w-full bg-white flex flex-col overflow-y-auto font-sans">
+              {/* Header */}
+              <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-15 pb-6 flex items-center justify-between relative">
+                <i className="fas fa-arrow-left text-xl text-black" />
+                <h2 className="text-lg font-semibold text-black">Banking</h2>
+                <i className="fas fa-sliders-h text-xl text-black" />
+              </div>
+
+              {/* Cards */}
+              <div className="p-4 space-y-3">
+                <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
+                  <div>
+                    <p className="text-xs text-gray-500">Account Balance</p>
+                    <p className="text-lg font-semibold">₹25,000</p>
+                  </div>
+                  <p className="text-right font-semibold text-gray-700">
+                    ₹41,090
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <img src="https://img.icons8.com/fluency/24/online-money-transfer.png" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Siep Galaits</p>
+                      <p className="text-sm font-semibold">₹1</p>
+                    </div>
+                  </div>
+                  <p className="text-right font-semibold text-gray-700">
+                    ₹22,090
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-orange-100 p-2 rounded-full">
+                      <img src="https://img.icons8.com/color/24/money--v1.png" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Transaction</p>
+                      <p className="text-sm font-semibold">₹41,000</p>
+                    </div>
+                  </div>
+                  <p className="text-right font-semibold text-gray-700">
+                    ₹34,090
+                  </p>
+                </div>
+              </div>
+
+              {/* Transaction History */}
+              <div className="px-4 mt-2">
+                <h3 className="text-sm text-gray-600 mb-2">
+                  Transaction History
+                </h3>
+
+                <div className="bg-black text-white rounded-xl p-4 mb-2">
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="text-xs">Account Balance</p>
+                      <p className="text-sm font-semibold">₹21</p>
+                    </div>
+                    <p className="text-sm font-semibold">₹21,090</p>
+                  </div>
+                  <div className="mt-2 h-1 bg-yellow-400 rounded-full w-1/3" />
+                </div>
+
+                <div className="bg-white border rounded-xl p-4 flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-gray-200 p-2 rounded-full">
+                      <img src="https://img.icons8.com/ios-filled/20/repeat.png" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Repeetion Payment</p>
+                      <p className="text-xs text-gray-400">जॉग</p>
+                    </div>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-600">₹7.00</p>
+                </div>
+              </div>
+
+              {/* Button */}
+              <div className="px-4 mt-auto mb-4">
+                <button className="w-full bg-yellow-400 text-white font-bold py-3 rounded-full shadow">
+                  Banking
+                </button>
+              </div>
+            </div>
+          </Iphone>
         </div>
 
         {/* Why Choose Us - placed at bottom */}
@@ -93,11 +186,11 @@ export default function HeroSection() {
         </div> */}
 
         {/* Scroll prompt (optional) */}
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <a href="#our-journey" className="text-blue-600 hover:underline">
             ↓ Scroll Down to See Our Journey
           </a>
-        </div>
+        </div> */}
       </section>
     </div>
   );
