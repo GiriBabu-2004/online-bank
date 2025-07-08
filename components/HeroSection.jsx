@@ -2,6 +2,7 @@ import Link from "next/link";
 import { WordRotate } from "./magicui/word-rotate";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import Iphone from "@/components/magicui/Iphone"; // adjust path based on your project
+import { ChevronLeft, EllipsisVertical } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -62,10 +63,10 @@ export default function HeroSection() {
           <Iphone className="mx-auto -mt-6">
             <div className="h-full w-full bg-white flex flex-col overflow-y-auto font-sans">
               {/* Header */}
-              <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-15 pb-6 flex items-center justify-between relative">
-                <i className="fas fa-arrow-left text-xl text-black" />
+              <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-6 pb-4 flex items-center justify-between">
+                <ChevronLeft className="text-black w-5 h-5" />
                 <h2 className="text-lg font-semibold text-black">Banking</h2>
-                <i className="fas fa-sliders-h text-xl text-black" />
+                <EllipsisVertical className="text-black w-5 h-5" />
               </div>
 
               {/* Cards */}
