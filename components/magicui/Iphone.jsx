@@ -1,6 +1,6 @@
 export default function Iphone15Pro({
   width = 433,
-  height = 882,
+  height = 682,
   src,
   videoSrc,
   children,

@@ -21,23 +21,33 @@ export default function Navbar({ className = "" }) {
     <nav
       className={`bg-white text-black transition-all ${borderClass} ${className}`}
     >
-      <div className="max-w-screen-xl h-20 mx-auto flex items-center justify-between font-[Caveat] px-4">
+      <div className="max-w-screen-xl h-14 mx-auto flex items-center justify-between font-[Caveat] px-4">
         {/* Logo: light and dark variants */}
         <div>
           <Link href="/" className="flex items-center">
+            {/* Light Mode Logo */}
             <Image
-              src="/logo1.png"
+              src="/logo2nd1.png"
+              alt="Bank Logo Light"
+              width={230}
+              height={60}
+              className="object-contain mt-2 block dark:hidden transition-all scale-70"
+            />
+            {/* Dark Mode Logo */}
+            <Image
+              src="/logo2nd2.png"
               alt="Bank Logo Dark"
               width={230}
               height={60}
-              className="object-contain mt-2hidden dark:block transition-all scale-70"
+              className="object-contain mt-2 hidden dark:block transition-all scale-70"
             />
           </Link>
+
         </div>
 
         {/* Nav Links */}
         <div
-          className="hidden md:flex pr-22 space-x-10 text-lg pt-10"
+          className="hidden md:flex pr-22 space-x-10 text-lg -pt-5 -mt-1 text-black"
           style={{ fontFamily: "Montserrat, sans-serif" }}
         >
           <Link
@@ -64,7 +74,7 @@ export default function Navbar({ className = "" }) {
         <div>
           <Link href="/login">
             <button
-              className="bg-black  text-white px-5 py-1 rounded-md border-2 border-white hover:bg-white hover:text-black hover:border-black cursor-pointer transition-all font-semibold mt-10"
+              className="bg-black  text-white px-5 py-1 rounded-md border-2 border-white hover:bg-white hover:text-black hover:border-black cursor-pointer transition-all font-semibold -mt-1"
               style={{ fontFamily: "Montserrat, sans-serif" }}
             >
               Login

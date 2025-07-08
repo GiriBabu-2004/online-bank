@@ -6,7 +6,7 @@ import Iphone from "@/components/magicui/Iphone"; // adjust path based on your p
 export default function HeroSection() {
   return (
     <div className="bg-white">
-      <section className="w-full bg-white py-20 mt-10 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
+      <section className="w-full bg-white py-20 mt-5 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
         {/* Headline */}
         <div className=" -mt-18">
           <Link
@@ -42,7 +42,7 @@ export default function HeroSection() {
           </h1>
 
           {/* Subheading */}
-          <p className="text-gray-600 text-lg max-w-2xl mb-8">
+          <p className="text-gray-600 text-md max-w-2xl mb-8 -mt-2">
             Join our modern digital bank designed to give you total control and
             security of your finances — anywhere, anytime.
           </p>
@@ -53,13 +53,13 @@ export default function HeroSection() {
               Get Started
             </button> */}
             <Link href="/register">
-              <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition">
+              <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition -mt-3">
                 Open Account
               </button>
             </Link>
           </div>
           {/* iPhone Component */}
-          <Iphone className="mx-auto mt-[-1rem]">
+          <Iphone className="mx-auto -mt-6">
             <div className="h-full w-full bg-white flex flex-col overflow-y-auto font-sans">
               {/* Header */}
               <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-15 pb-6 flex items-center justify-between relative">
