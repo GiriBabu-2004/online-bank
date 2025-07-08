@@ -3,22 +3,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import BlurText from "../../components/BlurText/BlurText";
+import { FaInfoCircle, FaTimes, FaEye, FaEyeSlash } from "react-icons/fa"; // icons for UX
+import { Button } from "../../components/ui/button"; // Assuming you have a Button component
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
+  const [showRules, setShowRules] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, role }),
       });
 
@@ -51,23 +51,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-yellow-50 to-yellow-200">
-      {/* Left Section - Banking Info */}
-      <div className="w-1/3 bg-gradient-to-b from-yellow-300 to-black text-white p-8 fixed h-full flex items-center justify-center ">
-        <div>
-          <BlurText
-            text="Welcome to Developer's Bank"
-            delay={200}
-            animateBy="words"
-            direction="top"
-            className="text-3xl font-bold text-black mb-8"
-          />
-          
-          <p className="text-md font-semibold leading-relaxed">
-            Developer's Bank is your trusted partner in secure and modern banking. Designed with developers and businesses in mind, our platform offers a seamless experience that puts you in full control of your finances. From powerful tools to smooth integrations, everything is built to help you manage money with confidence. Whether you're handling personal accounts or scaling a business, Developer's Bank gives you the freedom, flexibility, and support you need—anytime, anywhere.
-          </p>
-        </div>
-      </div>
+    <div className="relative flex min-h-screen bg-[url('/login-back.jpg')] bg-cover bg-center bg-no-repeat text-white overflow-hidden">
+      {/* Logo in top-left */}
+      <Link
+        href="/"
+        className="absolute top-5 left-5 z-50 flex items-center space-x-2"
+      >
+        <img src="tablogo.png" alt="Logo" className="h-10  w-auto" />
+        <img src="logo2nd1.png" alt="Logo" className="h-10 mt-1 w-auto" />
+      </Link>
 
       {/* Center Section - Login Form */}
       <motion.div
@@ -76,14 +68,17 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-1/3 ml-[33.3333%] flex items-center justify-center"
       >
-        <div className="w-full max-w-md bg-white p-10 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">
-            Login to Your Account
+        <div className="w-full max-w-md bg-black/20 backdrop-blur-md border border-white/30 p-10 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-semibold text-center mb-6 text-white">
+            Welcome, please login
           </h2>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-white"
+              >
                 Email
               </label>
               <input
@@ -92,26 +87,38 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium">
+            <div className="relative" >
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-white"
+              >
                 Password
               </label>
+              <div>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
+              <button
+    type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-yellow-300 hover:text-yellow-400 focus:outline-none"
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </button>
+  </div>
               <div className="text-right mt-1">
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-blue-500 hover:underline"
+                  className="text-sm text-white hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -119,60 +126,83 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="role" className="block text-sm font-medium">
+              <label
+                htmlFor="role"
+                className="block text-sm font-medium text-white"
+              >
                 Login as
               </label>
               <select
                 id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
 
-            <button
+            <Button
+              variant="secondary"
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+              className="w-full bg-black text-white hover:bg-gray-900 cursor-pointer"
             >
               Login
-            </button>
+            </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-white">
             Don't have an account?{" "}
-            <Link href="/register" className="text-blue-500 hover:underline">
+            <Link href="/register" className="text-yellow-300 hover:underline">
               Register
             </Link>
           </p>
         </div>
       </motion.div>
 
-      {/* Right Section - Rules */}
-      <motion.div
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-        className="w-1/3 p-8 flex items-center justify-center"
+      {/* Floating Toggle Button for Login Rules */}
+      <button
+        onClick={() => setShowRules(!showRules)}
+        className="fixed bottom-5 right-5 bg-yellow-500 text-black px-4 py-2 rounded-full shadow-md hover:bg-yellow-600 flex items-center gap-2 z-50"
       >
-        <div className="bg-white shadow-md p-6 rounded-lg text-sm text-gray-700 max-w-sm">
-          <h3 className="text-xl font-semibold mb-2 text-orange-700">
-            Login Rules
-          </h3>
-          <ul className="list-disc ml-5 space-y-1">
+        <FaInfoCircle />
+        {showRules ? "Rules" : "Rules"}
+      </button>
+
+      {/* Toggleable Rules Panel */}
+      {showRules && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="fixed bottom-20 right-5 bg-yellow-200 text-black shadow-md p-6 rounded-lg text-sm max-w-sm z-40"
+        >
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-xl font-semibold text-orange-700">
+              Login Rules
+            </h3>
+            <button
+              onClick={() => setShowRules(false)}
+              className="text-black hover:text-red-500"
+            >
+              <FaTimes />
+            </button>
+          </div>
+          <ul className="list-disc ml-5 space-y-1 text-sm">
             <li>Use your registered email and password only.</li>
             <li>Do not share your credentials with anyone.</li>
             <li>Admins must log in using the admin role.</li>
             <li>Too many failed attempts may lock your account.</li>
             <li>Always log out after using a public or shared device.</li>
-            <li>Do not use browser auto-fill for passwords on shared systems.</li>
+            <li>
+              Do not use browser auto-fill for passwords on shared systems.
+            </li>
             <li>Passwords must be updated every 90 days.</li>
-            <li>If you forget your password, use the 'Forgot Password' link to securely reset it via your registered email. Do not attempt to share or guess passwords.</li>
+            <li>Use the 'Forgot Password' link to reset securely.</li>
           </ul>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }
