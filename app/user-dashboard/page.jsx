@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Loader from "../../components/Loader"
 import {
   LayoutDashboard,
   FileText,
@@ -61,17 +62,17 @@ export default function Dashboard() {
   const [theme, setTheme] = useState("blue");
 
   const gradientThemes = {
-   blue: "bg-gradient-to-r from-blue-500 to-blue-700",
-  green: "bg-gradient-to-r from-green-400 to-green-600",
-  purple: "bg-gradient-to-r from-purple-500 to-indigo-700",
-  orange: "bg-gradient-to-r from-orange-400 to-red-500",
-  pink: "bg-gradient-to-r from-pink-400 to-pink-600",
-  teal: "bg-gradient-to-r from-teal-400 to-cyan-600",
-  indigo: "bg-gradient-to-r from-indigo-500 to-purple-700",
-  yellow: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black", // Keep text readable
-  gray: "bg-gradient-to-r from-gray-500 to-gray-700",
-  red: "bg-gradient-to-r from-red-500 to-red-700",
-  redBlue: "bg-gradient-to-r from-red-500 to-blue-700",
+    blue: "bg-gradient-to-r from-blue-500 to-blue-700",
+    green: "bg-gradient-to-r from-green-400 to-green-600",
+    purple: "bg-gradient-to-r from-purple-500 to-indigo-700",
+    orange: "bg-gradient-to-r from-orange-400 to-red-500",
+    pink: "bg-gradient-to-r from-pink-400 to-pink-600",
+    teal: "bg-gradient-to-r from-teal-400 to-cyan-600",
+    indigo: "bg-gradient-to-r from-indigo-500 to-purple-700",
+    yellow: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black", // Keep text readable
+    gray: "bg-gradient-to-r from-gray-500 to-gray-700",
+    red: "bg-gradient-to-r from-red-500 to-red-700",
+    redBlue: "bg-gradient-to-r from-red-500 to-blue-700",
   };
 
   // We'll get password from backend data, for demo use only — better to handle on backend
@@ -105,7 +106,7 @@ export default function Dashboard() {
       });
   }, [router]);
 
-  if (loading) return <div>Loading user info...</div>;
+  if (loading) return <div><Loader /></div>;
   if (error) return <div className="text-red-600">{error}</div>;
 
   // Mask account number for privacy
@@ -279,45 +280,44 @@ export default function Dashboard() {
 
       {/* Password Modal */}
       {passwordModalOpen && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}  // more transparent background
-    exit={{ opacity: 0 }}
-    className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
-  >
-    <motion.div
-      initial={{ y: "100%", opacity: 0 }}
-      animate={{ y: "0%", opacity: 1 }}
-      exit={{ y: "100%", opacity: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="bg-white rounded-lg w-full max-w-sm p-6 shadow-xl"
-    >
-      <h4 className="text-lg font-bold mb-4">Enter Account Password</h4>
-      <input
-        type="password"
-        className="w-full border p-2 rounded mb-4"
-        value={inputPassword}
-        onChange={(e) => setInputPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <div className="flex justify-end space-x-3">
-        <button
-          onClick={() => setPasswordModalOpen(false)}
-          className="px-4 py-2 text-gray-600"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }} // more transparent background
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
         >
-          Cancel
-        </button>
-        <button
-          onClick={handleVerifyPassword}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Submit
-        </button>
-      </div>
-    </motion.div>
-  </motion.div>
-)}
-
+          <motion.div
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            exit={{ y: "100%", opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="bg-white rounded-lg w-full max-w-sm p-6 shadow-xl"
+          >
+            <h4 className="text-lg font-bold mb-4">Enter Account Password</h4>
+            <input
+              type="password"
+              className="w-full border p-2 rounded mb-4"
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              placeholder="Password"
+            />
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setPasswordModalOpen(false)}
+                className="px-4 py-2 text-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleVerifyPassword}
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }
