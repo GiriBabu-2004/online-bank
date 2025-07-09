@@ -47,7 +47,7 @@ export default function Navbar({ className = "" }) {
 
         {/* Nav Links */}
         <div
-          className="hidden md:flex pr-22 space-x-10 text-lg -pt-5 -mt-1 text-black"
+          className="hidden md:flex pr-22 space-x-10 text-md -pt-5 -mt-1 text-black"
           style={{ fontFamily: "Montserrat, sans-serif" }}
         >
           <Link

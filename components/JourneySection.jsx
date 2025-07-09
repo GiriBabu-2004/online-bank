@@ -18,7 +18,7 @@ export default function JourneySection() {
 
 
       {/* Journey Section */}
-      <section id="our-journey" className="py-20 bg-yellow-400 -mt-1">
+      <section id="our-journey" className="py-20 bg-[#facc15] -mt-1">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
             Our Journey
