@@ -3,6 +3,8 @@ import { WordRotate } from "./magicui/word-rotate";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import Iphone from "@/components/magicui/Iphone"; // adjust path based on your project
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
+import FixedDepositCard from "@/components/FixedDepositCard"; // Adjust path if needed
+
 
 export default function HeroSection() {
   return (
@@ -33,7 +35,7 @@ export default function HeroSection() {
               />
             </svg>
           </Link>
-          <h1 className="text-xl md:text-6xl font-bold text-gray-800 mb-4">
+          <h1 className="text-xl md:text-6xl font-bold text-gray-800 justify-center">
             Your Financial Future,&nbsp;
             <WordRotate
               words={["Simplified", "Effortless", "Streamlined"]}
@@ -43,7 +45,7 @@ export default function HeroSection() {
           </h1>
 
           {/* Subheading */}
-          <p className="text-gray-600 text-md max-w-2xl mb-8 -mt-2">
+          <p className="text-gray-600 text-md max-w-2xl justify-center ml-38">
             Join our modern digital bank designed to give you total control and
             security of your finances — anywhere, anytime.
           </p>
@@ -54,103 +56,133 @@ export default function HeroSection() {
               Get Started
             </button> */}
             <Link href="/register">
-              <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition -mt-3">
+              <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition mt-3">
                 Open Account
               </button>
             </Link>
           </div>
           {/* iPhone Component */}
-          <Iphone className="mx-auto -mt-6">
-            <div className="h-full w-full bg-white flex flex-col overflow-y-auto font-sans">
-              {/* Header */}
-              <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-6 pb-4 flex items-center justify-between">
-                <ChevronLeft className="text-black w-5 h-5" />
-                <h2 className="text-lg font-semibold text-black">Banking</h2>
-                <EllipsisVertical className="text-black w-5 h-5" />
+          <div className="relative w-full flex flex-col lg:flex-row gap-6">
+            <div className="hidden lg:flex flex-col gap-4 items-end mt-8">
+              <div className="bg-[#4A102A] text-white rounded-xl p-4 w-55 shadow-lg text-left mt-25">
+                <p className="bitcount text-3xl font-bold  ">100%</p>
+                <p className="text-sm mt-1 mr-2">Users trust us for secure and reliable banking services.</p>
+              </div>
+              <FixedDepositCard />
+
+            </div>
+            <Iphone className="mx-auto -mt-8">
+              <div className="h-full w-full bg-white flex flex-col overflow-y-auto font-sans">
+                {/* Header */}
+                <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-6 pb-4 flex items-center justify-between">
+                  <ChevronLeft className="text-black w-5 h-5" />
+                  <h2 className="text-lg font-semibold text-black">Banking</h2>
+                  <EllipsisVertical className="text-black w-5 h-5" />
+                </div>
+
+                {/* Cards */}
+                <div className="p-4 space-y-3">
+                  <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
+                    <div>
+                      <p className="text-xs text-gray-500">Account Balance</p>
+                      <p className="text-lg font-semibold">₹25,000</p>
+                    </div>
+                    <p className="text-right font-semibold text-gray-700">
+                      ₹41,090
+                    </p>
+                  </div>
+
+                  <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-blue-100 p-2 rounded-full">
+                        <img src="https://img.icons8.com/fluency/24/online-money-transfer.png" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Siep Galaits</p>
+                        <p className="text-sm font-semibold">₹1</p>
+                      </div>
+                    </div>
+                    <p className="text-right font-semibold text-gray-700">
+                      ₹22,090
+                    </p>
+                  </div>
+
+                  <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-orange-100 p-2 rounded-full">
+                        <img src="https://img.icons8.com/color/24/money--v1.png" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Transaction</p>
+                        <p className="text-sm font-semibold">₹41,000</p>
+                      </div>
+                    </div>
+                    <p className="text-right font-semibold text-gray-700">
+                      ₹34,090
+                    </p>
+                  </div>
+                </div>
+
+                {/* Transaction History */}
+                <div className="px-4 mt-2">
+                  <h3 className="text-sm text-gray-600 mb-2">
+                    Transaction History
+                  </h3>
+
+                  <div className="bg-black text-white rounded-xl p-4 mb-2">
+                    <div className="flex justify-between">
+                      <div>
+                        <p className="text-xs">Account Balance</p>
+                        <p className="text-sm font-semibold">₹21</p>
+                      </div>
+                      <p className="text-sm font-semibold">₹21,090</p>
+                    </div>
+                    <div className="mt-2 h-1 bg-yellow-400 rounded-full w-1/3" />
+                  </div>
+
+                  <div className="bg-white border rounded-xl p-4 flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-gray-200 p-2 rounded-full">
+                        <img src="https://img.icons8.com/ios-filled/20/repeat.png" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Repeetion Payment</p>
+                        <p className="text-xs text-gray-400">जॉग</p>
+                      </div>
+                    </div>
+                    <p className="text-sm font-semibold text-gray-600">₹7.00</p>
+                  </div>
+                </div>
+
+                {/* Button */}
+                <div className="px-4 mt-auto mb-4">
+                  <button className="w-full bg-yellow-400 text-white font-bold py-3 rounded-full shadow">
+                    Banking
+                  </button>
+                </div>
+              </div>
+            </Iphone>
+            <div className="hidden lg:flex flex-col gap-4 items-start mt-8">
+
+
+              <div className="bg-white border rounded-xl p-4 w-64 shadow mt-10 text-left">
+                <p className="kanit text-md font-semibold text-black">🔐 Bank-Grade Security</p>
+                <p className="text-xs text-gray-600 mt-1">Your data is encrypted and protected with 256-bit security.</p>
               </div>
 
-              {/* Cards */}
-              <div className="p-4 space-y-3">
-                <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
-                  <div>
-                    <p className="text-xs text-gray-500">Account Balance</p>
-                    <p className="text-lg font-semibold">₹25,000</p>
-                  </div>
-                  <p className="text-right font-semibold text-gray-700">
-                    ₹41,090
-                  </p>
-                </div>
 
-                <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-blue-100 p-2 rounded-full">
-                      <img src="https://img.icons8.com/fluency/24/online-money-transfer.png" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Siep Galaits</p>
-                      <p className="text-sm font-semibold">₹1</p>
-                    </div>
-                  </div>
-                  <p className="text-right font-semibold text-gray-700">
-                    ₹22,090
-                  </p>
-                </div>
 
-                <div className="flex justify-between items-center bg-white shadow rounded-xl p-4 border">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-orange-100 p-2 rounded-full">
-                      <img src="https://img.icons8.com/color/24/money--v1.png" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Transaction</p>
-                      <p className="text-sm font-semibold">₹41,000</p>
-                    </div>
-                  </div>
-                  <p className="text-right font-semibold text-gray-700">
-                    ₹34,090
-                  </p>
-                </div>
-              </div>
-
-              {/* Transaction History */}
-              <div className="px-4 mt-2">
-                <h3 className="text-sm text-gray-600 mb-2">
-                  Transaction History
-                </h3>
-
-                <div className="bg-black text-white rounded-xl p-4 mb-2">
-                  <div className="flex justify-between">
-                    <div>
-                      <p className="text-xs">Account Balance</p>
-                      <p className="text-sm font-semibold">₹21</p>
-                    </div>
-                    <p className="text-sm font-semibold">₹21,090</p>
-                  </div>
-                  <div className="mt-2 h-1 bg-yellow-400 rounded-full w-1/3" />
-                </div>
-
-                <div className="bg-white border rounded-xl p-4 flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-gray-200 p-2 rounded-full">
-                      <img src="https://img.icons8.com/ios-filled/20/repeat.png" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Repeetion Payment</p>
-                      <p className="text-xs text-gray-400">जॉग</p>
-                    </div>
-                  </div>
-                  <p className="text-sm font-semibold text-gray-600">₹7.00</p>
-                </div>
-              </div>
-
-              {/* Button */}
-              <div className="px-4 mt-auto mb-4">
-                <button className="w-full bg-yellow-400 text-white font-bold py-3 rounded-full shadow">
-                  Banking
-                </button>
+              <div className="bg-[#fceff4] rounded-xl p-4 w-64 shadow mt-30">
+                <p className="bitcount text-black text-2xl font-bold mb-1 uppercase tracking-wide">FundMate</p>
+                <img
+                  src="mutual-face.png"
+                  alt="Face"
+                  className="rounded-lg mt-2"
+                />
+                <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition mt-4 mr-30">Explore</button>
               </div>
             </div>
-          </Iphone>
+          </div>
         </div>
 
         {/* Why Choose Us - placed at bottom */}

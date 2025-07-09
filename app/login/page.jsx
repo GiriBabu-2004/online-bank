@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaInfoCircle, FaTimes, FaEye, FaEyeSlash } from "react-icons/fa"; // icons for UX
 import { Button } from "../../components/ui/button"; // Assuming you have a Button component
+import { CardSpotlight } from "@/components/ui/card-spotlight";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -99,22 +100,22 @@ export default function LoginPage() {
                 Password
               </label>
               <div>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              <button
-    type="button"
-    onClick={() => setShowPassword(!showPassword)}
-    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-yellow-300 hover:text-yellow-400 focus:outline-none"
-  >
-    {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </button>
-  </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-yellow-300 hover:text-yellow-400 focus:outline-none"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
               <div className="text-right mt-1">
                 <Link
                   href="/forgot-password"
@@ -167,41 +168,45 @@ export default function LoginPage() {
         className="fixed bottom-5 right-5 bg-yellow-500 text-black px-4 py-2 rounded-full shadow-md hover:bg-yellow-600 flex items-center gap-2 z-50"
       >
         <FaInfoCircle />
-        {showRules ? "Rules" : "Rules"}
+        Rules
       </button>
 
-      {/* Toggleable Rules Panel */}
+      {/* Spotlight Card for Rules */}
       {showRules && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4 }}
-          className="fixed bottom-20 right-5 bg-yellow-200 text-black shadow-md p-6 rounded-lg text-sm max-w-sm z-40"
+          className="fixed bottom-20 right-5 z-40 max-w-sm w-full"
         >
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-xl font-semibold text-orange-700">
-              Login Rules
-            </h3>
-            <button
-              onClick={() => setShowRules(false)}
-              className="text-black hover:text-red-500"
-            >
-              <FaTimes />
-            </button>
-          </div>
-          <ul className="list-disc ml-5 space-y-1 text-sm">
-            <li>Use your registered email and password only.</li>
-            <li>Do not share your credentials with anyone.</li>
-            <li>Admins must log in using the admin role.</li>
-            <li>Too many failed attempts may lock your account.</li>
-            <li>Always log out after using a public or shared device.</li>
-            <li>
-              Do not use browser auto-fill for passwords on shared systems.
-            </li>
-            <li>Passwords must be updated every 90 days.</li>
-            <li>Use the 'Forgot Password' link to reset securely.</li>
-          </ul>
+          <CardSpotlight className="p-6 bg-black  text-white rounded-lg shadow-lg ">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="michroma text-2xl mb-3 font-semibold text-yellow-400">
+                Login Rules
+              </h3>
+              <button
+                onClick={() => setShowRules(false)}
+                className="text-black hover:text-red-500"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            <ul className="list-disc ml-5 space-y-1 text-sm text-white ">
+              <li>Use your registered email and password only.</li>
+              <li>Do not share your credentials with anyone.</li>
+              <li>Admins must log in using the admin role.</li>
+              <li>Too many failed attempts may lock your account.</li>
+              <li>Always log out after using a public or shared device.</li>
+              <li>
+                Do not use browser auto-fill for passwords on shared systems.
+              </li>
+              <li>Passwords must be updated every 90 days.</li>
+              <li>Use the 'Forgot Password' link to reset securely.</li>
+            </ul>
+          </CardSpotlight>
         </motion.div>
+        
       )}
     </div>
   );

@@ -1,6 +1,34 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* globals.css */
+:root {
+  --font-michroma: 'Michroma', sans-serif;
+  --font-geist-sans: 'Geist', sans-serif;
+  --font-geist-mono: 'Geist Mono', monospace;
+}
+.bitcount {
+  font-family: 'Bitcount Grid Double', sans-serif;
+}
+
+.kanit {
+  font-family: var(--font-kanit);
+}
+
+
+.michroma {
+  font-family: var(--font-michroma);
+}
+
+.geist-sans {
+  font-family: var(--font-geist-sans);
+}
+
+.geist-mono {
+  font-family: var(--font-geist-mono);
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
