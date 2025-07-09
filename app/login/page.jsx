@@ -182,7 +182,7 @@ export default function LoginPage() {
         >
           <CardSpotlight className="p-6 bg-black  text-white rounded-lg shadow-lg ">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="michroma text-2xl mb-3 font-semibold text-yellow-400">
+              <h3 className="michroma text-xl mb-3 font-semibold text-yellow-400">
                 Login Rules
               </h3>
               <button
