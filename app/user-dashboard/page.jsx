@@ -2,6 +2,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  LayoutDashboard,
+  FileText,
+  Info,
+  Calculator,
+  LineChart,
+  Headphones,
+  LogOut,
+} from "lucide-react";
+
+const menuItems = [
+  { icon: <LayoutDashboard size={20} />, label: "Dashboard", href: "/user-dashboard" },
+  { icon: <FileText size={20} />, label: "Statement", href: "/user-dashboard/statement" },
+  { icon: <Info size={20} />, label: "Account Info", href: "/user-dashboard/account-info" },
+  { icon: <Calculator size={20} />, label: "FD Calculator", href: "/user-dashboard/fd-calculator" },
+  { icon: <LineChart size={20} />, label: "MF Calculator", href: "/user-dashboard/mf-calculator" },
+  { icon: <Headphones size={20} />, label: "Contact Us", href: "/customer-care" },
+];
+
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState(null); // Full user data from backend
@@ -91,59 +111,52 @@ export default function Dashboard() {
     }
   };
 
+  
+
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-white p-4 shadow-md">
-        <h2 className="text-xl font-bold mb-6">MyBank</h2>
-        <ul className="space-y-4">
-          <li>
-            <Link href="/user-dashboard" className="hover:text-blue-600 block">
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/user-dashboard/statement"
-              className="hover:text-blue-600 block"
-            >
-              Statement
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/user-dashboard/account-info"
-              className="hover:text-blue-600 block"
-            >
-              Account Info
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/user-dashboard/fd-calculator"
-              className="hover:text-blue-600 block"
-            >
-              FD Calculator
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/user-dashboard/mf-calculator"
-              className="hover:text-blue-600 block"
-            >
-              Mutual Fund Calculator
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/customer-care"
-              className="hover:text-blue-600 block"
-            >
-              Contact Us
-            </Link>
-          </li>
-        </ul>
-      </aside>
+      <motion.aside
+  className="group fixed h-screen bg-white shadow-md z-10"
+  initial={{ width: 80 }}
+  whileHover={{ width: 260 }}
+  transition={{ type: "spring", stiffness: 180, damping: 20 }}
+>
+  {/* Logo Section */}
+  <div className="flex items-center justify-center group-hover:justify-start px-4 py-6 gap-2">
+    <img src="/tablogo.png" alt="Logo1" className="w-8 h-8" />
+    <img src="/logo2nd1.png" alt="Logo2" className="w-30 h-8 hidden group-hover:block" />
+  </div>
+
+  {/* Navigation Menu */}
+  <nav className="flex flex-col gap-4 mt-6 px-2">
+    {menuItems.map((item, index) => (
+      <Link
+        key={index}
+        href={item.href}
+        className="flex items-center gap-4 text-gray-700 p-3 rounded-md hover:bg-blue-100 transition-all"
+      >
+        {item.icon}
+        <span className="hidden group-hover:block">{item.label}</span>
+      </Link>
+    ))}
+  </nav>
+
+  {/* Logout Button */}
+  <div className="absolute bottom-12 left-2 right-2 px-2">
+    <button
+      onClick={() => {
+        localStorage.removeItem("user");
+        router.replace("/login");
+      }}
+      className="w-full flex items-center gap-4 text-red-600 p-3 rounded-md hover:bg-red-100 transition-all"
+    >
+      <LogOut size={20} />
+      <span className="hidden group-hover:block">Logout</span>
+    </button>
+  </div>
+</motion.aside>
 
       {/* Main Content */}
       <div className="flex-1 p-6 relative">
@@ -152,15 +165,7 @@ export default function Dashboard() {
           <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-full uppercase">
             {user?.email?.charAt(0)}
           </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem("user"); // Clear user data
-              router.replace("/login"); // Redirect to login
-            }}
-            className="text-sm text-red-600 underline hover:text-red-800"
-          >
-            Logout
-          </button>
+          
         </div>
 
         {/* User Info */}
