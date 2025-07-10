@@ -29,6 +29,9 @@ importers:
       express:
         specifier: ^5.1.0
         version: 5.1.0
+      express-fileupload:
+        specifier: ^1.5.2
+        version: 1.5.2
       mongoose:
         specifier: ^8.16.1
         version: 8.16.1
@@ -38,6 +41,9 @@ importers:
       nodemailer:
         specifier: ^7.0.4
         version: 7.0.4
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
     devDependencies:
       nodemon:
         specifier: ^3.1.10
@@ -221,6 +227,10 @@ packages:
   events@1.1.1:
     resolution: {integrity: sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==}
     engines: {node: '>=0.4.x'}
+
+  express-fileupload@1.5.2:
+    resolution: {integrity: sha512-wxUJn2vTHvj/kZCVmc5/bJO15C7aSMyHeuXYY3geKpeKibaAoQGcEv5+sM6nHS2T7VF+QHS4hTWPiY2mKofEdg==}
+    engines: {node: '>=12.0.0'}
 
   express@5.1.0:
     resolution: {integrity: sha512-DT9ck5YIRU+8GYzzU5kT3eHGA5iL+1Zd0EutOmTE9Dtk+Tvuzd23VBU+ec7HPNSTxXYO55gPV/hq4pSBJDjFpA==}
@@ -674,6 +684,10 @@ packages:
   util@0.12.5:
     resolution: {integrity: sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==}
 
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
+
   uuid@8.0.0:
     resolution: {integrity: sha512-jOXGuXZAWdsTH7eZLtyXMqUb9EcWMGZNbL9YcGBJl4MH4nrxHmZJhEHvyLFrkxo+28uLb/NYRcStH48fnD0Vzw==}
     hasBin: true
@@ -896,6 +910,10 @@ snapshots:
   etag@1.8.1: {}
 
   events@1.1.1: {}
+
+  express-fileupload@1.5.2:
+    dependencies:
+      busboy: 1.6.0
 
   express@5.1.0:
     dependencies:
@@ -1378,6 +1396,8 @@ snapshots:
       is-generator-function: 1.1.0
       is-typed-array: 1.1.15
       which-typed-array: 1.1.19
+
+  uuid@11.1.0: {}
 
   uuid@8.0.0: {}
 

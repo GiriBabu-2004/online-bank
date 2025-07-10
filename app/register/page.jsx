@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { Flex, Input, Typography } from "antd";
+import { Mail } from "lucide-react";
 
 const { Title } = Typography;
 export default function RegisterPage() {
@@ -303,7 +304,7 @@ export default function RegisterPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
-      <h1 className="text-3xl font-bold text-center mb-8">
+      <h1 className="kanit text-3xl font-bold text-center mb-8">
         Register Your Account
       </h1>
 
@@ -312,22 +313,28 @@ export default function RegisterPage() {
         <div className="space-y-6">
           <label className="block">
             <span>Email Address *</span>
-            <Input
+              <div className="relative mt-1">
+            <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+              <Mail size={18} />
+            </span>
+            <input
               type="email"
-              className="w-full border rounded p-2 mt-1"
+              className="w-full border rounded p-2 mt-1 pl-10"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={otpSent}
+              placeholder="example@gmail.com"
               required
             />
+            </div>
           </label>
 
           {!otpSent ? (
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              className="bg-black text-white px-4 py-2 rounded"
               onClick={sendOtp}
             >
-              Register
+              Get OTP
             </button>
           ) : (
             <>
