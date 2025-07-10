@@ -2,9 +2,9 @@ export default function JourneySection() {
   return (
     <div className="bg-white">
       {/* Wavy SVG Top */}
-      <div className="-mt-60">
+      <div className="-mt-60 relative z-50">
         <svg
-          className="w-full"
+          className="w-full "
           viewBox="0 0 1440 320"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"

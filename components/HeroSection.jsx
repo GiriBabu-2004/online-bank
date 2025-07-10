@@ -71,7 +71,7 @@ export default function HeroSection() {
               <FixedDepositCard />
 
             </div>
-            <Iphone className="mx-auto -mt-8">
+            <Iphone className="mx-auto -mt-8]">
               <div className="h-full w-full bg-white flex flex-col overflow-y-auto font-sans">
                 {/* Header */}
                 <div className="bg-yellow-400 rounded-t-[55px] px-6 pt-6 pb-4 flex items-center justify-between">
