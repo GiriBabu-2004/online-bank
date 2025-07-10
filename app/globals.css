@@ -154,3 +154,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+@keyframes glowBorder {
+  0% {
+    box-shadow: 0 0 0px #facc15;
+  }
+  50% {
+    box-shadow: 0 0 12px 4px #facc15;
+  }
+  100% {
+    box-shadow: 0 0 0px #facc15;
+  }
+}
+
+.glow-border {
+  animation: glowBorder 2s infinite;
+  border: 2px solid #facc15; /* yellow-400 */
+  border-radius: 0.5rem; /* match Tailwind's rounded */
+}
+
+

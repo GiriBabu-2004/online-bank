@@ -2,6 +2,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { TextField } from "@mui/material";
+
+import { FaLocationDot } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
 export default function CustomerCarePage() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -83,8 +86,32 @@ export default function CustomerCarePage() {
         </p>
       </div>
 
-      <div className="relative z-10 flex items-center justify-end min-h-[calc(100vh-160px)] px-4 pb-12">
-        <div className="w-full max-w-md bg-gray-900 text-white bg-opacity-90 backdrop-blur-md p-4 rounded shadow-md md:mr-16 max-h-[600px] ">
+      <div className="relative z-10 flex items-center justify-between min-h-[calc(100vh-160px)] px-4 pb-12">  
+         {/* LEFT SIDE – anchored to the extreme left */}
+  <div className="flex flex-col gap-6 w-full max-w-sm pl-16">
+    <div className="bg-gray-800 p-4 rounded-md text-white shadow">
+      <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
+      <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800"><FaLocationDot /></div>
+      </div>
+      <h3 className="text-yellow-400 font-semibold text-lg mb-2">Our Location</h3>
+      <p className="text-sm">
+        Chanditala Park<br />
+        Sonarpur, India
+      </p>
+    </div>
+
+    <div className="bg-gray-800 p-4 rounded-md text-white shadow">
+      <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
+      <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800"><MdEmail /></div>
+      </div>
+      <h3 className="text-yellow-400 font-semibold text-lg mb-2">Email Us</h3>
+      <p className="text-sm">
+        gofuture440@gmail.com<br />
+        Mon–Fri, 9am to 6pm
+      </p>
+    </div>
+  </div>
+        <div className="w-full max-w-md bg-gray-900 text-white bg-opacity-90 backdrop-blur-md p-4 rounded shadow-md md:mr-16 max-h-[600px] glow-border ">
           <h2 className="text-2xl font-semibold text-left mb-6 text-yellow-500">
             Send Message
           </h2>
