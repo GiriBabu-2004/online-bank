@@ -1,10 +1,16 @@
+"use client";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { WordRotate } from "./magicui/word-rotate";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import Iphone from "@/components/magicui/Iphone"; // adjust path based on your project
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
-import FixedDepositCard from "@/components/FixedDepositCard"; // Adjust path if needed
-
+const FixedDepositCard = dynamic(() => import('@/components/FixedDepositCard'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-72 h-36 rounded-xl bg-gray-100 animate-pulse shadow-md mt-10" />
+  ),
+});
 
 export default function HeroSection() {
   return (
