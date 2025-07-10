@@ -1,10 +1,17 @@
+"use client";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { WordRotate } from "./magicui/word-rotate";
+import { FaCrown } from "react-icons/fa";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import Iphone from "@/components/magicui/Iphone"; // adjust path based on your project
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
-import FixedDepositCard from "@/components/FixedDepositCard"; // Adjust path if needed
-
+const FixedDepositCard = dynamic(() => import('@/components/FixedDepositCard'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-72 h-36 rounded-xl bg-gray-100 animate-pulse shadow-md mt-10" />
+  ),
+});
 
 export default function HeroSection() {
   return (
@@ -16,7 +23,7 @@ export default function HeroSection() {
             href=""
             className="inline-flex items-center gap-2 rounded-full border border-[#ddd9ec] px-4 py-1 mb-6 text-sm font-medium text-black shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
           >
-            <span className="text-l">👑</span>
+            <span className="text-md text-[#FFD700]"><FaCrown /></span>
             <AnimatedGradientText className="text-sm">
               Welcome to the Online Bank
             </AnimatedGradientText>
