@@ -18,7 +18,7 @@ export default function HeroSection() {
     <div className="bg-white">
       <section className="w-full bg-white py-20 mt-5 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
         {/* Headline */}
-        <div className=" -mt-18">
+        <div className=" -mt-18 ">
           <Link
             href=""
             className="inline-flex items-center gap-2 rounded-full border border-[#ddd9ec] px-4 py-1 mb-6 text-sm font-medium text-black shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
@@ -69,7 +69,7 @@ export default function HeroSection() {
             </Link>
           </div>
           {/* iPhone Component */}
-          <div className="relative w-full flex flex-col lg:flex-row gap-6">
+          <div className="relative w-full flex flex-col lg:flex-row gap-6 -mt-6">
             <div className="hidden lg:flex flex-col gap-4 items-end mt-8">
               <div className="bg-[#4A102A] text-white rounded-xl p-4 w-55 shadow-lg text-left mt-25">
                 <p className="bitcount text-3xl font-bold  ">100%</p>
