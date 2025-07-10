@@ -247,7 +247,7 @@ export default function JourneySection() {
                   </p>
                 </div>
               </div>
-              <div className="bg-white text-balck -mt-15 pb-2 pb-6 rounded-md border border-gray-800 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="bg-white text-balck -mt-15 pb-2 rounded-md border border-gray-800 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 {/* Uptime */} 
                 <div>
                   <h2 className="text-4xl md:text-5xl font-semibold text-gray-200">
