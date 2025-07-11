@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { WarpBackground } from "./magicui/warp-background";
 import { ArrowLeft, ArrowRight, Expand, Rocket, Wrench, ShieldCheck, } from "lucide-react";
 import Image from "next/image";
@@ -49,6 +49,15 @@ const chartData = [
 
 export default function JourneySection() {
   const [current, setCurrent] = useState(0);
+
+
+   const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) return null;
   const handlePrev = () => {
     setCurrent((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
   };
