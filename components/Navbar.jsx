@@ -25,13 +25,21 @@ export default function Navbar({ className = "" }) {
         {/* Logo: light and dark variants */}
         <div>
           <Link href="/" className="flex items-center">
+
+             <Image
+              src="/tablogo.png"
+              alt="Bank Logo Light"
+              width={50}
+              height={50}
+              className="object-contain  block dark:hidden transition-all scale-70"
+            />
             {/* Light Mode Logo */}
             <Image
               src="/logo2nd1.png"
               alt="Bank Logo Light"
               width={230}
               height={60}
-              className="object-contain mt-2 block dark:hidden transition-all scale-70"
+              className="object-contain mt-2 -ml-8 block dark:hidden transition-all scale-70"
             />
             {/* Dark Mode Logo */}
             <Image
@@ -39,7 +47,7 @@ export default function Navbar({ className = "" }) {
               alt="Bank Logo Dark"
               width={230}
               height={60}
-              className="object-contain mt-2 hidden dark:block transition-all scale-70"
+              className="object-contain mt-2 ml-8 hidden dark:block transition-all scale-70"
             />
           </Link>
 
