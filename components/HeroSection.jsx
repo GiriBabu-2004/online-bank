@@ -140,7 +140,7 @@ export default function HeroSection() {
                     <div className="flex justify-between">
                       <div>
                         <p className="text-xs">Account Balance</p>
-                        <p className="text-sm font-semibold">₹21</p>
+                        <p className="text-sm font-semibold">₹2000</p>
                       </div>
                       <p className="text-sm font-semibold">₹21,090</p>
                     </div>
@@ -186,7 +186,8 @@ export default function HeroSection() {
                   alt="Face"
                   className="rounded-lg mt-2"
                 />
-                <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition mt-4 mr-30">Explore</button>
+                <Link href="/login">
+                <button className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer transition mt-4 mr-30">Explore</button></Link>
               </div>
             </div>
           </div>
