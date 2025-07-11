@@ -14,7 +14,7 @@ router.post("/personal-details", upload.fields([
 ]), savePersonalDetails);
 
 // Account details
-router.post("/account-details", express.json(), saveAccountDetails);
+router.post("/account-details", saveAccountDetails);
 
 // ✅ Updated: Video verification – allow 5 snapshots
 router.post(
