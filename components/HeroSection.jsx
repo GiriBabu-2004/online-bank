@@ -6,6 +6,7 @@ import { FaCrown } from "react-icons/fa";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import Iphone from "@/components/magicui/Iphone"; // adjust path based on your project
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
+import { BsDatabaseFillLock } from "react-icons/bs";
 const FixedDepositCard = dynamic(() => import('@/components/FixedDepositCard'), {
   ssr: false,
   loading: () => (
@@ -172,9 +173,10 @@ export default function HeroSection() {
             <div className="hidden lg:flex flex-col gap-4 items-start mt-8">
 
 
-              <div className="bg-white border rounded-xl p-4 w-64 shadow mt-10 text-left">
-                <p className="kanit text-md font-semibold text-black">🔐 Bank-Grade Security</p>
-                <p className="text-xs text-gray-600 mt-1">Your data is encrypted and protected with 256-bit security.</p>
+              <div className="bg-[#4A102A] text-white rounded-xl p-4 w-55 shadow-lg text-left mt-8">
+                <div className="flex "><BsDatabaseFillLock className="mt-1 text-2xl" />
+                <p className="bitcount text-lg font-bold ml-2 ">Bank-Grade Security</p></div>
+                <p className="text-sm mt-1 mr-2">Your data is encrypted and protected with 256-bit security.</p>
               </div>
 
 
