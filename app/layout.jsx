@@ -1,13 +1,19 @@
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 
-import { Michroma, Geist, Geist_Mono } from "next/font/google";
+import { Michroma, Geist, Geist_Mono, Roboto } from "next/font/google";
 import { Kanit } from 'next/font/google';
 
 const kanit = Kanit({
   subsets: ['latin'],
   weight: ['400', '600', '700'], // Add any weights you need
   variable: '--font-kanit',
+  display: 'swap',
+});
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'], // Add any weights you need
+  variable: '--font-roboto',
   display: 'swap',
 });
 
@@ -38,7 +44,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${michroma.variable} ${geistSans.variable} ${geistMono.variable} ${kanit.variable}`}
+      className={`${michroma.variable} ${geistSans.variable} ${geistMono.variable} ${kanit.variable} ${roboto.variable}`}
     >
       <head>
         <link rel="icon" href="/tablogo.png" type="image/png" />

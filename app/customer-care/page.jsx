@@ -60,12 +60,16 @@ export default function CustomerCarePage() {
     }
   };
 
-  
-
-
   return (
-    <div className="relative min-h-screen bg-cover bg-center bg-[url('/contact-back.jpg')]">
-      <div className="absolute inset-0 bg-black/60 bg-opacity-60 z-0"></div>
+    <div className="relative min-h-screen w-full bg-black">
+      {/* Golden Horizon Background with Top Glow */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(251, 191, 36, 0.25), transparent 70%), #000000",
+        }}
+      />
       <Link
         href="/"
         className="absolute top-5 left-5 z-50 flex items-center space-x-2"
@@ -74,51 +78,60 @@ export default function CustomerCarePage() {
         <img src="logo2nd2.png" alt="Logo" className="h-10 mt-1 w-auto" />
       </Link>
 
-      {/* Top centered heading and paragraph */}
-      <div className="relative z-10 pt-4 pb-6 text-center px-1 max-w-7xl mx-auto">
-        <h1 className="text-3xl font-extrabold text-yellow-400 mb-1 drop-shadow-lg">
-          Contact Us
-        </h1>
-        <p className="text-sm text-white max-w-3xl mx-auto drop-shadow-md">
-          We're here to help! Please fill out the form to get in touch with our
-          customer care team. Provide as much detail as possible, and feel free
-          to upload any relevant images.
-        </p>
-      </div>
+      <div className="relative z-10 flex items-center justify-between min-h-[calc(100vh-160px)] px-4 pb-12">
+        {/* LEFT SIDE – anchored to the extreme left */}
+        <div className="flex flex-col gap-6 w-full max-w-sm pl-16">
+          {/* Top centered heading and paragraph */}
+          <div className="relative z-10 pt-4 pb-6  mt-40 text-center px-1 max-w-7xl mx-auto">
+            <h1 className="roboto text-6xl font-extrabold text-white mb-1 drop-shadow-lg">
+              Contact Us
+            </h1>
+            <p className="text-sm text-white opacity-50 text-left mt-3 max-w-3xl mx-auto drop-shadow-md">
+              We're here to help! Please fill out the form to get in touch with
+              our customer care team. Provide as much detail as possible, and
+              feel free to upload any relevant images.
+            </p>
+          </div>
+          <div className="bg-transprent border-1 border-gray-800 p-4 rounded-md text-white shadow">
+            <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
+              <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800">
+                <FaLocationDot />
+              </div>
+            </div>
+            <h3 className="roboto text-yellow-400 font-semibold text-lg mb-2">
+              Our Location
+            </h3>
+            <p className=" roboto text-sm">
+              Chanditala Park
+              <br />
+              Sonarpur, India
+            </p>
+          </div>
 
-      <div className="relative z-10 flex items-center justify-between min-h-[calc(100vh-160px)] px-4 pb-12">  
-         {/* LEFT SIDE – anchored to the extreme left */}
-  <div className="flex flex-col gap-6 w-full max-w-sm pl-16">
-    <div className="bg-gray-800 p-4 rounded-md text-white shadow">
-      <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
-      <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800"><FaLocationDot /></div>
-      </div>
-      <h3 className="text-yellow-400 font-semibold text-lg mb-2">Our Location</h3>
-      <p className="text-sm">
-        Chanditala Park<br />
-        Sonarpur, India
-      </p>
-    </div>
-
-    <div className="bg-gray-800 p-4 rounded-md text-white shadow">
-      <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
-      <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800"><MdEmail /></div>
-      </div>
-      <h3 className="text-yellow-400 font-semibold text-lg mb-2">Email Us</h3>
-      <p className="text-sm">
-        gofuture440@gmail.com<br />
-        Mon–Fri, 9am to 6pm
-      </p>
-    </div>
-  </div>
-        <div className="w-full max-w-md bg-gray-900 text-white bg-opacity-90 backdrop-blur-md p-4 rounded shadow-md md:mr-16 max-h-[600px] glow-border ">
-          <h2 className="text-2xl font-semibold text-left mb-6 text-yellow-500">
+          <div className="bg-transprent border-1 border-gray-800 p-4 rounded-md text-white shadow">
+            <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
+              <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800">
+                <MdEmail />
+              </div>
+            </div>
+            <h3 className="roboto text-yellow-400 font-semibold text-lg mb-2">
+              Email Us
+            </h3>
+            <p className="roboto text-sm">
+              gofuture440@gmail.com
+              <br />
+              Mon–Fri, 9am to 6pm
+            </p>
+          </div>
+        </div>
+        <div className="w-full max-w-md bg-white text-black p-4 md:mr-16 max-h-[600px] rounded-lg">
+          <h2 className="roboto text-2xl font-semibold text-left mb-6 text-black">
             Send Message
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-white pb-2">
+              <label className="roboto block text-sm font-medium text-black pb-2">
                 Registered Email
               </label>
               <TextField
@@ -131,29 +144,29 @@ export default function CustomerCarePage() {
                 fullWidth
                 InputProps={{
                   sx: {
-                    color: "white", // Input text
-                    "&::placeholder": { color: "white" }, // Placeholder text
+                    color: "black", // Input text
+                    "&::placeholder": { color: "black" }, // Placeholder text
                   },
                 }}
                 InputLabelProps={{
-                  sx: { color: "white" }, // Label color
+                  sx: { color: "black" }, // Label color
                 }}
                 sx={{
                   "& .MuiInput-underline:before": {
-                    borderBottomColor: "yellow", // Underline default
+                    borderBottomColor: "gray", // Underline default
                   },
                   "& .MuiInput-underline:hover:before": {
-                    borderBottomColor: "yellow", // Underline on hover
+                    borderBottomColor: "black", // Underline on hover
                   },
                   "& .MuiInput-underline:after": {
-                    borderBottomColor: "yellow", // Underline after 
+                    borderBottomColor: "black", // Underline after
                   },
                 }}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white pb-2">
+              <label className="roboto block text-sm font-medium text-black pb-2">
                 Subject
               </label>
               <TextField
@@ -166,29 +179,29 @@ export default function CustomerCarePage() {
                 placeholder="Enter your subject"
                 InputProps={{
                   sx: {
-                    color: "white", // Input text
-                    "&::placeholder": { color: "white" }, // Placeholder text
+                    color: "black", // Input text
+                    "&::placeholder": { color: "black" }, // Placeholder text
                   },
                 }}
                 InputLabelProps={{
-                  sx: { color: "white" }, // Label color
+                  sx: { color: "black" }, // Label color
                 }}
                 sx={{
                   "& .MuiInput-underline:before": {
-                    borderBottomColor: "yellow", // Underline default
+                    borderBottomColor: "gray", // Underline default
                   },
                   "& .MuiInput-underline:hover:before": {
-                    borderBottomColor: "yellow", // Underline on hover
+                    borderBottomColor: "black", // Underline on hover
                   },
                   "& .MuiInput-underline:after": {
-                    borderBottomColor: "yellow", // Underline after 
+                    borderBottomColor: "black", // Underline after
                   },
                 }}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white pb-2">
+              <label className="roboto block text-sm font-medium text-black pb-2">
                 Describe the Problem
               </label>
               <textarea
@@ -196,52 +209,52 @@ export default function CustomerCarePage() {
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-2 border border-yellow-300 rounded-md resize-none text-white h-20 "
+                className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none text-black h-20 "
               ></textarea>
             </div>
 
             <div>
-      <label className="block text-sm font-medium text-white pb-2">
-        Upload Images (Optional)
-      </label>
+              <label className="roboto block text-sm font-medium text-black pb-2">
+                Upload Images (Optional)
+              </label>
 
-      {/* Hidden actual input */}
-      <input
-        id="imageUpload"
-        type="file"
-        multiple
-        accept="image/*"
-        onChange={handleImageChange}
-        className="hidden"
-      />
+              {/* Hidden actual input */}
+              <input
+                id="imageUpload"
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
 
-      {/* Custom styled label acts as button */}
-      <label
-        htmlFor="imageUpload"
-        className="flex items-center justify-center cursor-pointer w-full px-2 py-2 border-2 border-yellow-400 border-dashed rounded-md text-yellow-400 hover:bg-yellow-400 hover:text-black transition-colors h-10"
-      >
-        Choose Images
-      </label>
+              {/* Custom styled label acts as button */}
+              <label
+                htmlFor="imageUpload"
+                className="roboto flex items-center justify-center cursor-pointer w-full px-2 py-2 border-2 border-yellow-400 border-dashed rounded-md text-black hover:bg-yellow-400 hover:text-black transition-colors h-10"
+              >
+                Choose Images
+              </label>
 
-      {/* Selected image count */}
-      {images.length > 0 && (
-        <p className="text-[10px] text-green-400 mt-2">
-          {images.length} image{images.length > 1 ? "s" : ""} selected
-        </p>
-      )}
+              {/* Selected image count */}
+              {images.length > 0 && (
+                <p className="text-[10px] text-green-400 mt-2">
+                  {images.length} image{images.length > 1 ? "s" : ""} selected
+                </p>
+              )}
 
-      {/* Progress bar container */}
-      <div className="w-full bg-green-200 rounded-full h-0.5 mt-3 overflow-hidden">
-        {/* Progress bar itself */}
-        <div
-          className="bg-green-500 h-0.5 rounded-full transition-all duration-300 ease-in-out"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
+              {/* Progress bar container */}
+              <div className="w-full bg-green-200 rounded-full h-0.5 mt-3 overflow-hidden">
+                {/* Progress bar itself */}
+                <div
+                  className="bg-green-500 h-0.5 rounded-full transition-all duration-300 ease-in-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
             <button
               type="submit"
-              className="w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-600 cursor-pointer"
+              className="w-full bg-yellow-500 text-black roboto font-bold py-2 rounded-md hover:bg-yellow-600 cursor-pointer"
             >
               Submit
             </button>
