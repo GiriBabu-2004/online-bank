@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-const uploadToS3 = require("../config/awsS3");
+const uploadToCloudinary = require("../config/cloudinaryUpload");
 const transporter = require("../config/nodemailer");
 
 exports.savePersonalDetails = async (req, res) => {
@@ -29,7 +29,7 @@ exports.savePersonalDetails = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Upload govIdFront and govIdBack to S3 if files present
+    // Upload govIdFront and govIdBack to Cloudinary if files present
     const govIdFrontFile = req.files?.govIdFront?.[0];
     const govIdBackFile = req.files?.govIdBack?.[0];
 
@@ -37,20 +37,17 @@ exports.savePersonalDetails = async (req, res) => {
     let govIdBackUrl = null;
 
     if (govIdFrontFile) {
-      const frontUpload = await uploadToS3(
+      govIdFrontUrl = await uploadToCloudinary(
         govIdFrontFile.buffer,
-        `govIdFront_${email}_${Date.now()}`,
-        govIdFrontFile.mimetype
+        `govIdFront_${email}_${Date.now()}`
       );
-      govIdFrontUrl = frontUpload.Location;
     }
+
     if (govIdBackFile) {
-      const backUpload = await uploadToS3(
+      govIdBackUrl = await uploadToCloudinary(
         govIdBackFile.buffer,
-        `govIdBack_${email}_${Date.now()}`,
-        govIdBackFile.mimetype
+        `govIdBack_${email}_${Date.now()}`
       );
-      govIdBackUrl = backUpload.Location;
     }
 
     user.personalDetails = {
@@ -80,7 +77,6 @@ exports.savePersonalDetails = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
 
 exports.saveAccountDetails = async (req, res) => {
   try {
@@ -131,12 +127,11 @@ exports.saveVideoVerification = async (req, res) => {
       const file = req.files?.[fieldName]?.[0];
 
       if (file) {
-        const uploadResult = await uploadToS3(
+        const uploadedUrl = await uploadToCloudinary(
           file.buffer,
-          `videoVerification_${email}_${fieldName}_${Date.now()}`,
-          file.mimetype
+          `videoVerification_${email}_${fieldName}_${Date.now()}`
         );
-        uploadedUrls.push(uploadResult.Location);
+        uploadedUrls.push(uploadedUrl);
       }
     }
 
@@ -162,4 +157,3 @@ exports.saveVideoVerification = async (req, res) => {
     res.status(500).json({ error: "Server error while saving video verification" });
   }
 };
-
