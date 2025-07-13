@@ -92,22 +92,7 @@ export default function CustomerCarePage() {
               feel free to upload any relevant images.
             </p>
           </div>
-          <div className="bg-transprent border-1 border-gray-800 p-4 rounded-md text-white shadow">
-            <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
-              <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800">
-                <FaLocationDot />
-              </div>
-            </div>
-            <h3 className="roboto text-yellow-400 font-semibold text-lg mb-2">
-              Our Location
-            </h3>
-            <p className=" roboto text-sm">
-              Chanditala Park
-              <br />
-              Sonarpur, India
-            </p>
-          </div>
-
+         
           <div className="bg-transprent border-1 border-gray-800 p-4 rounded-md text-white shadow">
             <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
               <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800">
@@ -124,7 +109,7 @@ export default function CustomerCarePage() {
             </p>
           </div>
         </div>
-        <div className="w-full max-w-md bg-white text-black p-4 md:mr-16 max-h-[600px] rounded-lg">
+        <div className="w-full max-w-md mt-10 bg-white text-black p-4 md:mr-16 max-h-[600px] rounded-lg">
           <h2 className="roboto text-2xl font-semibold text-left mb-6 text-black">
             Send Message
           </h2>
