@@ -3,6 +3,8 @@ import { useState, useRef } from "react";
 import { Flex, Input, Typography } from "antd";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+import {  Loader2 } from "lucide-react"; // Loader2 = Spinner
+import { motion } from "framer-motion"; 
 const { Title } = Typography;
 export default function RegisterPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
@@ -330,6 +332,9 @@ function evaluatePasswordStrength(password) {
     setOtp(value);
   };
 
+  const emailError = email && !email.includes("@"); // simple example
+const otpError = otp.length > 0 && otp.length < 6;
+
   return (
      <div className="min-h-screen bg-gray-50">
     {/* Header with logo and step indicator */}
@@ -372,17 +377,24 @@ function evaluatePasswordStrength(password) {
     
 
       {/* Step 1 */}
-      {step === 1 && (
-  <div className="space-y-6 max-w-md mx-auto">
+   {step === 1 && (
+  <div className="bg-white shadow-md rounded-xl p-6 space-y-6 max-w-md mx-auto transition-all duration-300">
+    
+    {/* Email Input */}
     <label className="block">
-      <span className="text-gray-700 font-medium">Email Address *</span>
-      <div className="relative mt-1">
+      <span className="text-gray-800 font-medium">Email Address <span className="text-red-500">*</span></span>
+      <div className="relative mt-2">
         <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
           <Mail size={18} />
         </span>
         <input
           type="email"
-          className="w-full border border-gray-300 rounded-md p-2 pl-10 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+          inputMode="email"
+          className={`w-full border ${
+            emailError ? "border-red-500" : "border-gray-300"
+          } rounded-lg py-2 pl-10 pr-3 shadow-sm focus:outline-none focus:ring-2 ${
+            emailError ? "focus:ring-red-500" : "focus:ring-black"
+          } transition-all`}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={otpSent || loadingOtp}
@@ -390,25 +402,34 @@ function evaluatePasswordStrength(password) {
           required
         />
       </div>
+      {emailError && <p className="text-sm text-red-500 mt-1">Please enter a valid email.</p>}
     </label>
 
+    {/* Get OTP Button */}
     {!otpSent ? (
       <button
         onClick={sendOtp}
-        disabled={loadingOtp || !email}
-        className={`w-full text-white font-semibold rounded-md py-2 transition ${
+        disabled={loadingOtp || !email || emailError}
+        className={`w-full text-white font-semibold rounded-lg py-2 flex items-center justify-center gap-2 transition-all ${
           loadingOtp
-            ? "bg-neutral-600 cursor-not-allowed"
-            : "bg-neutral-800 hover:bg-neutral-900"
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-black hover:bg-gray-900"
         }`}
       >
+        {loadingOtp && <Loader2 className="animate-spin w-4 h-4" />}
         {loadingOtp ? "Getting OTP..." : "Get OTP"}
       </button>
     ) : (
       <>
-        <div className="space-y-2">
+        {/* Animated OTP Field */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="space-y-3"
+        >
           <div className="flex justify-between items-center">
-            <label className="text-gray-700 font-medium">Enter 6-digit OTP *</label>
+            <label className="text-gray-800 font-medium">Enter 6-digit OTP <span className="text-red-500">*</span></label>
             <button
               onClick={resendOtp}
               disabled={loadingOtp}
@@ -417,31 +438,39 @@ function evaluatePasswordStrength(password) {
               Resend OTP
             </button>
           </div>
+
           <Input.OTP
             length={6}
             value={otp}
             onChange={handleChange}
-            formatter={(str) => str.replace(/\D/g, "")} // Only digits
+            formatter={(str) => str.replace(/\D/g, "")}
             inputMode="numeric"
-            className="mx-auto"
+            autoFocus
+            className={`mx-auto gap-2 [&>input]:rounded-lg [&>input]:border ${
+              otpError ? "border-red-500" : "border-gray-300"
+            } [&>input]:focus:ring-black`}
           />
-        </div>
+          {otpError && <p className="text-sm text-red-500">OTP must be 6 digits.</p>}
+        </motion.div>
 
+        {/* Submit Button */}
         <button
           onClick={verifyOtp}
           disabled={loadingVerify || otp.length < 6}
-          className={`w-full mt-4 font-semibold rounded-md py-2 text-white transition ${
+          className={`w-full mt-4 font-semibold rounded-lg py-2 text-white flex items-center justify-center gap-2 transition-all ${
             loadingVerify
-              ? "bg-green-400 cursor-not-allowed"
+              ? "bg-green-300 cursor-not-allowed"
               : "bg-green-600 hover:bg-green-700"
           }`}
         >
+          {loadingVerify && <Loader2 className="animate-spin w-4 h-4" />}
           {loadingVerify ? "Submitting..." : "Submit"}
         </button>
       </>
     )}
   </div>
 )}
+
 
 
       {/* Step 2 */}
