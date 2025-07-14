@@ -45,9 +45,9 @@ export default function Footer() {
         <div className="transition-transform duration-300 hover:-translate-y-1">
           <h3 className="text-lg font-bold mb-4 text-white uppercase tracking-wide">Contact Us</h3>
           <ul className="text-sm space-y-2 text-yellow-200">
-            <li>Email: support@bankx.com</li>
+            <li>Email: gofuture440@gmail.com</li>
             <li>Phone: +1 800 123 4567</li>
-            <li>Address: 123 Finance St, NY, USA</li>
+            <li>Address: Kolkata , Westbengal</li>
           </ul>
         </div>
 
