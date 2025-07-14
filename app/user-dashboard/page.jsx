@@ -172,7 +172,7 @@ export default function Dashboard() {
         </div>
 
         {/* Navigation Menu */}
-        <nav className="flex flex-col gap-4 mt-6 px-2">
+        <nav className="flex flex-col gap-4 mt-6 px-2 ml-3 ">
           {menuItems.map((item, index) => (
             <Link
               key={index}
@@ -201,59 +201,82 @@ export default function Dashboard() {
       </motion.aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 relative">
+      <div className="flex-2 p-6 relative">
         {/* Top Right Profile */}
         <div className="absolute top-4 right-6 flex items-center gap-4">
           <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-full uppercase">
             {user?.email?.charAt(0)}
           </div>
         </div>
-        {/* Theme Selector */}
-        <div className="flex justify-end max-w-2xl mx-auto mt-10 px-4">
-          <select
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 text-sm"
-          >
-            {Object.keys(gradientThemes).map((key) => (
-              <option key={key} value={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)} Theme
-              </option>
-            ))}
-          </select>
-        </div>
 
-        {/* User Info */}
-        <div
-          className={`rounded-lg shadow-lg p-6 max-w-2xl mx-auto mt-4 text-white transition-all duration-500 ${gradientThemes[theme]}`}
-        >
-          <h3 className="text-lg font-semibold  mb-4">User Details</h3>
+
+
+
+
+
+
+
+
+
+
+        {/* Theme Selector */}
+        <div className="flex flex-col items-center  justify-end mt-4">
+          <div className="flex flex-row w-sm justify-between ">
+            <p className="mt-12">My card</p>
+            <div className="flex justify-end max-w-2xl mt-10">
+              <select
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                className="border border-gray-300 rounded px-3 py-2 text-sm"
+              >
+                {Object.keys(gradientThemes).map((key) => (
+                  <option key={key} value={key}>
+                    {key.charAt(0).toUpperCase() + key.slice(1)} Theme
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* User Info */}
+          <div
+            className={`rounded-lg shadow-lg w-sm  p-6 max-w-sm mx-auto mt-4 text-white transition-all duration-500 ${gradientThemes[theme]}`}
+          >
+            {/* <h3 className="text-lg font-semibold  mb-4">User Details</h3>
 
           <p>
             <strong>Name:</strong> {user?.personalDetails?.firstName}
           </p>
           <p>
             <strong>Email:</strong> {user?.email}
-          </p>
+          </p> */}
+            <div className="flex flex-row justify-between  items-center">
+              <img src="/tablogo.png" alt="Logo1" className="size-10 -ml-1" />
+              <img
+                src="/logo2nd1.png"
+                alt="Logo2"
+                className="w-35 h-10 group-hover:block"
+              />
+            </div>
 
-          {/* Account Info */}
-          <div className="mt-6 border-t border-white/40 pt-4">
-            <h4 className="font-semibold mb-2">Account Details</h4>
+            {/* Account Info */}
+            <div className="mt-4  pt-4">
+              {/* <h4 className="font-semibold mb-2">Account Details</h4>
             <p>
               <strong>Account Type:</strong> {user?.accountDetails?.accountType}
-            </p>
-            <p>
-              <strong>Account Number:</strong> {maskedAccount}{" "}
-              {!showAccountNumber && (
-                <button
-                  onClick={() => setPasswordModalOpen(true)}
-                  className="text-sm text-white underline hover:text-white/90"
-                >
-                  Show
-                </button>
-              )}
-            </p>
-            <p>
+            </p> */}
+              <p>
+                {maskedAccount}{" "}
+                {!showAccountNumber && (
+                  <button
+                    onClick={() => setPasswordModalOpen(true)}
+                    className="text-sm text-white underline hover:text-white/90"
+                  >
+                    Show
+                  </button>
+                )}
+              </p>
+              {/* <p>
               <strong>Balance:</strong> {maskedBalance}{" "}
               <button
                 onClick={() => setShowBalance(!showBalance)}
@@ -261,12 +284,66 @@ export default function Dashboard() {
               >
                 {showBalance ? "🙈" : "👁️"}
               </button>
-            </p>
+            </p> */}
+              <div className="flex flex-row justify-between  pt-6">
+                <p>12/24</p>
+                <p>CVV</p>
+              </div>
+            </div>
           </div>
+          <div className="flex flex-col mt-6 ">
+            <div className="flex flex-row justify-between gap-46">
+              <p className="text-gray-400">Card Balance</p>
+              <p>
+                <button
+                  onClick={() => setShowBalance(!showBalance)}
+                  className="text-white/80"
+                >
+                  {showBalance ? "🙈" : "👁️"}
+                </button>
+                {maskedBalance}{" "}
+
+              </p>
+            </div>
+            <div className="flex flex-row justify-between gap-35">
+              <p className="text-gray-400">Card Limit</p>
+              <p>
+                ₹100,000,00
+              </p>
+            </div>
+
+          </div>
+          <div className="flex flex-col mt-6 ">
+            <div className="flex flex-row justify-between gap-46">
+              <p className="font-bold">Information</p>
+              <p>More Details</p>
+            </div>
+            <div className="flex flex-row justify-between gap-35">
+              <p className="text-gray-400">Status</p>
+              <p>
+                Active
+              </p>
+            </div>
+            <div className="flex flex-row justify-between gap-35">
+              <p className="text-gray-400">Type Card</p>
+              <p>
+                Current
+              </p>
+            </div>
+            <div className="flex flex-row justify-between gap-35">
+              <p className="text-gray-400">Currency</p>
+              <p>
+                Indian
+              </p>
+            </div>
+
+          </div>
+
+
         </div>
 
         {/* Add Money & Send Money Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-2xl mx-auto">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-2xl mx-auto">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h4 className="text-lg font-semibold mb-2">Add Money</h4>
             <p className="text-gray-600">Easily fund your account instantly.</p>
@@ -275,7 +352,7 @@ export default function Dashboard() {
             <h4 className="text-lg font-semibold mb-2">Send Money</h4>
             <p className="text-gray-600">Transfer funds securely to anyone.</p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Password Modal */}
