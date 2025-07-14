@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 import { Flex, Input, Typography } from "antd";
 import { Mail } from "lucide-react";
-
+import Link from "next/link";
 const { Title } = Typography;
 export default function RegisterPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
@@ -13,6 +13,8 @@ export default function RegisterPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [loadingOtp, setLoadingOtp] = useState(false);
+const [loadingVerify, setLoadingVerify] = useState(false);
 
   const [personalDetails, setPersonalDetails] = useState({
     email: "",
@@ -52,53 +54,60 @@ export default function RegisterPage() {
 
   // Send OTP to email
   async function sendOtp() {
-    if (!email) return alert("Please enter your email");
-    try {
-      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setOtpSent(true);
-        alert("OTP sent to your email.");
-      } else {
-        alert(data.message || "Failed to send OTP");
-      }
-    } catch (err) {
-      alert("Error sending OTP: " + err.message);
+  if (!email) return alert("Please enter your email");
+  setLoadingOtp(true);
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setOtpSent(true);
+      alert("OTP sent to your email.");
+    } else {
+      alert(data.message || "Failed to send OTP");
     }
+  } catch (err) {
+    alert("Error sending OTP: " + err.message);
+  } finally {
+    setLoadingOtp(false);
   }
+}
 
-  // Verify OTP
-  async function verifyOtp() {
-    if (otp.length !== 6) return alert("Enter 6-digit OTP");
-
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, otp }),
-      });
-
-      const data = await res.json();
-      console.log("OTP Verify Response:", data); // ✅ log backend response
-
-      if (res.ok) {
-        setOtpVerified(true);
-        setStep(2); // ✅ move to Step 2
-        setPersonalDetails((prev) => ({ ...prev, email }));
-      } else {
-        alert(data.error || "OTP verification failed");
-      }
-    } catch (err) {
-      console.error("OTP Verify Error:", err);
-      alert("Network error: " + err.message);
+async function verifyOtp() {
+  if (otp.length !== 6) return alert("Enter 6-digit OTP");
+  setLoadingVerify(true);
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp }),
+    });
+    const data = await res.json();
+    console.log("OTP Verify Response:", data); // ✅ log backend response
+    if (res.ok) {
+      setOtpVerified(true);
+      setStep(2); // ✅ move to Step 2
+      setPersonalDetails((prev) => ({ ...prev, email }));
+    } else {
+      alert(data.error || "OTP verification failed");
     }
+  } catch (err) {
+    console.error("OTP Verify Error:", err);
+    alert("Network error: " + err.message);
+  } finally {
+    setLoadingVerify(false);
   }
+}
+
+// Simple resendOtp = just call sendOtp again
+function resendOtp() {
+  if (!loadingOtp) sendOtp();
+}
 
   function handlePersonalChange(e) {
     const { name, value, type, checked, files } = e.target;
@@ -303,61 +312,118 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-8">
-      <h1 className="kanit text-3xl font-bold text-center mb-8">
-        Register Your Account
-      </h1>
+     <div className="min-h-screen bg-gray-50">
+    {/* Header with logo and step indicator */}
+    <header className="flex items-center justify-between px-8 py-4 bg-white shadow-md sticky top-0 z-10">
+      <div className="flex items-center gap-4">
+        <Link href="/" className="flex items-center gap-2">
+        <img src="/tablogo.png" alt="logo" className="h-10 -mt-2 w-auto" />
+        <img src="/logo2nd1.png" alt="Logo" className="h-10 w-auto" />
+        </Link>
+      </div>
+      {/* Step Indicator (non-clickable) */}
+      <div className="flex items-center gap-2 text-sm font-medium">
+        {["Email Verification", "Personal Info", "Account Info", "Video KYC", "Confirmation"].map(
+          (label, index) => {
+            const current = index + 1;
+            return (
+              <div
+                key={index}
+                className={`flex items-center gap-2 px-3 py-1 rounded-full ${
+                  current === step
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-500"
+                }`}
+              >
+                Step {current}
+              </div>
+            );
+          }
+        )}
+      </div>
+    </header>
+
+    {/* Form Section */}
+    <main className="flex justify-center items-start mt-10 px-4">
+      <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
+        <h1 className="kanit text-3xl font-bold text-center mb-8">
+          Register Your Account
+        </h1>
+
+    
 
       {/* Step 1 */}
       {step === 1 && (
-        <div className="space-y-6">
-          <label className="block">
-            <span>Email Address *</span>
-              <div className="relative mt-1">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-              <Mail size={18} />
-            </span>
-            <input
-              type="email"
-              className="w-full border rounded p-2 mt-1 pl-10"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={otpSent}
-              placeholder="example@gmail.com"
-              required
-            />
-            </div>
-          </label>
+  <div className="space-y-6 max-w-md mx-auto">
+    <label className="block">
+      <span className="text-gray-700 font-medium">Email Address *</span>
+      <div className="relative mt-1">
+        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+          <Mail size={18} />
+        </span>
+        <input
+          type="email"
+          className="w-full border border-gray-300 rounded-md p-2 pl-10 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={otpSent || loadingOtp}
+          placeholder="example@gmail.com"
+          required
+        />
+      </div>
+    </label>
 
-          {!otpSent ? (
+    {!otpSent ? (
+      <button
+        onClick={sendOtp}
+        disabled={loadingOtp || !email}
+        className={`w-full text-white font-semibold rounded-md py-2 transition ${
+          loadingOtp
+            ? "bg-neutral-600 cursor-not-allowed"
+            : "bg-neutral-800 hover:bg-neutral-900"
+        }`}
+      >
+        {loadingOtp ? "Getting OTP..." : "Get OTP"}
+      </button>
+    ) : (
+      <>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <label className="text-gray-700 font-medium">Enter 6-digit OTP *</label>
             <button
-              className="bg-black text-white px-4 py-2 rounded cursor-pointer"
-              onClick={sendOtp}
+              onClick={resendOtp}
+              disabled={loadingOtp}
+              className="text-sm text-blue-600 hover:underline disabled:text-gray-400"
             >
-              Get OTP
+              Resend OTP
             </button>
-          ) : (
-            <>
-              <Flex gap="middle" align="flex-start" vertical>
-                <Title level={5}>Enter 6-digit OTP *</Title>
-                <Input.OTP
-                  length={6}
-                  value={otp}
-                  onChange={handleChange}
-                  formatter={(str) => str.replace(/\D/g, "")} // Only digits
-                  inputMode="numeric"
-                />
-              </Flex>
-              <button
-                className="bg-green-600 text-white mt-4 px-4 py-2 rounded"
-                onClick={verifyOtp}
-              >
-                Submit
-              </button>
-            </>
-          )}
+          </div>
+          <Input.OTP
+            length={6}
+            value={otp}
+            onChange={handleChange}
+            formatter={(str) => str.replace(/\D/g, "")} // Only digits
+            inputMode="numeric"
+            className="mx-auto"
+          />
         </div>
-      )}
+
+        <button
+          onClick={verifyOtp}
+          disabled={loadingVerify || otp.length < 6}
+          className={`w-full mt-4 font-semibold rounded-md py-2 text-white transition ${
+            loadingVerify
+              ? "bg-green-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
+        >
+          {loadingVerify ? "Submitting..." : "Submit"}
+        </button>
+      </>
+    )}
+  </div>
+)}
+
 
       {/* Step 2 */}
       {step === 2 && (
@@ -739,6 +805,8 @@ export default function RegisterPage() {
           </p>
         </div>
       )}
-    </div>
+     </div>
+    </main>
+  </div>
   );
 }
