@@ -179,3 +179,20 @@
 }
 
 
+@layer utilities {
+  .bg-animated {
+    background: linear-gradient(270deg, #fff, #FFD600, #fff);
+    background-size: 600% 600%;
+    animation: moveBg 15s ease infinite;
+  }
+
+  @keyframes moveBg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
+
+.input-style {
+  @apply border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition;
+}

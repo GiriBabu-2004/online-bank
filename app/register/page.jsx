@@ -2,6 +2,10 @@
 import { useState, useRef } from "react";
 import { Flex, Input, Typography } from "antd";
 import { Mail } from "lucide-react";
+import Link from "next/link";
+import {  Loader2 } from "lucide-react"; // Loader2 = Spinner
+import { motion } from "framer-motion"; 
+import ThreeFace from "@/components/ThreeFace";
 
 const { Title } = Typography;
 export default function RegisterPage() {
@@ -13,6 +17,10 @@ export default function RegisterPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [loadingOtp, setLoadingOtp] = useState(false);
+const [loadingVerify, setLoadingVerify] = useState(false);
+const [passwordStrength, setPasswordStrength] = useState("");
+
 
   const [personalDetails, setPersonalDetails] = useState({
     email: "",
@@ -52,53 +60,77 @@ export default function RegisterPage() {
 
   // Send OTP to email
   async function sendOtp() {
-    if (!email) return alert("Please enter your email");
-    try {
-      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setOtpSent(true);
-        alert("OTP sent to your email.");
-      } else {
-        alert(data.message || "Failed to send OTP");
-      }
-    } catch (err) {
-      alert("Error sending OTP: " + err.message);
+  if (!email) return alert("Please enter your email");
+  setLoadingOtp(true);
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setOtpSent(true);
+      alert("OTP sent to your email.");
+    } else {
+      alert(data.message || "Failed to send OTP");
     }
+  } catch (err) {
+    alert("Error sending OTP: " + err.message);
+  } finally {
+    setLoadingOtp(false);
+  }
+}
+
+async function verifyOtp() {
+  if (otp.length !== 6) return alert("Enter 6-digit OTP");
+  setLoadingVerify(true);
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp }),
+    });
+    const data = await res.json();
+    console.log("OTP Verify Response:", data); // ✅ log backend response
+    if (res.ok) {
+      setOtpVerified(true);
+      setStep(2); // ✅ move to Step 2
+      setPersonalDetails((prev) => ({ ...prev, email }));
+    } else {
+      alert(data.error || "OTP verification failed");
+    }
+  } catch (err) {
+    console.error("OTP Verify Error:", err);
+    alert("Network error: " + err.message);
+  } finally {
+    setLoadingVerify(false);
+  }
+}
+
+// Simple resendOtp = just call sendOtp again
+function resendOtp() {
+  if (!loadingOtp) sendOtp();
+}
+
+function evaluatePasswordStrength(password) {
+  let strength = "Weak";
+
+  const strongPattern =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  const mediumPattern = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+  if (strongPattern.test(password)) {
+    strength = "Strong";
+  } else if (mediumPattern.test(password)) {
+    strength = "Medium";
   }
 
-  // Verify OTP
-  async function verifyOtp() {
-    if (otp.length !== 6) return alert("Enter 6-digit OTP");
+  return strength;
+}
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, otp }),
-      });
-
-      const data = await res.json();
-      console.log("OTP Verify Response:", data); // ✅ log backend response
-
-      if (res.ok) {
-        setOtpVerified(true);
-        setStep(2); // ✅ move to Step 2
-        setPersonalDetails((prev) => ({ ...prev, email }));
-      } else {
-        alert(data.error || "OTP verification failed");
-      }
-    } catch (err) {
-      console.error("OTP Verify Error:", err);
-      alert("Network error: " + err.message);
-    }
-  }
 
   function handlePersonalChange(e) {
     const { name, value, type, checked, files } = e.target;
@@ -302,432 +334,554 @@ export default function RegisterPage() {
     setOtp(value);
   };
 
+  const emailError = email && !email.includes("@"); // simple example
+const otpError = otp.length > 0 && otp.length < 6;
+
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-8">
-      <h1 className="kanit text-3xl font-bold text-center mb-8">
+   <div className="min-h-screen bg-animated">
+
+  {/* Header */}
+  <header className="flex items-center justify-between px-8 py-4 bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-20 border-b border-yellow-300">
+    <Link href="/" className="flex items-center gap-2">
+      <img src="/tablogo.png" alt="Tab Logo" className="h-10 w-auto -mt-2" />
+      <img src="/logo2nd1.png" alt="Main Logo" className="h-10 w-auto" />
+    </Link>
+
+    {/* Stepper */}
+    <div className="flex items-center gap-3 text-sm font-semibold">
+      {["Email Verification", "Personal Info", "Account Info", "Video KYC", "Confirmation"].map(
+        (label, index) => {
+          const current = index + 1;
+          const isActive = current === step;
+
+          return (
+            <div
+              key={label}
+              className={`px-4 py-1.5 rounded-full transition-all flex items-center gap-2 ${
+                isActive
+                  ? "bg-yellow-400 text-black shadow-sm"
+                  : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              <span className="hidden sm:inline">Step {current}:</span> {label}
+            </div>
+          );
+        }
+      )}
+    </div>
+  </header>
+
+  {/* Main Form Area */}
+  <main className="flex justify-center items-start mt-10 px-4">
+    <div className="w-full max-w-4xl bg-white p-10 rounded-xl shadow-lg border border-yellow-300 relative overflow-hidden">
+      <h1 className="kanit text-4xl font-bold text-center mb-8 text-black">
         Register Your Account
       </h1>
 
       {/* Step 1 */}
-      {step === 1 && (
-        <div className="space-y-6">
-          <label className="block">
-            <span>Email Address *</span>
-              <div className="relative mt-1">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-              <Mail size={18} />
-            </span>
-            <input
-              type="email"
-              className="w-full border rounded p-2 mt-1 pl-10"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={otpSent}
-              placeholder="example@gmail.com"
-              required
-            />
-            </div>
-          </label>
+   {step === 1 && (
+  <div className="bg-white shadow-md rounded-xl p-6 space-y-6 max-w-md mx-auto transition-all duration-300">
+    
+    {/* Email Input */}
+    <label className="block">
+      <span className="text-gray-800 font-medium">Email Address <span className="text-red-500">*</span></span>
+      <div className="relative mt-2">
+        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+          <Mail size={18} />
+        </span>
+        <input
+          type="email"
+          inputMode="email"
+          className={`w-full border ${
+            emailError ? "border-red-500" : "border-gray-300"
+          } rounded-lg py-2 pl-10 pr-3 shadow-sm focus:outline-none focus:ring-2 ${
+            emailError ? "focus:ring-red-500" : "focus:ring-black"
+          } transition-all`}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={otpSent || loadingOtp}
+          placeholder="example@gmail.com"
+          required
+        />
+      </div>
+      {emailError && <p className="text-sm text-red-500 mt-1">Please enter a valid email.</p>}
+    </label>
 
-          {!otpSent ? (
+    {/* Get OTP Button */}
+    {!otpSent ? (
+      <button
+        onClick={sendOtp}
+        disabled={loadingOtp || !email || emailError}
+        className={`w-full text-white font-semibold rounded-lg py-2 flex items-center justify-center gap-2 transition-all ${
+          loadingOtp
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-black hover:bg-gray-900"
+        }`}
+      >
+        {loadingOtp && <Loader2 className="animate-spin w-4 h-4" />}
+        {loadingOtp ? "Getting OTP..." : "Get OTP"}
+      </button>
+    ) : (
+      <>
+        {/* Animated OTP Field */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="space-y-3"
+        >
+          <div className="flex justify-between items-center">
+            <label className="text-gray-800 font-medium">Enter 6-digit OTP <span className="text-red-500">*</span></label>
             <button
-              className="bg-black text-white px-4 py-2 rounded cursor-pointer"
-              onClick={sendOtp}
+              onClick={resendOtp}
+              disabled={loadingOtp}
+              className="text-sm text-blue-600 hover:underline disabled:text-gray-400"
             >
-              Get OTP
+              Resend OTP
             </button>
-          ) : (
-            <>
-              <Flex gap="middle" align="flex-start" vertical>
-                <Title level={5}>Enter 6-digit OTP *</Title>
-                <Input.OTP
-                  length={6}
-                  value={otp}
-                  onChange={handleChange}
-                  formatter={(str) => str.replace(/\D/g, "")} // Only digits
-                  inputMode="numeric"
-                />
-              </Flex>
-              <button
-                className="bg-green-600 text-white mt-4 px-4 py-2 rounded"
-                onClick={verifyOtp}
-              >
-                Submit
-              </button>
-            </>
-          )}
-        </div>
-      )}
+          </div>
+
+          <Input.OTP
+            length={6}
+            value={otp}
+            onChange={handleChange}
+            formatter={(str) => str.replace(/\D/g, "")}
+            inputMode="numeric"
+            autoFocus
+            className={`mx-auto gap-2 [&>input]:rounded-lg [&>input]:border ${
+              otpError ? "border-red-500" : "border-gray-300"
+            } [&>input]:focus:ring-black`}
+          />
+          {otpError && <p className="text-sm text-red-500">OTP must be 6 digits.</p>}
+        </motion.div>
+
+        {/* Submit Button */}
+        <button
+          onClick={verifyOtp}
+          disabled={loadingVerify || otp.length < 6}
+          className={`w-full mt-4 font-semibold rounded-lg py-2 text-white flex items-center justify-center gap-2 transition-all ${
+            loadingVerify
+              ? "bg-green-300 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
+        >
+          {loadingVerify && <Loader2 className="animate-spin w-4 h-4" />}
+          {loadingVerify ? "Submitting..." : "Submit"}
+        </button>
+      </>
+    )}
+  </div>
+)}
+
+
 
       {/* Step 2 */}
       {step === 2 && (
-        <form
-          className="space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitPersonalDetails();
-          }}
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      submitPersonalDetails();
+    }}
+    className="space-y-6 bg-white p-8 rounded-2xl shadow-lg border border-yellow-400 max-w-4xl mx-auto mt-8"
+  >
+    <h2 className="text-2xl font-bold text-black border-b pb-2 border-yellow-300">
+      Personal Details
+    </h2>
+
+    {/* Name Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">First Name *</label>
+        <input
+          name="firstName"
+          type="text"
+          value={personalDetails.firstName}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+        <input
+          name="middleName"
+          type="text"
+          value={personalDetails.middleName}
+          onChange={handlePersonalChange}
+          className="input-style"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+        <input
+          name="lastName"
+          type="text"
+          value={personalDetails.lastName}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+    </div>
+
+    {/* Phone & DOB */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+        <input
+          name="phone"
+          type="tel"
+          value={personalDetails.phone}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Date of Birth *</label>
+        <input
+          name="dob"
+          type="date"
+          value={personalDetails.dob}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+    </div>
+
+    {/* Address */}
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Current Address *</label>
+      <textarea
+        name="address"
+        value={personalDetails.address}
+        onChange={handlePersonalChange}
+        required
+        className="input-style min-h-[100px]"
+      />
+    </div>
+
+    {/* Location Details */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {["state", "country", "city"].map((field) => (
+        <div key={field} className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1 capitalize">{field}</label>
+          <input
+            name={field}
+            type="text"
+            value={personalDetails[field]}
+            onChange={handlePersonalChange}
+            className="input-style"
+          />
+        </div>
+      ))}
+    </div>
+
+    {/* Pincode, Police Station, Post Office */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {["pincode", "policeStation", "postOffice"].map((field) => (
+        <div key={field} className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1 capitalize">
+            {field.replace(/([A-Z])/g, " $1")}
+          </label>
+          <input
+            name={field}
+            type="text"
+            value={personalDetails[field]}
+            onChange={handlePersonalChange}
+            className="input-style"
+          />
+        </div>
+      ))}
+    </div>
+
+    {/* Government ID */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Government ID Type</label>
+        <select
+          name="govIdType"
+          value={personalDetails.govIdType}
+          onChange={handlePersonalChange}
+          className="input-style"
         >
-          <h2 className="text-xl font-semibold">Personal Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label>
-              First Name *<br />
-              <input
-                name="firstName"
-                type="text"
-                value={personalDetails.firstName}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-                required
-              />
-            </label>
-            <label>
-              Middle Name
-              <br />
-              <input
-                name="middleName"
-                type="text"
-                value={personalDetails.middleName}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-            <label>
-              Last Name *<br />
-              <input
-                name="lastName"
-                type="text"
-                value={personalDetails.lastName}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-                required
-              />
-            </label>
-          </div>
+          <option value="">Select</option>
+          <option value="Aadhar">Aadhar</option>
+          <option value="PAN">PAN</option>
+          <option value="Driving License">Driving License</option>
+          <option value="Passport">Passport</option>
+        </select>
+      </div>
 
-          <label>
-            Phone Number *<br />
-            <input
-              name="phone"
-              type="tel"
-              value={personalDetails.phone}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Government ID Number</label>
+        <input
+          name="govIdNumber"
+          type="text"
+          value={personalDetails.govIdNumber}
+          onChange={handlePersonalChange}
+          className="input-style"
+        />
+      </div>
+    </div>
 
-          <label>
-            Date of Birth *<br />
-            <input
-              name="dob"
-              type="date"
-              value={personalDetails.dob}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
+    {/* ID Upload */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Upload ID Front</label>
+        <input
+          name="govIdFront"
+          type="file"
+          accept="image/*"
+          onChange={handlePersonalChange}
+          className="input-style file:border-none file:bg-yellow-400 file:text-black file:font-medium"
+        />
+      </div>
 
-          <label>
-            Current Address *<br />
-            <textarea
-              name="address"
-              value={personalDetails.address}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Upload ID Back</label>
+        <input
+          name="govIdBack"
+          type="file"
+          accept="image/*"
+          onChange={handlePersonalChange}
+          className="input-style file:border-none file:bg-yellow-400 file:text-black file:font-medium"
+        />
+      </div>
+    </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label>
-              State
-              <br />
-              <input
-                name="state"
-                type="text"
-                value={personalDetails.state}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-            <label>
-              Country
-              <br />
-              <input
-                name="country"
-                type="text"
-                value={personalDetails.country}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-            <label>
-              City
-              <br />
-              <input
-                name="city"
-                type="text"
-                value={personalDetails.city}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-          </div>
+    {/* Terms */}
+    <label className="flex items-start gap-2 text-sm font-medium text-gray-800">
+      <input
+        name="termsAccepted"
+        type="checkbox"
+        checked={personalDetails.termsAccepted}
+        onChange={handlePersonalChange}
+        required
+        className="mt-1 accent-yellow-500"
+      />
+      <span>I accept the Terms and Conditions *</span>
+    </label>
 
-          <label>
-            Pincode
-            <br />
-            <input
-              name="pincode"
-              type="text"
-              value={personalDetails.pincode}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
+    {/* Submit Button */}
+    <button
+      type="submit"
+      className="w-full mt-4 bg-black hover:bg-gray-900 text-white font-semibold py-3 rounded-md transition-all"
+    >
+      Next
+    </button>
+  </form>
+)}
 
-          <label>
-            Police Station
-            <br />
-            <input
-              name="policeStation"
-              type="text"
-              value={personalDetails.policeStation}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Post Office
-            <br />
-            <input
-              name="postOffice"
-              type="text"
-              value={personalDetails.postOffice}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Government ID Type
-            <br />
-            <select
-              name="govIdType"
-              value={personalDetails.govIdType}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            >
-              <option value="">Select</option>
-              <option value="Aadhar">Aadhar</option>
-              <option value="PAN">PAN</option>
-              <option value="Driving License">Driving License</option>
-              <option value="Passport">Passport</option>
-            </select>
-          </label>
-
-          <label>
-            Government ID Number
-            <br />
-            <input
-              name="govIdNumber"
-              type="text"
-              value={personalDetails.govIdNumber}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Upload Government ID Front
-            <br />
-            <input
-              name="govIdFront"
-              type="file"
-              accept="image/*"
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Upload Government ID Back
-            <br />
-            <input
-              name="govIdBack"
-              type="file"
-              accept="image/*"
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label className="flex items-center gap-2">
-            <input
-              name="termsAccepted"
-              type="checkbox"
-              checked={personalDetails.termsAccepted}
-              onChange={handlePersonalChange}
-              required
-            />
-            <span>I accept the Terms and Conditions *</span>
-          </label>
-
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded"
-          >
-            Next
-          </button>
-        </form>
-      )}
 
       {/* Step 3 */}
       {step === 3 && (
-        <form
-          className="space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitAccountDetails();
+  <form
+    className="space-y-8 bg-white p-6 md:p-10 rounded-lg shadow border border-yellow-300"
+    onSubmit={(e) => {
+      e.preventDefault();
+      submitAccountDetails();
+    }}
+  >
+    <h2 className="text-2xl font-bold border-b pb-2 text-black">Account Details</h2>
+
+    {/* Account Type */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Account Type *
+      </label>
+      <select
+        name="accountType"
+        value={accountDetails.accountType}
+        onChange={handleAccountChange}
+        className="input-style"
+        required
+      >
+        <option value="">Select</option>
+        <option value="Savings">Savings Account</option>
+        <option value="Current">Current Account</option>
+        <option value="Salary">Salary Account</option>
+      </select>
+    </div>
+
+    {/* Nominee Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Name *
+        </label>
+        <input
+          type="text"
+          name="nomineeName"
+          value={accountDetails.nomineeName}
+          onChange={handleAccountChange}
+          className="input-style"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Relation *
+        </label>
+        <input
+          type="text"
+          name="nomineeRelation"
+          value={accountDetails.nomineeRelation}
+          onChange={handleAccountChange}
+          className="input-style"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Phone
+        </label>
+        <input
+          type="tel"
+          name="nomineePhone"
+          value={accountDetails.nomineePhone}
+          onChange={handleAccountChange}
+          className="input-style"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Email
+        </label>
+        <input
+          type="email"
+          name="nomineeEmail"
+          value={accountDetails.nomineeEmail}
+          onChange={handleAccountChange}
+          className="input-style"
+        />
+      </div>
+    </div>
+
+    {/* Nominee Address */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Nominee Address
+      </label>
+      <textarea
+        name="nomineeAddress"
+        value={accountDetails.nomineeAddress}
+        onChange={handleAccountChange}
+        className="input-style"
+        rows={3}
+      />
+    </div>
+
+    {/* Password Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Password *
+        </label>
+        <input
+          type="password"
+          name="password"
+          value={accountDetails.password}
+          onChange={(e) => {
+            handleAccountChange(e);
+            const strength = evaluatePasswordStrength(e.target.value);
+            setPasswordStrength(strength);
           }}
-        >
-          <h2 className="text-xl font-semibold">Account Details</h2>
-
-          <label>
-            Account Type *<br />
-            <select
-              name="accountType"
-              value={accountDetails.accountType}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Savings">Savings Account</option>
-              <option value="Current">Current Account</option>
-              <option value="Salary">Salary Account</option>
-            </select>
-          </label>
-
-          <label>
-            Nominee Name *<br />
-            <input
-              name="nomineeName"
-              type="text"
-              value={accountDetails.nomineeName}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <label>
-            Nominee Relation *<br />
-            <input
-              name="nomineeRelation"
-              type="text"
-              value={accountDetails.nomineeRelation}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <label>
-            Nominee Address
-            <br />
-            <textarea
-              name="nomineeAddress"
-              value={accountDetails.nomineeAddress}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Nominee Phone
-            <br />
-            <input
-              name="nomineePhone"
-              type="tel"
-              value={accountDetails.nomineePhone}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Nominee Email
-            <br />
-            <input
-              name="nomineeEmail"
-              type="email"
-              value={accountDetails.nomineeEmail}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Password *<br />
-            <input
-              name="password"
-              type="password"
-              value={accountDetails.password}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <label>
-            Confirm Password *<br />
-            <input
-              name="confirmPassword"
-              type="password"
-              value={accountDetails.confirmPassword}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded"
+          className="input-style"
+          required
+        />
+        {accountDetails.password && (
+          <div
+            className={`mt-1 text-sm font-medium ${
+              passwordStrength === "Strong"
+                ? "text-green-600"
+                : passwordStrength === "Medium"
+                ? "text-yellow-600"
+                : "text-red-500"
+            }`}
           >
-            Next
-          </button>
-        </form>
-      )}
+            Password Strength: {passwordStrength}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Confirm Password *
+        </label>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={accountDetails.confirmPassword}
+          onChange={handleAccountChange}
+          className="input-style"
+          required
+        />
+      </div>
+    </div>
+
+    {/* Submit Button */}
+    <div className="pt-4">
+      <button
+        type="submit"
+        className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded transition"
+      >
+        Next
+      </button>
+    </div>
+  </form>
+)}
+
 
       {/* Step 4 */}
       {step === 4 && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold">Video Verification</h2>
-          {!videoStarted && (
-            <button
-              className="bg-green-600 text-white px-6 py-2 rounded"
-              onClick={startVideoVerification}
-            >
-              Start Video Verification
-            </button>
-          )}
+  <div className="flex flex-col lg:flex-row gap-6 bg-white p-8 rounded-2xl shadow border border-yellow-300 max-w-4xl mx-auto">
+    
+    {/* Video Verification Column */}
+    <div className="flex-1 space-y-4">
+      <h2 className="text-2xl font-bold text-black">Video Verification</h2>
 
-          {videoStarted && (
-            <video ref={videoRef} className="w-full rounded shadow" />
-          )}
-
-          {verificationMessage && (
-            <p className="text-center text-green-700 font-semibold mt-4">
-              {verificationMessage}
-            </p>
-          )}
-        </div>
+      {!videoStarted ? (
+        <button
+          onClick={startVideoVerification}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+        >
+          Start Video Verification
+        </button>
+      ) : (
+        <video
+          ref={videoRef}
+          className="w-full rounded-lg shadow-lg bg-black"
+          autoPlay
+          muted
+        />
       )}
+
+      {verificationMessage && (
+        <p className="text-center text-green-700 font-semibold mt-2">
+          {verificationMessage}
+        </p>
+      )}
+    </div>
+
+    {/* 3D Face Animation Column */}
+    <div className="flex-1 flex flex-col items-center justify-center">
+      <h3 className="text-lg font-semibold text-gray-700 mb-2">Facial Recognition Guide</h3>
+      <div className="w-full h-64 bg-black rounded-lg shadow-lg">
+        <ThreeFace />
+      </div>
+    </div>
+
+  </div>
+)}
+
 
       {/* Step 5 - Confirmation */}
       {step === 5 && (
@@ -739,6 +893,9 @@ export default function RegisterPage() {
           </p>
         </div>
       )}
-    </div>
+     </div>
+    </main>
+    
+  </div>
   );
 }
