@@ -15,6 +15,8 @@ export default function RegisterPage() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [loadingOtp, setLoadingOtp] = useState(false);
 const [loadingVerify, setLoadingVerify] = useState(false);
+const [passwordStrength, setPasswordStrength] = useState("");
+
 
   const [personalDetails, setPersonalDetails] = useState({
     email: "",
@@ -108,6 +110,23 @@ async function verifyOtp() {
 function resendOtp() {
   if (!loadingOtp) sendOtp();
 }
+
+function evaluatePasswordStrength(password) {
+  let strength = "Weak";
+
+  const strongPattern =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  const mediumPattern = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+  if (strongPattern.test(password)) {
+    strength = "Strong";
+  } else if (mediumPattern.test(password)) {
+    strength = "Medium";
+  }
+
+  return strength;
+}
+
 
   function handlePersonalChange(e) {
     const { name, value, type, checked, files } = e.target;
@@ -743,11 +762,28 @@ function resendOtp() {
               name="password"
               type="password"
               value={accountDetails.password}
-              onChange={handleAccountChange}
+              onChange={(e) => {
+    handleAccountChange(e);
+    const strength = evaluatePasswordStrength(e.target.value);
+    setPasswordStrength(strength);
+  }}
               className="border p-2 rounded w-full"
               required
             />
           </label>
+          {accountDetails.password && (
+  <div
+    className={`text-sm font-semibold ${
+      passwordStrength === "Strong"
+        ? "text-green-600"
+        : passwordStrength === "Medium"
+        ? "text-yellow-500"
+        : "text-red-500"
+    }`}
+  >
+    Password Strength: {passwordStrength}
+  </div>
+)}
 
           <label>
             Confirm Password *<br />
