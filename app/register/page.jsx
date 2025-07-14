@@ -5,6 +5,8 @@ import { Mail } from "lucide-react";
 import Link from "next/link";
 import {  Loader2 } from "lucide-react"; // Loader2 = Spinner
 import { motion } from "framer-motion"; 
+import ThreeFace from "@/components/ThreeFace";
+
 const { Title } = Typography;
 export default function RegisterPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
@@ -336,45 +338,45 @@ function evaluatePasswordStrength(password) {
 const otpError = otp.length > 0 && otp.length < 6;
 
   return (
-     <div className="min-h-screen bg-gray-50">
-    {/* Header with logo and step indicator */}
-    <header className="flex items-center justify-between px-8 py-4 bg-white shadow-md sticky top-0 z-10">
-      <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center gap-2">
-        <img src="/tablogo.png" alt="logo" className="h-10 -mt-2 w-auto" />
-        <img src="/logo2nd1.png" alt="Logo" className="h-10 w-auto" />
-        </Link>
-      </div>
-      {/* Step Indicator (non-clickable) */}
-      <div className="flex items-center gap-2 text-sm font-medium">
-        {["Email Verification", "Personal Info", "Account Info", "Video KYC", "Confirmation"].map(
-          (label, index) => {
-            const current = index + 1;
-            return (
-              <div
-                key={index}
-                className={`flex items-center gap-2 px-3 py-1 rounded-full ${
-                  current === step
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-500"
-                }`}
-              >
-                Step {current}
-              </div>
-            );
-          }
-        )}
-      </div>
-    </header>
+   <div className="min-h-screen bg-animated">
 
-    {/* Form Section */}
-    <main className="flex justify-center items-start mt-10 px-4">
-      <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
-        <h1 className="kanit text-3xl font-bold text-center mb-8">
-          Register Your Account
-        </h1>
+  {/* Header */}
+  <header className="flex items-center justify-between px-8 py-4 bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-20 border-b border-yellow-300">
+    <Link href="/" className="flex items-center gap-2">
+      <img src="/tablogo.png" alt="Tab Logo" className="h-10 w-auto -mt-2" />
+      <img src="/logo2nd1.png" alt="Main Logo" className="h-10 w-auto" />
+    </Link>
 
-    
+    {/* Stepper */}
+    <div className="flex items-center gap-3 text-sm font-semibold">
+      {["Email Verification", "Personal Info", "Account Info", "Video KYC", "Confirmation"].map(
+        (label, index) => {
+          const current = index + 1;
+          const isActive = current === step;
+
+          return (
+            <div
+              key={label}
+              className={`px-4 py-1.5 rounded-full transition-all flex items-center gap-2 ${
+                isActive
+                  ? "bg-yellow-400 text-black shadow-sm"
+                  : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              <span className="hidden sm:inline">Step {current}:</span> {label}
+            </div>
+          );
+        }
+      )}
+    </div>
+  </header>
+
+  {/* Main Form Area */}
+  <main className="flex justify-center items-start mt-10 px-4">
+    <div className="w-full max-w-4xl bg-white p-10 rounded-xl shadow-lg border border-yellow-300 relative overflow-hidden">
+      <h1 className="kanit text-4xl font-bold text-center mb-8 text-black">
+        Register Your Account
+      </h1>
 
       {/* Step 1 */}
    {step === 1 && (
@@ -475,390 +477,411 @@ const otpError = otp.length > 0 && otp.length < 6;
 
       {/* Step 2 */}
       {step === 2 && (
-        <form
-          className="space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitPersonalDetails();
-          }}
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      submitPersonalDetails();
+    }}
+    className="space-y-6 bg-white p-8 rounded-2xl shadow-lg border border-yellow-400 max-w-4xl mx-auto mt-8"
+  >
+    <h2 className="text-2xl font-bold text-black border-b pb-2 border-yellow-300">
+      Personal Details
+    </h2>
+
+    {/* Name Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">First Name *</label>
+        <input
+          name="firstName"
+          type="text"
+          value={personalDetails.firstName}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+        <input
+          name="middleName"
+          type="text"
+          value={personalDetails.middleName}
+          onChange={handlePersonalChange}
+          className="input-style"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+        <input
+          name="lastName"
+          type="text"
+          value={personalDetails.lastName}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+    </div>
+
+    {/* Phone & DOB */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+        <input
+          name="phone"
+          type="tel"
+          value={personalDetails.phone}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Date of Birth *</label>
+        <input
+          name="dob"
+          type="date"
+          value={personalDetails.dob}
+          onChange={handlePersonalChange}
+          required
+          className="input-style"
+        />
+      </div>
+    </div>
+
+    {/* Address */}
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Current Address *</label>
+      <textarea
+        name="address"
+        value={personalDetails.address}
+        onChange={handlePersonalChange}
+        required
+        className="input-style min-h-[100px]"
+      />
+    </div>
+
+    {/* Location Details */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {["state", "country", "city"].map((field) => (
+        <div key={field} className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1 capitalize">{field}</label>
+          <input
+            name={field}
+            type="text"
+            value={personalDetails[field]}
+            onChange={handlePersonalChange}
+            className="input-style"
+          />
+        </div>
+      ))}
+    </div>
+
+    {/* Pincode, Police Station, Post Office */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {["pincode", "policeStation", "postOffice"].map((field) => (
+        <div key={field} className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1 capitalize">
+            {field.replace(/([A-Z])/g, " $1")}
+          </label>
+          <input
+            name={field}
+            type="text"
+            value={personalDetails[field]}
+            onChange={handlePersonalChange}
+            className="input-style"
+          />
+        </div>
+      ))}
+    </div>
+
+    {/* Government ID */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Government ID Type</label>
+        <select
+          name="govIdType"
+          value={personalDetails.govIdType}
+          onChange={handlePersonalChange}
+          className="input-style"
         >
-          <h2 className="text-xl font-semibold">Personal Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label>
-              First Name *<br />
-              <input
-                name="firstName"
-                type="text"
-                value={personalDetails.firstName}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-                required
-              />
-            </label>
-            <label>
-              Middle Name
-              <br />
-              <input
-                name="middleName"
-                type="text"
-                value={personalDetails.middleName}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-            <label>
-              Last Name *<br />
-              <input
-                name="lastName"
-                type="text"
-                value={personalDetails.lastName}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-                required
-              />
-            </label>
-          </div>
+          <option value="">Select</option>
+          <option value="Aadhar">Aadhar</option>
+          <option value="PAN">PAN</option>
+          <option value="Driving License">Driving License</option>
+          <option value="Passport">Passport</option>
+        </select>
+      </div>
 
-          <label>
-            Phone Number *<br />
-            <input
-              name="phone"
-              type="tel"
-              value={personalDetails.phone}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Government ID Number</label>
+        <input
+          name="govIdNumber"
+          type="text"
+          value={personalDetails.govIdNumber}
+          onChange={handlePersonalChange}
+          className="input-style"
+        />
+      </div>
+    </div>
 
-          <label>
-            Date of Birth *<br />
-            <input
-              name="dob"
-              type="date"
-              value={personalDetails.dob}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
+    {/* ID Upload */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Upload ID Front</label>
+        <input
+          name="govIdFront"
+          type="file"
+          accept="image/*"
+          onChange={handlePersonalChange}
+          className="input-style file:border-none file:bg-yellow-400 file:text-black file:font-medium"
+        />
+      </div>
 
-          <label>
-            Current Address *<br />
-            <textarea
-              name="address"
-              value={personalDetails.address}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
+      <div className="flex flex-col">
+        <label className="text-sm font-medium text-gray-700 mb-1">Upload ID Back</label>
+        <input
+          name="govIdBack"
+          type="file"
+          accept="image/*"
+          onChange={handlePersonalChange}
+          className="input-style file:border-none file:bg-yellow-400 file:text-black file:font-medium"
+        />
+      </div>
+    </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label>
-              State
-              <br />
-              <input
-                name="state"
-                type="text"
-                value={personalDetails.state}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-            <label>
-              Country
-              <br />
-              <input
-                name="country"
-                type="text"
-                value={personalDetails.country}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-            <label>
-              City
-              <br />
-              <input
-                name="city"
-                type="text"
-                value={personalDetails.city}
-                onChange={handlePersonalChange}
-                className="border p-2 rounded w-full"
-              />
-            </label>
-          </div>
+    {/* Terms */}
+    <label className="flex items-start gap-2 text-sm font-medium text-gray-800">
+      <input
+        name="termsAccepted"
+        type="checkbox"
+        checked={personalDetails.termsAccepted}
+        onChange={handlePersonalChange}
+        required
+        className="mt-1 accent-yellow-500"
+      />
+      <span>I accept the Terms and Conditions *</span>
+    </label>
 
-          <label>
-            Pincode
-            <br />
-            <input
-              name="pincode"
-              type="text"
-              value={personalDetails.pincode}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
+    {/* Submit Button */}
+    <button
+      type="submit"
+      className="w-full mt-4 bg-black hover:bg-gray-900 text-white font-semibold py-3 rounded-md transition-all"
+    >
+      Next
+    </button>
+  </form>
+)}
 
-          <label>
-            Police Station
-            <br />
-            <input
-              name="policeStation"
-              type="text"
-              value={personalDetails.policeStation}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Post Office
-            <br />
-            <input
-              name="postOffice"
-              type="text"
-              value={personalDetails.postOffice}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Government ID Type
-            <br />
-            <select
-              name="govIdType"
-              value={personalDetails.govIdType}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            >
-              <option value="">Select</option>
-              <option value="Aadhar">Aadhar</option>
-              <option value="PAN">PAN</option>
-              <option value="Driving License">Driving License</option>
-              <option value="Passport">Passport</option>
-            </select>
-          </label>
-
-          <label>
-            Government ID Number
-            <br />
-            <input
-              name="govIdNumber"
-              type="text"
-              value={personalDetails.govIdNumber}
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Upload Government ID Front
-            <br />
-            <input
-              name="govIdFront"
-              type="file"
-              accept="image/*"
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Upload Government ID Back
-            <br />
-            <input
-              name="govIdBack"
-              type="file"
-              accept="image/*"
-              onChange={handlePersonalChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label className="flex items-center gap-2">
-            <input
-              name="termsAccepted"
-              type="checkbox"
-              checked={personalDetails.termsAccepted}
-              onChange={handlePersonalChange}
-              required
-            />
-            <span>I accept the Terms and Conditions *</span>
-          </label>
-
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded"
-          >
-            Next
-          </button>
-        </form>
-      )}
 
       {/* Step 3 */}
       {step === 3 && (
-        <form
-          className="space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitAccountDetails();
-          }}
-        >
-          <h2 className="text-xl font-semibold">Account Details</h2>
-
-          <label>
-            Account Type *<br />
-            <select
-              name="accountType"
-              value={accountDetails.accountType}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            >
-              <option value="">Select</option>
-              <option value="Savings">Savings Account</option>
-              <option value="Current">Current Account</option>
-              <option value="Salary">Salary Account</option>
-            </select>
-          </label>
-
-          <label>
-            Nominee Name *<br />
-            <input
-              name="nomineeName"
-              type="text"
-              value={accountDetails.nomineeName}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <label>
-            Nominee Relation *<br />
-            <input
-              name="nomineeRelation"
-              type="text"
-              value={accountDetails.nomineeRelation}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <label>
-            Nominee Address
-            <br />
-            <textarea
-              name="nomineeAddress"
-              value={accountDetails.nomineeAddress}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Nominee Phone
-            <br />
-            <input
-              name="nomineePhone"
-              type="tel"
-              value={accountDetails.nomineePhone}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Nominee Email
-            <br />
-            <input
-              name="nomineeEmail"
-              type="email"
-              value={accountDetails.nomineeEmail}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-            />
-          </label>
-
-          <label>
-            Password *<br />
-            <input
-              name="password"
-              type="password"
-              value={accountDetails.password}
-              onChange={(e) => {
-    handleAccountChange(e);
-    const strength = evaluatePasswordStrength(e.target.value);
-    setPasswordStrength(strength);
-  }}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-          {accountDetails.password && (
-  <div
-    className={`text-sm font-semibold ${
-      passwordStrength === "Strong"
-        ? "text-green-600"
-        : passwordStrength === "Medium"
-        ? "text-yellow-500"
-        : "text-red-500"
-    }`}
+  <form
+    className="space-y-8 bg-white p-6 md:p-10 rounded-lg shadow border border-yellow-300"
+    onSubmit={(e) => {
+      e.preventDefault();
+      submitAccountDetails();
+    }}
   >
-    Password Strength: {passwordStrength}
-  </div>
+    <h2 className="text-2xl font-bold border-b pb-2 text-black">Account Details</h2>
+
+    {/* Account Type */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Account Type *
+      </label>
+      <select
+        name="accountType"
+        value={accountDetails.accountType}
+        onChange={handleAccountChange}
+        className="input-style"
+        required
+      >
+        <option value="">Select</option>
+        <option value="Savings">Savings Account</option>
+        <option value="Current">Current Account</option>
+        <option value="Salary">Salary Account</option>
+      </select>
+    </div>
+
+    {/* Nominee Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Name *
+        </label>
+        <input
+          type="text"
+          name="nomineeName"
+          value={accountDetails.nomineeName}
+          onChange={handleAccountChange}
+          className="input-style"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Relation *
+        </label>
+        <input
+          type="text"
+          name="nomineeRelation"
+          value={accountDetails.nomineeRelation}
+          onChange={handleAccountChange}
+          className="input-style"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Phone
+        </label>
+        <input
+          type="tel"
+          name="nomineePhone"
+          value={accountDetails.nomineePhone}
+          onChange={handleAccountChange}
+          className="input-style"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nominee Email
+        </label>
+        <input
+          type="email"
+          name="nomineeEmail"
+          value={accountDetails.nomineeEmail}
+          onChange={handleAccountChange}
+          className="input-style"
+        />
+      </div>
+    </div>
+
+    {/* Nominee Address */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Nominee Address
+      </label>
+      <textarea
+        name="nomineeAddress"
+        value={accountDetails.nomineeAddress}
+        onChange={handleAccountChange}
+        className="input-style"
+        rows={3}
+      />
+    </div>
+
+    {/* Password Fields */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Password *
+        </label>
+        <input
+          type="password"
+          name="password"
+          value={accountDetails.password}
+          onChange={(e) => {
+            handleAccountChange(e);
+            const strength = evaluatePasswordStrength(e.target.value);
+            setPasswordStrength(strength);
+          }}
+          className="input-style"
+          required
+        />
+        {accountDetails.password && (
+          <div
+            className={`mt-1 text-sm font-medium ${
+              passwordStrength === "Strong"
+                ? "text-green-600"
+                : passwordStrength === "Medium"
+                ? "text-yellow-600"
+                : "text-red-500"
+            }`}
+          >
+            Password Strength: {passwordStrength}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Confirm Password *
+        </label>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={accountDetails.confirmPassword}
+          onChange={handleAccountChange}
+          className="input-style"
+          required
+        />
+      </div>
+    </div>
+
+    {/* Submit Button */}
+    <div className="pt-4">
+      <button
+        type="submit"
+        className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded transition"
+      >
+        Next
+      </button>
+    </div>
+  </form>
 )}
 
-          <label>
-            Confirm Password *<br />
-            <input
-              name="confirmPassword"
-              type="password"
-              value={accountDetails.confirmPassword}
-              onChange={handleAccountChange}
-              className="border p-2 rounded w-full"
-              required
-            />
-          </label>
-
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded"
-          >
-            Next
-          </button>
-        </form>
-      )}
 
       {/* Step 4 */}
       {step === 4 && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold">Video Verification</h2>
-          {!videoStarted && (
-            <button
-              className="bg-green-600 text-white px-6 py-2 rounded"
-              onClick={startVideoVerification}
-            >
-              Start Video Verification
-            </button>
-          )}
+  <div className="flex flex-col lg:flex-row gap-6 bg-white p-8 rounded-2xl shadow border border-yellow-300 max-w-4xl mx-auto">
+    
+    {/* Video Verification Column */}
+    <div className="flex-1 space-y-4">
+      <h2 className="text-2xl font-bold text-black">Video Verification</h2>
 
-          {videoStarted && (
-            <video ref={videoRef} className="w-full rounded shadow" />
-          )}
-
-          {verificationMessage && (
-            <p className="text-center text-green-700 font-semibold mt-4">
-              {verificationMessage}
-            </p>
-          )}
-        </div>
+      {!videoStarted ? (
+        <button
+          onClick={startVideoVerification}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+        >
+          Start Video Verification
+        </button>
+      ) : (
+        <video
+          ref={videoRef}
+          className="w-full rounded-lg shadow-lg bg-black"
+          autoPlay
+          muted
+        />
       )}
+
+      {verificationMessage && (
+        <p className="text-center text-green-700 font-semibold mt-2">
+          {verificationMessage}
+        </p>
+      )}
+    </div>
+
+    {/* 3D Face Animation Column */}
+    <div className="flex-1 flex flex-col items-center justify-center">
+      <h3 className="text-lg font-semibold text-gray-700 mb-2">Facial Recognition Guide</h3>
+      <div className="w-full h-64 bg-black rounded-lg shadow-lg">
+        <ThreeFace />
+      </div>
+    </div>
+
+  </div>
+)}
+
 
       {/* Step 5 - Confirmation */}
       {step === 5 && (
@@ -872,6 +895,7 @@ const otpError = otp.length > 0 && otp.length < 6;
       )}
      </div>
     </main>
+    
   </div>
   );
 }
