@@ -5,7 +5,6 @@ import { Mail } from "lucide-react";
 import Link from "next/link";
 import {  Loader2 } from "lucide-react"; // Loader2 = Spinner
 import { motion } from "framer-motion"; 
-import ThreeFace from "@/components/ThreeFace";
 
 const { Title } = Typography;
 export default function RegisterPage() {
@@ -872,12 +871,7 @@ const otpError = otp.length > 0 && otp.length < 6;
     </div>
 
     {/* 3D Face Animation Column */}
-    <div className="flex-1 flex flex-col items-center justify-center">
-      <h3 className="text-lg font-semibold text-gray-700 mb-2">Facial Recognition Guide</h3>
-      <div className="w-full h-64 bg-black rounded-lg shadow-lg">
-        <ThreeFace />
-      </div>
-    </div>
+    
 
   </div>
 )}
