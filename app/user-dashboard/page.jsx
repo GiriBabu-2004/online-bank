@@ -215,8 +215,10 @@ export default function Dashboard() {
 
 
 
-
-
+        <div className = "flex flex-row justify-between px-6 py-6 min-h-screen bg-blue-100">
+        <div className = "flex-1 mr-6">
+          Welcome to ONLINE BANK
+          </div>
 
 
         {/* Theme Selector */}
@@ -305,7 +307,7 @@ export default function Dashboard() {
 
               </p>
             </div>
-            <div className="flex flex-row justify-between gap-35">
+            <div className="flex flex-row justify-between gap-35 mt-2">
               <p className="text-gray-400">Card Limit</p>
               <p>
                 ₹100,000,00
@@ -314,23 +316,23 @@ export default function Dashboard() {
 
           </div>
           <div className="flex flex-col mt-6 ">
-            <div className="flex flex-row justify-between gap-46">
+            <div className="flex flex-row justify-between gap-46 mt-2">
               <p className="font-bold">Information</p>
               <p>More Details</p>
             </div>
-            <div className="flex flex-row justify-between gap-35">
+            <div className="flex flex-row justify-between gap-35 mt-2">
               <p className="text-gray-400">Status</p>
               <p>
                 Active
               </p>
             </div>
-            <div className="flex flex-row justify-between gap-35">
+            <div className="flex flex-row justify-between gap-35 mt-2">
               <p className="text-gray-400">Type Card</p>
               <p>
                 Current
               </p>
             </div>
-            <div className="flex flex-row justify-between gap-35">
+            <div className="flex flex-row justify-between gap-35 mt-2">
               <p className="text-gray-400">Currency</p>
               <p>
                 Indian
@@ -340,6 +342,7 @@ export default function Dashboard() {
           </div>
 
 
+        </div>
         </div>
 
         {/* Add Money & Send Money Cards */}
