@@ -13,6 +13,31 @@ import {
   Headphones,
   LogOut,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // update path if needed
+
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+
+import {
+  PieChart,
+  Pie,
+  Cell,
+  LineChart as ReLineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const menuItems = [
   {
@@ -58,6 +83,7 @@ export default function Dashboard() {
   const [showBalance, setShowBalance] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("January");
 
   const [theme, setTheme] = useState("blue");
 
@@ -151,9 +177,28 @@ export default function Dashboard() {
       alert("Server error");
     }
   };
+  const pieData = [
+    { name: "Shopping", value: 20, color: "#8B5CF6" },
+    { name: "Sport", value: 30, color: "#0EA5E9" },
+    { name: "Food", value: 10, color: "#FACC15" },
+    { name: "Clothes", value: 0, color: "#4F46E5" },
+    { name: "Others", value: 0, color: "#9CA3AF" },
+  ];
+
+  const lineData = [
+    { name: "Apr", value: 0 },
+    { name: "May", value: 0 },
+    { name: "Jun", value: 0 },
+    { name: "Jul", value: 0 },
+    { name: "Aug", value: 0 },
+    { name: "Sep", value: 0 },
+    { name: "Oct", value: 0 },
+  ];
+
+  const transactions = [];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
       <motion.aside
         className="group fixed h-screen bg-white shadow-md z-10"
@@ -201,7 +246,7 @@ export default function Dashboard() {
       </motion.aside>
 
       {/* Main Content */}
-      <div className="flex-2 p-6 relative">
+      <div className="flex-2 pt-16 relative h-screen w-full overflow-hidden">
         {/* Top Right Profile */}
         <div className="absolute top-4 right-6 flex items-center gap-4">
           <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-full uppercase">
@@ -215,21 +260,135 @@ export default function Dashboard() {
 
 
 
-        <div className = "flex flex-row justify-between px-6 py-6 min-h-screen bg-blue-100">
-        <div className = "flex-1 mr-6">
-          Welcome to ONLINE BANK
+        <div className="flex min-h-screen bg-blue-100 w-full pt-0 px-0 ml-16 overflow-hidden">
+          {/* Left Panel - Charts */}
+          <div className="flex-1 p-8 space-y-6 overflow-y-auto">
+            <h1 className="text-xl font-semibold">Welcome to ONLINE BANK</h1>
+
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Pie Chart */}
+              <div className="bg-white p-4 rounded-xl shadow-md">
+                <div className="flex justify-between items-center mb-4">
+                  <p className="font-semibold">Expenses by category</p>
+
+                  {/* ShadCN Month Selector */}
+                  <Select
+                    value={selectedMonth}
+                    onValueChange={(value) => setSelectedMonth(value)}
+                  >
+                    <SelectTrigger className="w-[120px] h-8 text-sm">
+                      <SelectValue placeholder="Select month" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((month) => (
+                        <SelectItem key={month} value={month}>
+                          {month}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-row justify-between">
+                  <PieChart width={150} height={150}>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      innerRadius={50}
+                      outerRadius={70}
+                      paddingAngle={2}
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+
+                  <ul className="mt-4 space-y-1 text-sm text-gray-600">
+                    {pieData.map((item, index) => (
+                      <li key={index} className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-3 h-3 rounded-full"
+                          style={{ background: item.color }}
+                        ></span>
+                        {item.name} {item.value}%
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Transactions */}
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <div className="flex justify-between items-center mb-4">
+                  <p className="font-semibold">Transactions</p>
+                  <p className="text-sm text-blue-500">More details</p>
+                </div>
+                {transactions.length === 0 ? (
+                  <p className="text-gray-400 text-sm">No transactions yet.</p>
+                ) : (
+                  <ul className="space-y-4 text-sm">
+                    {transactions.map((tx, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between items-center"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl">{tx.icon}</span>
+                          <div>
+                            <p className="font-medium">{tx.label}</p>
+                            <p className="text-gray-400 text-xs">{tx.time}</p>
+                          </div>
+                        </div>
+                        <p
+                          className={`font-semibold ${tx.amount.includes("-")
+                            ? "text-red-500"
+                            : "text-green-500"
+                            }`}
+                        >
+                          {tx.amount}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+
+            {/* Analytics Chart */}
+            <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="flex justify-between items-center mb-4">
+                <p className="font-semibold">Analytics</p>
+                <p className="text-sm text-gray-400">1 year</p>
+              </div>
+              <ResponsiveContainer width="100%" height={150}>
+                <ReLineChart data={lineData}>
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#4F46E5"
+                    strokeWidth={3}
+                    dot={{ r: 5 }}
+                  />
+                </ReLineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-
-        {/* Theme Selector */}
-        <div className="flex flex-col items-center  justify-end mt-4">
-          <div className="flex flex-row w-sm justify-between ">
-            <p className="mt-12">My card</p>
-            <div className="flex justify-end max-w-2xl mt-10">
+          {/* Right Panel - Card */}
+          <div className="w-[340px] h-screen bg-white pl-3 pr-3 pb-3 mr-16  shadow-md">
+            {/* Theme Selector */}
+            <div className="flex justify-between items-center  mb-4">
+              <p className="font-semibold">My card</p>
               <select
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 text-sm"
+                className="border border-gray-300 rounded px-3 py-1 text-sm"
               >
                 {Object.keys(gradientThemes).map((key) => (
                   <option key={key} value={key}>
@@ -238,112 +397,88 @@ export default function Dashboard() {
                 ))}
               </select>
             </div>
-          </div>
 
-          {/* User Info */}
-          <div
-            className={`rounded-lg shadow-lg w-sm  p-6 max-w-sm mx-auto mt-4 text-white transition-all duration-500 ${gradientThemes[theme]}`}
-          >
-            {/* <h3 className="text-lg font-semibold  mb-4">User Details</h3>
+            {/* Card Display */}
+            <div
+              className={`rounded-lg shadow-md text-white transition-all duration-500 p-4 ${gradientThemes[theme]}`}
+            >
+              <div className="flex items-center justify-between">
+                <img src="/tablogo.png" alt="Logo1" className="size-10" />
 
-          <p>
-            <strong>Name:</strong> {user?.personalDetails?.firstName}
-          </p>
-          <p>
-            <strong>Email:</strong> {user?.email}
-          </p> */}
-            <div className="flex flex-row justify-between  items-center">
-              <img src="/tablogo.png" alt="Logo1" className="size-10 -ml-1" />
-              <img
-                src="/logo2nd1.png"
-                alt="Logo2"
-                className="w-35 h-10 group-hover:block"
-              />
-            </div>
+                {/* Wrap the right logo in a container to adjust alignment */}
+                <div className="flex-1 flex justify-end pr-1">
+                  <img
+                    src="/logo2nd1.png"
+                    alt="Logo2" 
+                    className="h-10"
+                  />
+                </div>
+              </div>
 
-            {/* Account Info */}
-            <div className="mt-4  pt-4">
-              {/* <h4 className="font-semibold mb-2">Account Details</h4>
-            <p>
-              <strong>Account Type:</strong> {user?.accountDetails?.accountType}
-            </p> */}
-              <p>
-                {maskedAccount}{" "}
+              {/* Format Account Number into 4-4-4 */}
+              <p className="mt-6 text-xl tracking-widest font-mono">
+                {showAccountNumber
+                  ? "123456789012".replace(/(.{4})/g, "$1 ").trim()
+                  : maskedAccount}{" "}
                 {!showAccountNumber && (
                   <button
                     onClick={() => setPasswordModalOpen(true)}
-                    className="text-sm text-white underline hover:text-white/90"
+                    className="text-sm text-white underline hover:text-white/90 ml-2"
                   >
                     Show
                   </button>
                 )}
               </p>
-              {/* <p>
-              <strong>Balance:</strong> {maskedBalance}{" "}
-              <button
-                onClick={() => setShowBalance(!showBalance)}
-                className="text-white/80"
-              >
-                {showBalance ? "🙈" : "👁️"}
-              </button>
-            </p> */}
-              <div className="flex flex-row justify-between  pt-6">
+
+              <div className="flex justify-between mt-6">
                 <p>12/24</p>
                 <p>CVV</p>
               </div>
             </div>
+
+
+            {/* Card Info */}
+            <div className="mt-6 space-y-2">
+              <div className="flex justify-between text-gray-500">
+                <p>Card Balance</p>
+                <p>
+                  <button
+                    onClick={() => setShowBalance(!showBalance)}
+                    className="text-gray-500"
+                  >
+                    {showBalance ? "🙈" : "👁️"}
+                  </button>{" "}
+                  {maskedBalance}
+                </p>
+              </div>
+              <div className="flex justify-between text-gray-500">
+                <p>Card Limit</p>
+                <p>₹100,000.00</p>
+              </div>
+            </div>
+
+            {/* Info */}
+            <div className="mt-6 space-y-2">
+              <div className="flex justify-between font-semibold">
+                <p>Information</p>
+                <p className="text-sm font-normal">More Details</p>
+              </div>
+              <div className="flex justify-between text-gray-500">
+                <p>Status</p>
+                <p className="text-green-600 font-medium">Active</p>
+              </div>
+              <div className="flex justify-between text-gray-500">
+                <p>Type Card</p>
+                <p>Current</p>
+              </div>
+              <div className="flex justify-between text-gray-500">
+                <p>Currency</p>
+                <p>Indian</p>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col mt-6 ">
-            <div className="flex flex-row justify-between gap-46">
-              <p className="text-gray-400">Card Balance</p>
-              <p>
-                <button
-                  onClick={() => setShowBalance(!showBalance)}
-                  className="text-white/80"
-                >
-                  {showBalance ? "🙈" : "👁️"}
-                </button>
-                {maskedBalance}{" "}
-
-              </p>
-            </div>
-            <div className="flex flex-row justify-between gap-35 mt-2">
-              <p className="text-gray-400">Card Limit</p>
-              <p>
-                ₹100,000,00
-              </p>
-            </div>
-
-          </div>
-          <div className="flex flex-col mt-6 ">
-            <div className="flex flex-row justify-between gap-46 mt-2">
-              <p className="font-bold">Information</p>
-              <p>More Details</p>
-            </div>
-            <div className="flex flex-row justify-between gap-35 mt-2">
-              <p className="text-gray-400">Status</p>
-              <p>
-                Active
-              </p>
-            </div>
-            <div className="flex flex-row justify-between gap-35 mt-2">
-              <p className="text-gray-400">Type Card</p>
-              <p>
-                Current
-              </p>
-            </div>
-            <div className="flex flex-row justify-between gap-35 mt-2">
-              <p className="text-gray-400">Currency</p>
-              <p>
-                Indian
-              </p>
-            </div>
-
-          </div>
-
-
         </div>
-        </div>
+
 
         {/* Add Money & Send Money Cards */}
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-2xl mx-auto">
