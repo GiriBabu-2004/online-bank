@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -18,21 +19,43 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl mb-4">Forgot Password</h2>
+    <div className="relative flex min-h-screen items-center justify-center bg-[url('/login-back.jpg')] bg-cover bg-center bg-no-repeat text-white px-4">
+      {/* Logo top-left */}
+      <Link
+        href="/"
+        className="absolute top-5 left-5 z-50 flex items-center space-x-2"
+      >
+        <img src="/tablogo.png" alt="Logo" className="h-10 w-auto" />
+        <img src="/logo2nd1.png" alt="Secondary Logo" className="h-10 w-auto mt-1" />
+      </Link>
+
+      {/* Form container */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white/20 backdrop-blur-md text-primary p-8 rounded-xl shadow-lg w-full max-w-md border border-white/30"
+      >
+        <h2 className="text-3xl font-semibold mb-6 text-center">Forgot Password</h2>
+
+        <label className="block mb-2 text-sm font-medium">Email Address</label>
         <input
           type="email"
-          className="w-full p-2 border border-gray-300 rounded mb-4"
+          className="w-full p-3 rounded bg-white/80 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <button className="w-full bg-blue-500 text-white p-2 rounded" type="submit">
+
+        <button
+          type="submit"
+          className="w-full mt-6 bg-black hover:bg-gray-800 transition-colors duration-200 text-white py-3 rounded font-medium cursor-pointer"
+        >
           Send Reset Link
         </button>
-        {message && <p className="mt-4 text-green-500">{message}</p>}
+
+        {message && (
+          <p className="mt-4 text-center text-green-300 font-medium">{message}</p>
+        )}
       </form>
     </div>
   );
