@@ -1,5 +1,5 @@
 "use client";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { WarpBackground } from "./magicui/warp-background";
 import { ArrowLeft, ArrowRight, Expand, Rocket, Wrench, ShieldCheck, } from "lucide-react";
 import Image from "next/image";
@@ -26,6 +26,37 @@ const testimonials = [
     image: "/anitatestimoni.png",
   },
 ];
+
+const scams = [
+  {
+    title: "KYC Fraud SMS",
+    message:
+      "Beware of fake SMS asking to update KYC with malicious links. Do not click any unknown links.",
+    name: "RBI Official", // like testimonial.name
+    titleRole: "India’s Central Bank", // like testimonial.title
+    image: "/rbi.png", // like testimonial.image
+    link: "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx", // external redirect
+  },
+  {
+    title: "Fake Customer Care Calls",
+    message:
+      "Scammers pretend to be from banks asking for card details. No bank will ever ask for your CVV or OTP.",
+    name: "Cyber Crime Portal",
+    titleRole: "Ministry of Home Affairs",
+    image: "/cyber crime.png",
+    link: "https://cybercrime.gov.in/",
+  },
+  {
+    title: "WhatsApp Investment Scams",
+    message:
+      "Do not trust WhatsApp messages promising high returns for small investments. These are fraud.",
+    name: "CERT-In",
+    titleRole: "Cyber Emergency Response",
+    image: "/cert-in.png",
+    link: "https://www.cert-in.org.in/",
+  },
+];
+
 import {
   LineChart,
   Line,
@@ -48,25 +79,35 @@ const chartData = [
 
 
 export default function JourneySection() {
-  const [current, setCurrent] = useState(0);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const testimonial = testimonials[testimonialIndex];
 
+  const handleTestimonialNext = () => {
+    setTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+  };
 
-   const [hasMounted, setHasMounted] = useState(false);
+  const handleTestimonialPrev = () => {
+    setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+  };
 
+  // For scams
+  const [scamIndex, setScamIndex] = useState(0);
+  const scam = scams[scamIndex];
+
+  const handleScamNext = () => {
+    setScamIndex((prev) => (prev + 1) % scams.length);
+  };
+
+  const handleScamPrev = () => {
+    setScamIndex((prev) => (prev - 1 + scams.length) % scams.length);
+  };
+
+  // Avoid hydration mismatch (optional if SSR)
+  const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
     setHasMounted(true);
   }, []);
-
   if (!hasMounted) return null;
-  const handlePrev = () => {
-    setCurrent((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrent((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-  };
-
-  const testimonial = testimonials[current];
   return (
     <div className="bg-white">
       {/* Wavy SVG Top */}
@@ -161,13 +202,13 @@ export default function JourneySection() {
                 {/* Navigation Arrows */}
                 <div className="absolute top-4 right-4 flex gap-2">
                   <button
-                    onClick={handlePrev}
+                    onClick={handleTestimonialPrev}
                     className="p-2 rounded-md hover:bg-gray-100 transition border border-gray-200"
                   >
                     <ArrowLeft size={18} className="text-gray-800" />
                   </button>
                   <button
-                    onClick={handleNext}
+                    onClick={handleTestimonialNext}
                     className="p-2 rounded-md hover:bg-gray-100 transition border border-gray-200"
                   >
                     <ArrowRight size={18} className="text-gray-800" />
@@ -256,10 +297,62 @@ export default function JourneySection() {
                   </p>
                 </div>
               </div>
+              <div className="relative border border-gray-200 p-6 mb-1 -mt-12 shadow-sm bg-white">
+                {/* Navigation Arrows (optional, keep only if carousel-style) */}
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button
+                    onClick={handleScamPrev}
+                    className="p-2 rounded-md hover:bg-red-50 transition border border-gray-200"
+                  >
+                    <ArrowLeft size={18} className="text-red-800" />
+                  </button>
+                  <button
+                    onClick={handleScamNext}
+                    className="p-2 rounded-md hover:bg-red-50 transition border border-gray-200"
+                  >
+                    <ArrowRight size={18} className="text-red-800" />
+                  </button>
+                </div>
+                {/* Scam Description */}
+                <p className="text-black text-lg mt-4 ml-7">
+                  “<span className="font-semibold text-black">
+                    {scam.message.split(" ")[0] + " " + scam.message.split(" ")[1]}
+                  </span>{" "}
+                  {scam.message.split(" ").slice(2).join(" ")}”
+                </p>
+
+                {/* User Info or Source */}
+                <div className="mt-4 flex items-center gap-4 ml-7">
+                  <Image
+                    src={scam.image}
+                    alt={scam.name}
+                    width={40}
+                    height={40}
+                    className="rounded-full scale-130"
+                  />
+                  <div>
+                    <p className="font-semibold text-black">{scam.name}</p>
+                    <p className="text-sm text-red-400">{scam.title}</p>
+                  </div>
+                </div>
+
+                {/* External Link Button */}
+                <div className="ml-7 mt-4">
+                  <a
+                    href={scam.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline font-medium text-sm"
+                  >
+                    Explore More →
+                  </a>
+                </div>
+              </div>
+
               <div className="bg-white text-balck -mt-15 pb-2 rounded-md border border-gray-800 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                {/* Uptime */} 
+                {/* Uptime */}
                 <div>
-                  <h2 className="text-4xl md:text-5xl font-semibold text-gray-200">
+                  <h2 className="text-4xl md:text-5xl font-semibold text-gray-200 pt-10">
                     99.99<span className="align-super text-2xl">%</span> Uptime
                   </h2>
                 </div>

@@ -384,7 +384,7 @@ export default function Dashboard() {
           <div className="w-[340px] h-screen bg-white pl-3 pr-3 pb-3 mr-16  shadow-md">
             {/* Theme Selector */}
             <div className="flex justify-between items-center  mb-4">
-              <p className="font-semibold">My card</p>
+              <p className="font-semibold">My Account</p>
               <select
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
@@ -431,7 +431,7 @@ export default function Dashboard() {
               </p>
 
               <div className="flex justify-between mt-6">
-                <p>12/24</p>
+                <p>12/30</p>
                 <p>CVV</p>
               </div>
             </div>
