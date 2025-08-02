@@ -19,7 +19,7 @@ export default function Navbar({ className = "" }) {
 
   return (
     <nav
-      className={`bg-white text-black transition-all ${borderClass} ${className}`}
+      className={`bg-white  text-black transition-all ${borderClass} ${className}`}
     >
       <div className="max-w-screen-xl h-14 mx-auto flex items-center justify-between font-[Caveat] px-4">
         {/* Logo: light and dark variants */}

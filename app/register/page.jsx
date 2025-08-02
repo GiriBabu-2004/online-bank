@@ -337,10 +337,13 @@ function evaluatePasswordStrength(password) {
 const otpError = otp.length > 0 && otp.length < 6;
 
   return (
-   <div className="min-h-screen bg-animated">
+   <div className="min-h-screen bg-[url('/background.png')]  bg-center bg-repeat bg-[length:400px_400px]" style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}>
 
   {/* Header */}
-  <header className="flex items-center justify-between px-8 py-4 bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-20 border-b border-yellow-300">
+  <header className="flex items-center justify-between px-8 py-4  backdrop-blur-md shadow-md sticky top-0 z-20 border-b border-yellow-300">
     <Link href="/" className="flex items-center gap-2">
       <img src="/tablogo.png" alt="Tab Logo" className="h-10 w-auto -mt-2" />
       <img src="/logo2nd1.png" alt="Main Logo" className="h-10 w-auto" />
@@ -372,14 +375,14 @@ const otpError = otp.length > 0 && otp.length < 6;
 
   {/* Main Form Area */}
   <main className="flex justify-center items-start mt-10 px-4">
-    <div className="w-full max-w-4xl bg-white p-10 rounded-xl shadow-lg border border-yellow-300 relative overflow-hidden">
+    <div className="w-full max-w-4xl p-10  relative overflow-hidden">
       <h1 className="kanit text-4xl font-bold text-center mb-8 text-black">
         Register Your Account
       </h1>
 
       {/* Step 1 */}
    {step === 1 && (
-  <div className="bg-white shadow-md rounded-xl p-6 space-y-6 max-w-md mx-auto transition-all duration-300">
+  <div className="bg-white border border-yellow-400 shadow-xl rounded-xl p-6 space-y-6 max-w-md mx-auto transition-all duration-300">
     
     {/* Email Input */}
     <label className="block">

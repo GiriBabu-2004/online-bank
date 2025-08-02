@@ -52,7 +52,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen bg-[url('/login-back.jpg')] bg-cover bg-center bg-no-repeat text-white overflow-hidden">
+    <div className="relative flex min-h-screen bg-[url('/background.png')]  bg-center bg-repeat bg-[length:400px_400px] text-black overflow-hidden"
+    style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}>
       {/* Logo in top-left */}
       <Link
         href="/"
@@ -69,8 +73,8 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-1/3 ml-[33.3333%] flex items-center justify-center"
       >
-        <div className="w-full max-w-md bg-black/20 backdrop-blur-md border border-white/30 p-10 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold text-center mb-6 text-white">
+        <div className="w-full max-w-md bg-white/20 backdrop-blur-sm  border border-yellow-400 p-10 rounded-lg shadow-lg ">
+          <h2 className="text-2xl font-semibold text-center mb-6 text-black">
             Welcome, please login
           </h2>
 
@@ -78,7 +82,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-white"
+                className="block text-sm font-medium text-black"
               >
                 Email
               </label>
@@ -88,14 +92,14 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
             </div>
 
             <div className="relative" >
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-white"
+                className="block text-sm font-medium text-black"
               >
                 Password
               </label>
@@ -106,7 +110,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  className="mt-1 w-full px-4 py-2 border border-gray-700 rounded-md bg-black/10 backdrop-blur-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
                 <button
                   type="button"
@@ -119,7 +123,7 @@ export default function LoginPage() {
               <div className="text-right mt-1">
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-white hover:underline"
+                  className="text-sm text-black hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -129,7 +133,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="role"
-                className="block text-sm font-medium text-white"
+                className="block text-sm font-medium text-black"
               >
                 Login as
               </label>
@@ -153,9 +157,9 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-white">
+          <p className="mt-6 text-center text-sm text-black">
             Don't have an account?{" "}
-            <Link href="/register" className="text-yellow-300 hover:underline">
+            <Link href="/register" className="text-yellow-600 hover:underline">
               Register
             </Link>
           </p>
@@ -187,7 +191,7 @@ export default function LoginPage() {
               </h3>
               <button
                 onClick={() => setShowRules(false)}
-                className="text-black hover:text-red-500"
+                className="text-white hover:text-gray-300"
               >
                 <FaTimes />
               </button>

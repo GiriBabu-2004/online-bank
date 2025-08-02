@@ -51,7 +51,11 @@ export default function ResetPasswordPage({ params }) {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[url('/login-back.jpg')] bg-cover bg-center bg-no-repeat text-primary px-4">
+    <div className="relative flex min-h-screen items-center justify-center bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] bg-center  text-primary px-4"
+    style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}>
       <Link
         href="/"
         className="absolute top-5 left-5 z-50 flex items-center space-x-2"
@@ -60,7 +64,7 @@ export default function ResetPasswordPage({ params }) {
         <img src="/logo2nd1.png" alt="Secondary Logo" className="h-10 w-auto mt-1" />
       </Link>
       {/* Form container */}
-      <div className="bg-white/20 backdrop-blur-md  p-8 rounded-xl shadow-lg w-full max-w-md border border-white/30">
+      <div className="bg-white/20 backdrop-blur-md  p-8 rounded-xl shadow-lg w-full max-w-md border border-yellow-400">
         <h2 className="text-3xl font-semibold mb-6 text-center">Reset Your Password</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,7 +72,7 @@ export default function ResetPasswordPage({ params }) {
             <label className="block mb-1 text-sm font-medium">New Password</label>
             <input
               type="password"
-              className="w-full p-3 rounded bg-white/80 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full p-3 rounded bg-white/80 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black border"
               placeholder="Enter new password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -80,7 +84,7 @@ export default function ResetPasswordPage({ params }) {
             <label className="block mb-1 text-sm font-medium">Confirm New Password</label>
             <input
               type="password"
-              className="w-full p-3 rounded bg-white/80 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full p-3 rounded bg-white/80 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black border "
               placeholder="Confirm new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

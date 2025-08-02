@@ -16,8 +16,8 @@ const FixedDepositCard = dynamic(() => import('@/components/FixedDepositCard'), 
 
 export default function HeroSection() {
   return (
-    <div className="bg-white">
-      <section className="w-full bg-white py-20 mt-5 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
+    <div >
+      <section className="w-full py-20 mt-5 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center text-center">
         {/* Headline */}
         <div className=" -mt-18 ">
           <Link

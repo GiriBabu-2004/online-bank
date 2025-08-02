@@ -109,9 +109,9 @@ export default function JourneySection() {
   }, []);
   if (!hasMounted) return null;
   return (
-    <div className="bg-white">
+    <div >
       {/* Wavy SVG Top */}
-      <div className="-mt-60 relative z-50">
+      <div className="-mt-64 relative z-50">
         <svg
           className="w-full "
           viewBox="0 0 1440 320"

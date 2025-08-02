@@ -61,21 +61,19 @@ export default function CustomerCarePage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-black">
+    <div className="relative min-h-screen w-full bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] bg-center"
+     style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}>
       {/* Golden Horizon Background with Top Glow */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(251, 191, 36, 0.25), transparent 70%), #000000",
-        }}
-      />
+      
       <Link
         href="/"
         className="absolute top-5 left-5 z-50 flex items-center space-x-2"
       >
         <img src="tablogo.png" alt="Logo" className="h-10  w-auto" />
-        <img src="logo2nd2.png" alt="Logo" className="h-10 mt-1 w-auto" />
+        <img src="logo2nd1.png" alt="Logo" className="h-10 mt-1 w-auto" />
       </Link>
 
       <div className="relative z-10 flex items-center justify-between min-h-[calc(100vh-160px)] px-4 pb-12">
@@ -83,10 +81,10 @@ export default function CustomerCarePage() {
         <div className="flex flex-col gap-6 w-full max-w-sm pl-16">
           {/* Top centered heading and paragraph */}
           <div className="relative z-10 pt-4 pb-6  mt-40 text-center px-1 max-w-7xl mx-auto">
-            <h1 className="roboto text-6xl font-extrabold text-white mb-1 drop-shadow-lg">
+            <h1 className="roboto text-6xl font-extrabold text-black mb-1 drop-shadow-lg">
               Contact Us
             </h1>
-            <p className="text-sm text-white opacity-50 text-left mt-3 max-w-3xl mx-auto drop-shadow-md">
+            <p className="text-sm text-black opacity-50 text-left mt-3 max-w-3xl mx-auto drop-shadow-md">
               We're here to help! Please fill out the form to get in touch with
               our customer care team. Provide as much detail as possible, and
               feel free to upload any relevant images.
@@ -95,21 +93,21 @@ export default function CustomerCarePage() {
          
           <div className="bg-transprent border-1 border-gray-800 p-4 rounded-md text-white shadow">
             <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
-              <div className="w-8 h-8  bg-amber-400 rounded-sm flex items-center justify-center text-gray-800">
+              <div className="w-8 h-8  bg-yellow-500 rounded-sm flex items-center justify-center text-gray-800">
                 <MdEmail />
               </div>
             </div>
-            <h3 className="roboto text-yellow-400 font-semibold text-lg mb-2">
+            <h3 className="roboto text-yellow-500 font-semibold text-lg mb-2">
               Email Us
             </h3>
-            <p className="roboto text-sm">
+            <p className="roboto text-sm text-black">
               gofuture440@gmail.com
               <br />
               Mon–Fri, 9am to 6pm
             </p>
           </div>
         </div>
-        <div className="w-full max-w-md mt-10 bg-white text-black p-4 md:mr-16 max-h-[600px] rounded-lg">
+        <div className="w-full max-w-md mt-10 bg-white/80 border border-yellow-400 text-black p-4 md:mr-16 max-h-[600px] rounded-lg">
           <h2 className="roboto text-2xl font-semibold text-left mb-6 text-black">
             Send Message
           </h2>

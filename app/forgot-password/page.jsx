@@ -19,7 +19,11 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[url('/login-back.jpg')] bg-cover bg-center bg-no-repeat text-white px-4">
+    <div className="relative flex min-h-screen items-center justify-center bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] bg-center text-white px-4"
+     style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}>
       {/* Logo top-left */}
       <Link
         href="/"
@@ -32,14 +36,14 @@ export default function ForgotPassword() {
       {/* Form container */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white/20 backdrop-blur-md text-primary p-8 rounded-xl shadow-lg w-full max-w-md border border-white/30"
+        className="bg-white/20 backdrop-blur-md text-primary p-8 rounded-xl shadow-lg w-full max-w-md border border-yellow-400"
       >
         <h2 className="text-3xl font-semibold mb-6 text-center">Forgot Password</h2>
 
         <label className="block mb-2 text-sm font-medium">Email Address</label>
         <input
           type="email"
-          className="w-full p-3 rounded bg-white/80 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full p-3 rounded bg-white/80 text-black border placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
