@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Loader from "../../components/Loader"
+import Loader from "../../components/Loader";
 import {
   LayoutDashboard,
   FileText,
@@ -12,6 +12,8 @@ import {
   LineChart,
   Headphones,
   LogOut,
+  EyeClosed,
+  Eye,
 } from "lucide-react";
 import {
   Select,
@@ -22,10 +24,19 @@ import {
 } from "@/components/ui/select"; // update path if needed
 
 const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
-
 
 import {
   PieChart,
@@ -85,7 +96,7 @@ export default function Dashboard() {
   const [inputPassword, setInputPassword] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("January");
 
-  const [theme, setTheme] = useState("blue");
+  const [theme, setTheme] = useState("orange");
 
   const gradientThemes = {
     blue: "bg-gradient-to-r from-blue-500 to-blue-700",
@@ -132,7 +143,12 @@ export default function Dashboard() {
       });
   }, [router]);
 
-  if (loading) return <div><Loader /></div>;
+  if (loading)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   if (error) return <div className="text-red-600">{error}</div>;
 
   // Mask account number for privacy
@@ -142,7 +158,7 @@ export default function Dashboard() {
     : "XXXXXXXX" + accountNumber.slice(-4);
 
   // Demo balance (replace with real balance from user.accountDetails if available)
-  const balance = user?.accountDetails?.balance || 0;
+  const balance = user?.accountDetails?.balance || "0000.00";
   const maskedBalance = showBalance ? `₹${balance}` : "₹XXXX.XX";
 
   const handleVerifyPassword = async () => {
@@ -181,24 +197,30 @@ export default function Dashboard() {
     { name: "Shopping", value: 20, color: "#8B5CF6" },
     { name: "Sport", value: 30, color: "#0EA5E9" },
     { name: "Food", value: 10, color: "#FACC15" },
-    { name: "Clothes", value: 0, color: "#4F46E5" },
-    { name: "Others", value: 0, color: "#9CA3AF" },
+    { name: "Clothes", value: 25, color: "#4F46E5" },
+    { name: "Others", value: 15, color: "#9CA3AF" },
   ];
 
   const lineData = [
-    { name: "Apr", value: 0 },
-    { name: "May", value: 0 },
-    { name: "Jun", value: 0 },
-    { name: "Jul", value: 0 },
-    { name: "Aug", value: 0 },
-    { name: "Sep", value: 0 },
-    { name: "Oct", value: 0 },
-  ];
+  { name: "Apr", value: 0.2 },
+  { name: "May", value: 0.35 },
+  { name: "Jun", value: 0.5 },
+  { name: "Jul", value: 0.7 },
+  { name: "Aug", value: 0.6 },
+  { name: "Sep", value: 0.8 },
+  { name: "Oct", value: 0.9 },
+];
 
   const transactions = [];
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div
+      className="flex min-h-screen bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] bg-center"
+      style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}
+    >
       {/* Sidebar */}
       <motion.aside
         className="group fixed h-screen bg-white shadow-md z-10"
@@ -217,15 +239,22 @@ export default function Dashboard() {
         </div>
 
         {/* Navigation Menu */}
-        <nav className="flex flex-col gap-4 mt-6 px-2 ml-3 ">
+        <nav className="flex flex-col gap-4 mt-6 px-2 ml-2 ">
           {menuItems.map((item, index) => (
             <Link
               key={index}
               href={item.href}
               className="flex items-center gap-4 text-gray-700 p-3 rounded-md hover:bg-blue-100 transition-all"
             >
-              {item.icon}
-              <span className="hidden group-hover:block">{item.label}</span>
+              <div className="min-w-[24px]">{item.icon}</div>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="overflow-hidden whitespace-nowrap"
+              >
+                {item.label}
+              </motion.span>
             </Link>
           ))}
         </nav>
@@ -249,26 +278,20 @@ export default function Dashboard() {
       <div className="flex-2 pt-16 relative h-screen w-full overflow-hidden">
         {/* Top Right Profile */}
         <div className="absolute top-4 right-6 flex items-center gap-4">
-          <div className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-full uppercase">
+          <div className="w-10 h-10 bg-orange-600 text-white flex items-center justify-center rounded-full uppercase">
             {user?.email?.charAt(0)}
           </div>
         </div>
 
-
-
-
-
-
-
-        <div className="flex min-h-screen bg-blue-100 w-full pt-0 px-0 ml-16 overflow-hidden">
+        <div className="flex min-h-screen w-full pt-0 px-0 ml-16 overflow-hidden">
           {/* Left Panel - Charts */}
-          <div className="flex-1 p-8 space-y-6 overflow-y-auto">
-            <h1 className="text-xl font-semibold">Welcome to ONLINE BANK</h1>
+          <div className="flex-1 p-6 space-y-4 overflow-y-auto">
+            <h1 className="text-xl font-bold">Welcome to ONLINE BANK</h1>
 
             {/* Charts Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pie Chart */}
-              <div className="bg-white p-4 rounded-xl shadow-md">
+              <div className="bg-white/80 border border-yellow-400 p-4 rounded-xl shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <p className="font-semibold">Expenses by category</p>
 
@@ -321,10 +344,10 @@ export default function Dashboard() {
               </div>
 
               {/* Transactions */}
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white/80 border border-yellow-400 p-6 rounded-xl shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <p className="font-semibold">Transactions</p>
-                  <p className="text-sm text-blue-500">More details</p>
+                  <p className="text-sm text-black">More details</p>
                 </div>
                 {transactions.length === 0 ? (
                   <p className="text-gray-400 text-sm">No transactions yet.</p>
@@ -343,10 +366,11 @@ export default function Dashboard() {
                           </div>
                         </div>
                         <p
-                          className={`font-semibold ${tx.amount.includes("-")
-                            ? "text-red-500"
-                            : "text-green-500"
-                            }`}
+                          className={`font-semibold ${
+                            tx.amount.includes("-")
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
                         >
                           {tx.amount}
                         </p>
@@ -358,7 +382,7 @@ export default function Dashboard() {
             </div>
 
             {/* Analytics Chart */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
+            <div className="bg-white/80 border border-yellow-400 p-6 rounded-xl shadow-md">
               <div className="flex justify-between items-center mb-4">
                 <p className="font-semibold">Analytics</p>
                 <p className="text-sm text-gray-400">1 year</p>
@@ -381,18 +405,18 @@ export default function Dashboard() {
           </div>
 
           {/* Right Panel - Card */}
-          <div className="w-[340px] h-screen bg-white pl-3 pr-3 pb-3 mr-16  shadow-md">
+          <div className="w-[340px] h-screen bg-white/80 border border-yellow-400 rounded-l-2xl pl-3 pr-3 pb-3 mr-16  shadow-md">
             {/* Theme Selector */}
-            <div className="flex justify-between items-center  mb-4">
+            <div className="flex justify-between items-center mt-2 mb-4">
               <p className="font-semibold">My Account</p>
               <select
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
-                className="border border-gray-300 rounded px-3 py-1 text-sm"
+                className="border border-gray-300 rounded px-0.5 py-0.5 text-sm"
               >
                 {Object.keys(gradientThemes).map((key) => (
                   <option key={key} value={key}>
-                    {key.charAt(0).toUpperCase() + key.slice(1)} Theme
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
                   </option>
                 ))}
               </select>
@@ -400,19 +424,10 @@ export default function Dashboard() {
 
             {/* Card Display */}
             <div
-              className={`rounded-lg shadow-md text-white transition-all duration-500 p-4 ${gradientThemes[theme]}`}
+              className={`rounded-lg shadow-md text-white h-45 transition-all duration-500 p-4 ${gradientThemes[theme]}`}
             >
-              <div className="flex items-center justify-between">
-                <img src="/tablogo.png" alt="Logo1" className="size-10" />
-
-                {/* Wrap the right logo in a container to adjust alignment */}
-                <div className="flex-1 flex justify-end pr-1">
-                  <img
-                    src="/logo2nd1.png"
-                    alt="Logo2" 
-                    className="h-10"
-                  />
-                </div>
+              <div className="flex items-center justify-end">
+                <img src="/tablogo.png" alt="Logo1" className="size-8" />
               </div>
 
               {/* Format Account Number into 4-4-4 */}
@@ -423,37 +438,31 @@ export default function Dashboard() {
                 {!showAccountNumber && (
                   <button
                     onClick={() => setPasswordModalOpen(true)}
-                    className="text-sm text-white underline hover:text-white/90 ml-2"
+                    className="text-sm text-white underline hover:text-white/90 ml-2 cursor-pointer"
                   >
                     Show
                   </button>
                 )}
               </p>
-
-              <div className="flex justify-between mt-6">
-                <p>12/30</p>
-                <p>CVV</p>
-              </div>
             </div>
-
 
             {/* Card Info */}
             <div className="mt-6 space-y-2">
               <div className="flex justify-between text-gray-500">
-                <p>Card Balance</p>
+                <p>Acc. Balance</p>
                 <p>
                   <button
                     onClick={() => setShowBalance(!showBalance)}
-                    className="text-gray-500"
+                    className="text-gray-500 "
                   >
-                    {showBalance ? "🙈" : "👁️"}
+                    {showBalance ? (
+                      <Eye className="w-5 h-5 inline cursor-pointer" />
+                    ) : (
+                      <EyeClosed className="w-5 h-5 inline cursor-pointer" />
+                    )}
                   </button>{" "}
                   {maskedBalance}
                 </p>
-              </div>
-              <div className="flex justify-between text-gray-500">
-                <p>Card Limit</p>
-                <p>₹100,000.00</p>
               </div>
             </div>
 
@@ -468,8 +477,8 @@ export default function Dashboard() {
                 <p className="text-green-600 font-medium">Active</p>
               </div>
               <div className="flex justify-between text-gray-500">
-                <p>Type Card</p>
-                <p>Current</p>
+                <p>Acc. Type</p>
+                <p>{user?.accountDetails?.accountType}</p>
               </div>
               <div className="flex justify-between text-gray-500">
                 <p>Currency</p>
@@ -478,7 +487,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
 
         {/* Add Money & Send Money Cards */}
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-2xl mx-auto">
@@ -519,13 +527,13 @@ export default function Dashboard() {
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setPasswordModalOpen(false)}
-                className="px-4 py-2 text-gray-600"
+                className="px-4 py-2 text-gray-600 hover:bg-red-500 hover:text-white rounded cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleVerifyPassword}
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className="px-4 py-2 bg-yellow-500 text-black rounded cursor-pointer"
               >
                 Submit
               </button>
