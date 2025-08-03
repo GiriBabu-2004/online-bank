@@ -138,7 +138,7 @@ export default function MutualFundCalculator() {
 
           <div className="space-y-3">
             <div>
-              <label>{mode === "sip" ? "Monthly SIP Amount (₹)" : "Lumpsum Amount (₹)"}</label>
+              <label className="font-semibold mb-1 block">{mode === "sip" ? "Monthly SIP Amount (₹)" : "Lumpsum Amount (₹)"}</label>
               <input
                 type="number"
                 value={amount}
@@ -149,7 +149,7 @@ export default function MutualFundCalculator() {
             </div>
 
             <div>
-              <label>Annual Interest Rate (%)</label>
+              <label className="font-semibold mb-1 block">Annual Interest Rate (%)</label>
               <input
                 type="number"
                 step="0.01"
@@ -161,7 +161,7 @@ export default function MutualFundCalculator() {
             </div>
 
             <div>
-              <label>Maturity Terms  (Years)</label>
+              <label className="font-semibold mb-1 block">Maturity Terms  (Years)</label>
               <input
                 type="number"
                 value={years}
@@ -172,8 +172,8 @@ export default function MutualFundCalculator() {
             </div>
 
             <div>
-              <label>
-                Yearly Setup Amount (₹) <small className="text-gray-500">(Optional)</small>
+              <label className="font-semibold mb-1 block">
+                Yearly Step-up Amount (₹) <small className="text-gray-500">(Optional)</small>
               </label>
               <input
                 type="number"
@@ -185,7 +185,7 @@ export default function MutualFundCalculator() {
             </div>
 
             <div>
-              <label>
+              <label className="font-semibold mb-1 block">
                 Inflation Rate (%) <small className="text-gray-500">(Optional)</small>
               </label>
               <input
