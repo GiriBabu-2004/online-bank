@@ -7,12 +7,11 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
-import {
-  CircularProgressbar,
-  buildStyles,
-} from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 
 export default function FDCalculator() {
   const [principal, setPrincipal] = useState("");
@@ -60,16 +59,14 @@ export default function FDCalculator() {
   const principalFloat = parseFloat(principal) || 0;
   const interestEarned =
     maturityAmount && principalFloat
-      ? (maturityAmount - principalFloat).toFixed(2)
-      : "0.00";
-
-  const growthPercent =
-    maturityAmount && principalFloat
-      ? Math.min(
-          100,
-          (((maturityAmount - principalFloat) / principalFloat) * 100).toFixed(1)
-        )
+      ? maturityAmount - principalFloat
       : 0;
+
+  // Data for Pie Chart
+  const pieData = [
+    { name: "Invested Amount", value: principalFloat, color: "#3b82f6" }, // Blue
+    { name: "Returns Earned", value: interestEarned, color: "#22c55e" }, // Green
+  ];
 
   return (
     <div
@@ -155,23 +152,69 @@ export default function FDCalculator() {
             <p className="text-lg font-semibold text-green-800">
               Maturity Amount: ₹{maturityAmount.toFixed(2)}
             </p>
-            <p className="text-lg text-green-700">
-              Interest Earned: ₹{interestEarned}
+            <p className="text-md  text-green-800">
+              Invested Amount: ₹{principalFloat.toFixed(2)}
+            </p>
+            <p className="text-md text-green-700">
+              Interest Earned: ₹{interestEarned.toFixed(2)}
             </p>
           </div>
 
-          {/* Circular Progress */}
-          <div className="w-28 h-28">
-            <CircularProgressbar
-              value={growthPercent}
-              text={`${growthPercent}%`}
-              styles={buildStyles({
-                textColor: "#000000",         // Black text
-    pathColor: "#facc15",         // Yellow path (Tailwind's yellow-400)
-    trailColor: "#fef9c3",  
-              })}
-            />
+          {/* Pie Chart replacing Circular Progress */}
+          <div className="w-36 h-36 -mt-6">
+            {principalFloat > 0 && maturityAmount > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={30}
+                    outerRadius={50}
+                    paddingAngle={5}
+                   
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                 
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-center text-gray-400 mt-14 text-sm">
+                Pie chart will appear after calculation
+              </p>
+            )}
           </div>
+
+          {/* Percentages below Pie Chart */}
+          {principalFloat > 0 && maturityAmount > 0 && (
+            <div className="flex justify-center gap-6 mt-2 text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: pieData[0].color }}
+                ></span>
+                <span>
+                  Invested:{" "}
+                  {((pieData[0].value / maturityAmount) * 100).toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: pieData[1].color }}
+                ></span>
+                <span>
+                  Returns:{" "}
+                  {((pieData[1].value / maturityAmount) * 100).toFixed(1)}%
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Line Chart */}
           <div className="h-56 bg-white border rounded-lg p-2 shadow w-full max-w-md">
@@ -195,7 +238,9 @@ export default function FDCalculator() {
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-center text-gray-400 mt-16">Chart will appear after calculation</p>
+              <p className="text-center text-gray-400 mt-16">
+                Chart will appear after calculation
+              </p>
             )}
           </div>
         </div>
