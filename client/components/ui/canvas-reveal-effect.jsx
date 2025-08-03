@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { cn } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import React, { useMemo, useRef } from "react";
@@ -7,16 +7,26 @@ import * as THREE from "three";
 export const CanvasRevealEffect = ({
   animationSpeed = 0.4,
   opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
-  colors = [[250, 204, 21], [234, 179, 8], [202, 138, 4]],
+  colors = [
+    [250, 204, 21],
+    [234, 179, 8],
+    [202, 138, 4],
+  ],
   containerClassName,
   dotSize,
-  showGradient = true
+  showGradient = true,
 }) => {
   return (
     <div className={cn("h-full relative bg-white w-full", containerClassName)}>
       <div className="h-full w-full">
         <DotMatrix
-          colors={colors ?? [[250, 204, 21], [234, 179, 8], [202, 138, 4]]}
+          colors={
+            colors ?? [
+              [250, 204, 21],
+              [234, 179, 8],
+              [202, 138, 4],
+            ]
+          }
           dotSize={dotSize ?? 3}
           opacities={
             opacities ?? [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1]
@@ -27,7 +37,8 @@ export const CanvasRevealEffect = ({
               opacity *= step(intro_offset, u_time * animation_speed_factor);
               opacity *= clamp((1.0 - step(intro_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
             `}
-          center={["x", "y"]} />
+          center={["x", "y"]}
+        />
       </div>
       {showGradient && (
         <div className="absolute inset-0 bg-gradient-to-t from-gray-950 to-[84%]" />
@@ -149,15 +160,12 @@ const DotMatrix = ({
       fragColor.rgb *= fragColor.a;
         }`}
       uniforms={uniforms}
-      maxFps={60} />
+      maxFps={60}
+    />
   );
 };
 
-const ShaderMaterial = ({
-  source,
-  uniforms,
-  maxFps = 60
-}) => {
+const ShaderMaterial = ({ source, uniforms, maxFps = 60 }) => {
   const { size } = useThree();
   const ref = useRef();
   let lastFrameTime = 0;
@@ -196,8 +204,7 @@ const ShaderMaterial = ({
           break;
         case "uniform3fv":
           preparedUniforms[uniformName] = {
-            value: uniform.value.map((v) =>
-              new THREE.Vector3().fromArray(v)),
+            value: uniform.value.map((v) => new THREE.Vector3().fromArray(v)),
             type: "3fv",
           };
           break;

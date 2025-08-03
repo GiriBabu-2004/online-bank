@@ -14,11 +14,7 @@ export const CardSpotlight = ({
 }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  function handleMouseMove({
-    currentTarget,
-    clientX,
-    clientY
-  }) {
+  function handleMouseMove({ currentTarget, clientX, clientY }) {
     let { left, top } = currentTarget.getBoundingClientRect();
 
     mouseX.set(clientX - left);
@@ -37,7 +33,8 @@ export const CardSpotlight = ({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      {...props}>
+      {...props}
+    >
       <motion.div
         className="pointer-events-none absolute z-20 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
         style={{
@@ -49,22 +46,22 @@ export const CardSpotlight = ({
               transparent 80%
             )
           `,
-        }}>
+        }}
+      >
         {isHovering && (
           <CanvasRevealEffect
             animationSpeed={5}
             containerClassName="bg-transparent absolute inset-0 pointer-events-none"
             colors={[
-              [250, 204, 21],   // yellow-400
-              [234, 179, 8],    // yellow-500
-              [202, 138, 4],    // yellow-600
+              [250, 204, 21], // yellow-400
+              [234, 179, 8], // yellow-500
+              [202, 138, 4], // yellow-600
             ]}
-            dotSize={3} />
+            dotSize={3}
+          />
         )}
       </motion.div>
-      <div className="relative z-20">
-        {children}
-      </div>
+      <div className="relative z-20">{children}</div>
     </div>
   );
 };
