@@ -5,6 +5,7 @@ exports.getPendingApplications = async (req, res) => {
   try {
     const users = await User.find({
       isVerified: false,
+      isRejected: { $ne: true },
       videoVerificationSubmittedAt: { $exists: true }
     }).select('email personalDetails videoVerificationImageUrls videoVerificationSubmittedAt');
 
@@ -36,6 +37,7 @@ exports.approveApplication = async (req, res) => {
 
     user.isVerified = true;
     user.accountNumber = accountNumber;
+    user.isRejected = false;
 
     await user.save();
 
@@ -59,6 +61,7 @@ exports.rejectApplication = async (req, res) => {
       {
         videoVerificationSubmittedAt: null,
         videoVerificationImageUrls: [],
+        isRejected: true,
       },
       { new: true }
     );

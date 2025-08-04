@@ -19,7 +19,7 @@ router.patch('/pending-applications/:id/reject', rejectApplication);
 router.get('/pending-applications/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user || user.isVerified !== false) {
+    if (!user || user.isVerified !== false ||  user.videoVerificationSubmittedAt == null ||user.isRejected === true) {
       return res.status(404).json({ message: 'Pending application not found' });
     }
     res.json(user);
