@@ -11,6 +11,7 @@ export default function CustomerCarePage() {
   const [images, setImages] = useState([]);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
     const timeout = setTimeout(() => {
@@ -38,7 +39,7 @@ export default function CustomerCarePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitting(true);
     const formData = new FormData();
     formData.append("email", email);
     formData.append("subject", subject);
@@ -65,6 +66,8 @@ export default function CustomerCarePage() {
     } catch (err) {
       console.error("Error:", err);
       alert("Something went wrong!");
+    } finally {
+      setSubmitting(false);
     }
   };
 if (loading) return <Loader />;
@@ -245,9 +248,10 @@ if (loading) return <Loader />;
             </div>
             <button
               type="submit"
-              className="w-full bg-yellow-500 text-black roboto font-bold py-2 rounded-md hover:bg-yellow-600 cursor-pointer"
+              disabled={submitting}
+              className={`w-full bg-yellow-500 text-black roboto font-bold py-2 rounded-md hover:bg-yellow-600 ${submitting ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             >
-              Submit
+              {submitting ? "Submitting..." : "Submit"}
             </button>
           </form>
         </div>
