@@ -225,7 +225,7 @@ if (loading) return <Loader />;
               {/* Custom styled label acts as button */}
               <label
                 htmlFor="imageUpload"
-                className="roboto flex items-center justify-center cursor-pointer w-full px-2 py-2 border-2 border-yellow-400 border-dashed rounded-md text-black hover:bg-yellow-400 hover:text-black transition-colors h-10"
+                className="roboto flex items-center justify-center cursor-pointer w-full px-2 py-2 border-2 border-yellow-400 border-dashed rounded-md text-black hover:bg-yellow-50 hover:text-black transition-colors h-10"
               >
                 Choose Images
               </label>
@@ -241,8 +241,8 @@ if (loading) return <Loader />;
               <div className="w-full bg-green-200 rounded-full h-0.5 mt-3 overflow-hidden">
                 {/* Progress bar itself */}
                 <div
-                  className="bg-green-500 h-0.5 rounded-full transition-all duration-300 ease-in-out"
-                  style={{ width: `${progress}%` }}
+                  className="bg-green-500 h-0.5 rounded-full transition-width duration-700 ease-in-out"
+                  style={{ width: `${progress}%`, willChange: 'width' }}
                 />
               </div>
             </div>
