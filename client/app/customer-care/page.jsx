@@ -84,14 +84,14 @@ export default function CustomerCarePage() {
             <h1 className="roboto text-6xl font-extrabold text-black mb-1 drop-shadow-lg">
               Contact Us
             </h1>
-            <p className="text-sm text-black opacity-50 text-left mt-3 max-w-3xl mx-auto drop-shadow-md">
+            <p className="text-sm text-black opacity-70 ml-4 text-left mt-3 max-w-3xl mx-auto drop-shadow-md">
               We're here to help! Please fill out the form to get in touch with
               our customer care team. Provide as much detail as possible, and
               feel free to upload any relevant images.
             </p>
           </div>
          
-          <div className="bg-transprent border-1 border-gray-800 p-4 rounded-md text-white shadow">
+          <div className="bg-white/80 border-1 border-yellow-400 p-4 rounded-md text-white shadow">
             <div className="border w-10 height-12 flex items-center justify-center border-yellow-400 rounded-sm p-1">
               <div className="w-8 h-8  bg-yellow-500 rounded-sm flex items-center justify-center text-gray-800">
                 <MdEmail />

@@ -103,9 +103,9 @@ const AboutUs = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-20"
       >
-        <h1 className="text-4xl font-bold mb-4">About Us</h1>
-        <p className="text-lg max-w-2xl mx-auto">
-          Welcome to{' '} <span id='snippets' className="text-yellow-500 text-xl font-semibold">Online Bank</span>,</p><p className='mt-2'>we're redefining banking for the digital age. Built with innovation, security, and customer experience at our core, we make managing your money simpler, smarter, and more accessible—wherever life takes you.</p> 
+        <h1 className="text-4xl font-bold mb-4 drop-shadow-lg">About Us</h1>
+        <p className="text-lg max-w-2xl mx-auto ">
+          Welcome to{' '} <span id='snippets' className="text-yellow-500 text-xl font-semibold">Online Bank</span>,</p><p className='mt-2 text-black opacity-55'>we're redefining banking for the digital age. Built with innovation, security, and customer experience at our core, we make managing your money simpler, smarter, and more accessible—wherever life takes you.</p> 
         
       </motion.div>
 

@@ -417,7 +417,7 @@ const otpError = otp.length > 0 && otp.length < 6;
         className={`w-full text-white font-semibold rounded-lg py-2 flex items-center justify-center gap-2 transition-all ${
           loadingOtp
             ? "bg-gray-400 cursor-not-allowed"
-            : "bg-black hover:bg-gray-900"
+            : "bg-black hover:bg-gray-900 cursor-pointer"
         }`}
       >
         {loadingOtp && <Loader2 className="animate-spin w-4 h-4" />}
@@ -463,8 +463,8 @@ const otpError = otp.length > 0 && otp.length < 6;
           disabled={loadingVerify || otp.length < 6}
           className={`w-full mt-4 font-semibold rounded-lg py-2 text-white flex items-center justify-center gap-2 transition-all ${
             loadingVerify
-              ? "bg-green-300 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-black hover:bg-gray-900 cursor-pointer"
           }`}
         >
           {loadingVerify && <Loader2 className="animate-spin w-4 h-4" />}
@@ -672,7 +672,7 @@ const otpError = otp.length > 0 && otp.length < 6;
     {/* Submit Button */}
     <button
       type="submit"
-      className="w-full mt-4 bg-black hover:bg-gray-900 text-white font-semibold py-3 rounded-md transition-all"
+      className="w-full mt-4 bg-black hover:bg-gray-900 text-white font-semibold py-3 rounded-md transition-all cursor-pointer"
     >
       Next
     </button>
@@ -833,7 +833,7 @@ const otpError = otp.length > 0 && otp.length < 6;
     <div className="pt-4">
       <button
         type="submit"
-        className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded transition"
+        className="w-full bg-black hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded transition cursor-pointer"
       >
         Next
       </button>
@@ -847,13 +847,13 @@ const otpError = otp.length > 0 && otp.length < 6;
   <div className="flex flex-col lg:flex-row gap-6 bg-white p-8 rounded-2xl shadow border border-yellow-300 max-w-4xl mx-auto">
     
     {/* Video Verification Column */}
-    <div className="flex-1 space-y-4">
+    <div className="flex-1 space-y-4 flex flex-col items-center justify-center">
       <h2 className="text-2xl font-bold text-black">Video Verification</h2>
 
       {!videoStarted ? (
         <button
           onClick={startVideoVerification}
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition cursor-pointer"
         >
           Start Video Verification
         </button>

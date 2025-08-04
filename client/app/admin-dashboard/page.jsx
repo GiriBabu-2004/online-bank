@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import { LogOut } from "lucide-react";
 export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -44,8 +44,12 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 text-black">
-      <aside className="w-64 bg-white shadow-lg p-4">
+    <div className="flex min-h-screen bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] text-black"
+      style={{
+        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundBlendMode: "overlay",
+      }}>
+      <aside className="w-64 bg-white/80 border border-yellow-400 rounded-r-3xl shadow-lg p-4">
         <h2 className="text-xl font-bold mb-4">Bank Admin</h2>
         <nav>
           <ul className="space-y-2">
@@ -62,27 +66,31 @@ export default function Dashboard() {
         {/* Top Navbar */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 gap-4">
             {admin.image ? (
               <img src={admin.image} className="w-10 h-10 rounded-full" alt="Profile" />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
+              <div className="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center justify-center text-xl font-bold">
                 {admin.email.charAt(0).toUpperCase()}
               </div>
             )}
-            <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-              Logout
+            <button className="text-red-500 cursor-pointer  hover:transform hover:scale-110 transition-transform duration-200 hover:bg-gray-200 rounded-3xl w-10 h-10 flex items-center justify-center"
+            onClick={() => {
+              localStorage.removeItem("admin");
+              router.replace("/login");
+            }}>
+              <LogOut />
             </button>
           </div>
         </div>
 
         {/* Profile Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white/80 border border-yellow-400 rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center">
             {admin.image ? (
               <img src={admin.image} className="w-20 h-20 rounded-full mr-4" alt="Profile" />
             ) : (
-              <div className="w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold mr-4">
+              <div className="w-20 h-20 rounded-full bg-orange-600 text-white flex items-center justify-center text-2xl font-bold mr-4">
                 {admin.email.charAt(0).toUpperCase()}
               </div>
             )}
@@ -94,7 +102,7 @@ export default function Dashboard() {
         </div>
 
         {/* Pending Applications */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white/80 border border-yellow-400 rounded-lg shadow-md p-6 mb-6">
           <h3 className="text-lg font-semibold mb-4">Pending Applications</h3>
           <ul>
             {pendingApplications.map((app) => (
@@ -112,7 +120,7 @@ export default function Dashboard() {
                 </div>
                 <button
                   onClick={() => router.push(`/pending-application/${app._id}`)}
-                  className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                  className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700"
                 >
                   Details
                 </button>
@@ -125,7 +133,7 @@ export default function Dashboard() {
         </div>
 
         {/* Search User Accounts */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white/80 border border-yellow-400  rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">Search User Accounts</h3>
           <div className="flex mb-4">
             <input
@@ -137,7 +145,7 @@ export default function Dashboard() {
             />
             <button
               onClick={handleSearch}
-              className="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700"
+              className="bg-orange-600 text-white px-4 py-2 rounded-r-md hover:bg-orange-700"
             >
               Search
             </button>

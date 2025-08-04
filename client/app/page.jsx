@@ -12,7 +12,7 @@ export default function Home() {
         backgroundBlendMode: "overlay",
       }}
     >
-      <Navbar className="sticky top-0 z-50 bg-white/50 backdrop-blur-sm" />
+      <Navbar className="sticky top-0 z-50 bg-white/50 backdrop-blur-sm " />
       <HeroSection />
       <JourneySection />
       <Footer />

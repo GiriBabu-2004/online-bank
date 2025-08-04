@@ -14,12 +14,12 @@ export default function Navbar({ className = "" }) {
   }, []);
 
   const borderClass = scrolled
-    ? "border-b border-green-200/30 dark:border-green-200/30"
-    : "border-b-0";
+    ? "border-b border-yellow-400 dark:border-green-200/30"
+    : "border-b border-yellow-400";
 
   return (
     <nav
-      className={`bg-white  text-black transition-all ${borderClass} ${className}`}
+      className={`bg-white/80  text-black transition-all ${borderClass} ${className}`}
     >
       <div className="max-w-screen-xl h-14 mx-auto flex items-center justify-between font-[Caveat] px-4">
         {/* Logo: light and dark variants */}
