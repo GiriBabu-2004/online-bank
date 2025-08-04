@@ -1,16 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { TextField } from "@mui/material";
-
-import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
+import Loader from "@/components/Loader";
 export default function CustomerCarePage() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // Adjust as needed
+
+    return () => clearTimeout(timeout);
+  }, []);
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(files);
@@ -59,7 +67,7 @@ export default function CustomerCarePage() {
       alert("Something went wrong!");
     }
   };
-
+if (loading) return <Loader />;
   return (
     <div className="relative min-h-screen w-full bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] bg-center"
      style={{

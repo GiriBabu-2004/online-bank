@@ -2,8 +2,11 @@
 import { motion } from 'framer-motion';
 import { Info, List, User, AlertCircle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import  {useState, useEffect } from 'react';
+import Loader from '@/components/Loader';
 import { annotate } from 'rough-notation';
+
+
 const sections = [
   {
     icon: Info,
@@ -61,8 +64,18 @@ const sections = [
     ),
   },
 ];
+  
 
 const AboutUs = () => {
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    setLoading(false);
+  }, 1000); // Adjust as needed
+
+  return () => clearTimeout(timeout);
+}, []);
      useEffect(() => {
     // Disable automatic scroll restoration
     if ('scrollRestoration' in window.history) {
@@ -82,6 +95,8 @@ const AboutUs = () => {
       }, 100);
     }
   }, []);
+
+  if (loading) return <Loader />;
   return (
     <div className="w-full min-h-screen bg-[url('/background.png')] bg-repeat bg-[length:350px_350px] bg-center "
       style={{
