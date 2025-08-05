@@ -94,7 +94,7 @@ useEffect(() => {
         annotation.show();
       }, 100);
     }
-  }, []);
+  }, [loading]);
 
   if (loading) return <Loader />;
   return (
