@@ -127,7 +127,7 @@ export default function Dashboard() {
 
     // Fetch user details from backend by email
     fetch(
-      `http://localhost:5000/api/user/by-email/${encodeURIComponent(email)}`
+      `http://online-bank-production.up.railway.app/api/user/by-email/${encodeURIComponent(email)}`
     )
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch user data");
@@ -165,7 +165,7 @@ export default function Dashboard() {
   const handleVerifyPassword = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/user/verify-password",
+        "http://online-bank-production.up.railway.app/api/user/verify-password",
         {
           method: "POST",
           headers: {

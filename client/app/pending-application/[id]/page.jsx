@@ -12,7 +12,7 @@ export default function PendingApplicationPage() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/admin/pending-applications/${id}`)
+    fetch(`http://online-bank-production.up.railway.app/api/admin/pending-applications/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Application not found");
         return res.json();
@@ -24,7 +24,7 @@ export default function PendingApplicationPage() {
   const handleAction = async (action) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/pending-applications/${id}/${action}`,
+        `http://online-bank-production.up.railway.app/api/admin/pending-applications/${id}/${action}`,
         { method: "PATCH" }
       );
       if (!res.ok) throw new Error("Action failed");

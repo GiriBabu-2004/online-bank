@@ -48,7 +48,7 @@ export default function CustomerCarePage() {
     images.forEach((img) => formData.append("images", img));
 
     try {
-      const res = await fetch("http://localhost:5000/api/support", {
+      const res = await fetch("http://online-bank-production.up.railway.app/api/support", {
         method: "POST",
         body: formData,
       });
