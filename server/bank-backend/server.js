@@ -16,5 +16,9 @@ app.use("/api/admin", require("./routes/admin"));
 app.use("/api/user", require("./routes/user"));
 app.use("/api/support", require("./routes/support"));
 
+app.get("/test", (req, res) => {
+  res.send("Welcome to the SKG Bank API");
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
