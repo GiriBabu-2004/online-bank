@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
+import toast from "react-hot-toast";
 export default function PendingApplicationPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -28,10 +28,10 @@ export default function PendingApplicationPage() {
         { method: "PATCH" }
       );
       if (!res.ok) throw new Error("Action failed");
-      alert(`Application ${action}d`);
+      toast.success(`Application ${action}d`);
       router.push("/admin-dashboard");
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

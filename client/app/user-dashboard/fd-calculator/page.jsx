@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   LineChart,
   Line,
@@ -31,7 +32,7 @@ export default function FDCalculator() {
 
   function calculateMaturity() {
     if (!principal || !rate || !tenure) {
-      alert("Please fill all fields");
+      toast.error("Please fill all fields");
       return;
     }
 

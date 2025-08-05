@@ -1,6 +1,6 @@
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-
+import { Toaster } from "react-hot-toast";
 import { Michroma, Geist, Geist_Mono, Roboto } from "next/font/google";
 import { Kanit } from 'next/font/google';
 
@@ -56,6 +56,10 @@ export default function RootLayout({ children }) {
       </head>
       <body className="antialiased">
         <SmoothScroll />
+        <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
         {children}
       </body>
     </html>

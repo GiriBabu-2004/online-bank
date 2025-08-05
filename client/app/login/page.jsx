@@ -6,16 +6,20 @@ import { motion } from "framer-motion";
 import { FaInfoCircle, FaTimes, FaEye, FaEyeSlash } from "react-icons/fa"; // icons for UX
 import { Button } from "../../components/ui/button"; // Assuming you have a Button component
 import { CardSpotlight } from "@/components/ui/card-spotlight";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react"; // Assuming you have a Loader component
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
   const [showRules, setShowRules] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -29,16 +33,18 @@ export default function LoginPage() {
       } catch {
         const text = await res.text();
         console.error("Non-JSON response:", text);
-        alert("Server returned an unexpected response");
+        toast.error("Server returned an unexpected response");
         return;
       }
 
       if (!res.ok) {
-        alert(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
         return;
       }
 
       localStorage.setItem("user", JSON.stringify({ email }));
+
+      toast.success("Login successful!");
 
       if (role === "user") {
         router.push("/user-dashboard");
@@ -47,7 +53,9 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Server error. Please try again later.");
+      toast.error("Server error. Please try again later.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -151,9 +159,11 @@ export default function LoginPage() {
             <Button
               variant="secondary"
               type="submit"
-              className="w-full bg-black text-white hover:bg-gray-900 cursor-pointer"
+              className={`w-full bg-black text-white hover:bg-gray-900  ${submitting ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+              disabled={submitting}
             >
-              Login
+              {submitting && <Loader2 className="animate-spin w-4 h-4" />}
+              {submitting ? 'Logging in...' : 'Login'}
             </Button>
           </form>
 

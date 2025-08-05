@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   PieChart,
   Pie,
@@ -39,7 +40,7 @@ export default function MutualFundCalculator() {
 
   function calculate() {
     if (!amount || !interestRate || !years) {
-      alert("Please fill amount, interest rate, and years");
+      toast.error("Please fill amount, interest rate, and years");
       return;
     }
 

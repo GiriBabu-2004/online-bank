@@ -1,13 +1,14 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
-
+import {toast} from 'react-hot-toast';
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-
+  const [submitting, setSubmitting] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
+    try {
     const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -15,7 +16,17 @@ export default function ForgotPassword() {
     });
 
     const data = await res.json();
-    setMessage(data.message);
+    if(res.ok){
+      toast.success(data.message || 'Password reset link sent successfully!');
+    } else {
+      toast.error(data.message || 'Failed to send reset link. Please try again.');
+    }
+  } catch(error){
+    toast.error('Something went wrong. Please try again later.');
+  } finally {
+    setSubmitting(false);
+    setEmail(''); // Clear the email input after submission
+  }
   };
 
   return (
@@ -53,13 +64,12 @@ export default function ForgotPassword() {
         <button
           type="submit"
           className="w-full mt-6 bg-black hover:bg-gray-800 transition-colors duration-200 text-white py-3 rounded font-medium cursor-pointer"
+          disabled={submitting}
         >
-          Send Reset Link
+          {submitting ? 'Sending...' : 'Send Reset Link'}
         </button>
 
-        {message && (
-          <p className="mt-4 text-center text-green-300 font-medium">{message}</p>
-        )}
+        
       </form>
     </div>
   );

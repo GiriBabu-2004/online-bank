@@ -4,6 +4,7 @@ import Link from "next/link";
 import { TextField } from "@mui/material";
 import { MdEmail } from "react-icons/md";
 import Loader from "@/components/Loader";
+import { toast } from "react-hot-toast";
 export default function CustomerCarePage() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -55,17 +56,17 @@ export default function CustomerCarePage() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Your issue has been submitted.");
+        toast.success("Your issue has been submitted.");
         setEmail("");
         setSubject("");
         setDescription("");
         setImages([]);
       } else {
-        alert(`Failed: ${data.message}`);
+        toast.error(`Failed: ${data.message}`);
       }
     } catch (err) {
       console.error("Error:", err);
-      alert("Something went wrong!");
+      toast.error("Something went wrong!");
     } finally {
       setSubmitting(false);
     }

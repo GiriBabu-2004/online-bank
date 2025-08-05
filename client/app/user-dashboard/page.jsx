@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Loader from "../../components/Loader";
+import toast from "react-hot-toast";
 import {
   LayoutDashboard,
   FileText,
@@ -180,7 +181,7 @@ export default function Dashboard() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || "Password verification failed");
+        toast.error(data.message || "Password verification failed");
         return;
       }
 
@@ -190,7 +191,7 @@ export default function Dashboard() {
       setInputPassword("");
     } catch (err) {
       console.error("Password check error:", err);
-      alert("Server error");
+      toast.error("Server error");
     }
   };
   const pieData = [

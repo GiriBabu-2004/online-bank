@@ -2,21 +2,20 @@
 import { useState , use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 export default function ResetPasswordPage({ params }) {
   const router = useRouter();
   const { token } = use(params);
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setError('');
-    setMessage('');
+    
 
     if (!password || !confirmPassword) {
       return setError('Both fields are required');
@@ -36,15 +35,15 @@ export default function ResetPasswordPage({ params }) {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.message || 'Something went wrong');
+        toast.error(data.message || 'Something went wrong');
       } else {
-        setMessage('Password reset successfully! Redirecting to login...');
+        toast.success('Password reset successfully! Redirecting to login...');
         setTimeout(() => {
           router.push('/login');
         }, 3000);
       }
     } catch (err) {
-      setError('Network error. Try again later.');
+      toast.error('Network error. Try again later.');
     } finally {
       setLoading(false);
     }
@@ -101,8 +100,6 @@ export default function ResetPasswordPage({ params }) {
           </button>
         </form>
 
-        {error && <p className="mt-4 text-center text-red-300 font-medium">{error}</p>}
-        {message && <p className="mt-4 text-center text-green-300 font-medium">{message}</p>}
       </div>
     </div>
   );

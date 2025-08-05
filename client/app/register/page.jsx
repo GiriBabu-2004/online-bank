@@ -5,7 +5,7 @@ import { Mail } from "lucide-react";
 import Link from "next/link";
 import {  Loader2 } from "lucide-react"; // Loader2 = Spinner
 import { motion } from "framer-motion"; 
-
+import toast from "react-hot-toast"; // For notifications
 const { Title } = Typography;
 export default function RegisterPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
@@ -59,7 +59,7 @@ const [passwordStrength, setPasswordStrength] = useState("");
 
   // Send OTP to email
   async function sendOtp() {
-  if (!email) return alert("Please enter your email");
+  if (!email) return toast.error("Please enter your email");
   setLoadingOtp(true);
   try {
     const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
@@ -70,12 +70,12 @@ const [passwordStrength, setPasswordStrength] = useState("");
     const data = await res.json();
     if (res.ok) {
       setOtpSent(true);
-      alert("OTP sent to your email.");
+      toast.success("OTP sent to your email.");
     } else {
-      alert(data.message || "Failed to send OTP");
+      toast.error(data.message || "Failed to send OTP");
     }
   } catch (err) {
-    alert("Error sending OTP: " + err.message);
+    toast.error("Error sending OTP: " + err.message);
   } finally {
     setLoadingOtp(false);
   }
@@ -93,17 +93,18 @@ async function verifyOtp() {
       body: JSON.stringify({ email, otp }),
     });
     const data = await res.json();
-    console.log("OTP Verify Response:", data); // ✅ log backend response
+    console.log("OTP Verify Response:", data); 
+    toast.success(data.message || "OTP verified successfully!"); // ✅ log backend response
     if (res.ok) {
       setOtpVerified(true);
       setStep(2); // ✅ move to Step 2
       setPersonalDetails((prev) => ({ ...prev, email }));
     } else {
-      alert(data.error || "OTP verification failed");
+      toast.error(data.error || "OTP verification failed");
     }
   } catch (err) {
     console.error("OTP Verify Error:", err);
-    alert("Network error: " + err.message);
+    toast.error("Network error: " + err.message);
   } finally {
     setLoadingVerify(false);
   }
@@ -152,11 +153,11 @@ function evaluatePasswordStrength(password) {
     const requiredFields = ["firstName", "lastName", "phone", "dob", "address"];
     for (let field of requiredFields) {
       if (!personalDetails[field]) {
-        return alert("Please fill all required fields.");
+        return toast.error("Please fill all required fields.");
       }
     }
     if (!personalDetails.termsAccepted)
-      return alert("Please accept terms and conditions.");
+      return toast.error("Please accept terms and conditions.");
     console.log(
       "Submitting personal details with email:",
       personalDetails.email
@@ -189,7 +190,7 @@ function evaluatePasswordStrength(password) {
     if (personalDetails.email) {
       formData.append("email", personalDetails.email);
     } else {
-      return alert("User email missing!");
+      return toast.error("User email missing!");
     }
 
     try {
@@ -199,12 +200,13 @@ function evaluatePasswordStrength(password) {
       });
       const data = await res.json();
       if (res.ok) {
+        toast.success("Personal details saved successfully!");
         setStep(3);
       } else {
-        alert(data.error || data.message || "Failed to save personal details");
+        toast.error(data.error || data.message || "Failed to save personal details");
       }
     } catch (err) {
-      alert("Error submitting personal details: " + err.message);
+      toast.error("Error submitting personal details: " + err.message);
     }
   }
 
@@ -221,7 +223,7 @@ function evaluatePasswordStrength(password) {
       !password ||
       password !== confirmPassword
     ) {
-      alert("Please complete required fields and ensure passwords match.");
+      toast.error("Please complete required fields and ensure passwords match.");
       return;
     }
 
@@ -241,12 +243,13 @@ function evaluatePasswordStrength(password) {
       const data = await res.json();
 
       if (res.ok) {
+        toast.success("Account details saved successfully!");
         setStep(4);
       } else {
-        alert(data.error || "Failed to save account details");
+        toast.error(data.error || "Failed to save account details");
       }
     } catch (err) {
-      alert("Error submitting account details: " + err.message);
+      toast.error("Error submitting account details: " + err.message);
     }
   }
 
@@ -290,12 +293,12 @@ function evaluatePasswordStrength(password) {
           }, 6000); // Take snapshot every 6 seconds (5 times in 30 seconds)
         };
       })
-      .catch((err) => alert("Cannot access camera: " + err.message));
+      .catch((err) => toast.error("Cannot access camera: " + err.message));
   }
 
   function uploadSnapshots(blobs) {
     if (!personalDetails.email) {
-      alert("Email missing, cannot upload verification");
+      toast.error("Email missing, cannot upload verification");
       return;
     }
 
@@ -321,11 +324,11 @@ function evaluatePasswordStrength(password) {
           );
           setStep(5);
         } else {
-          alert(data.message || "Verification upload failed.");
+          toast.error(data.message || "Verification upload failed.");
         }
       })
       .catch((err) => {
-        alert("Error uploading video snapshots: " + err.message);
+        toast.error("Error uploading video snapshots: " + err.message);
       });
   }
 
