@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const fileUpload = require('express-fileupload');
 const { submitSupport } = require('../controllers/supportController');
 
-router.post('/', submitSupport);
+// Apply fileUpload ONLY for this route
+router.post('/', fileUpload(), submitSupport);
 
 module.exports = router;
