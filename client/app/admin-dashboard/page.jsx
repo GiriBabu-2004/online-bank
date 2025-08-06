@@ -15,7 +15,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetch("http://online-bank-production.up.railway.app/api/admin/pending-applications")
+    fetch("https://online-bank-server.onrender.com/api/admin/pending-applications")
       .then((res) => res.json())
       .then(setPendingApplications)
       .catch((err) => console.error("Fetch error:", err));

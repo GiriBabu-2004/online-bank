@@ -127,7 +127,7 @@ export default function Dashboard() {
 
     // Fetch user details from backend by email
     fetch(
-      `http://online-bank-production.up.railway.app/api/user/by-email/${encodeURIComponent(email)}`
+      `https://online-bank-server.onrender.com/api/user/by-email/${encodeURIComponent(email)}`
     )
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch user data");
@@ -165,7 +165,7 @@ export default function Dashboard() {
   const handleVerifyPassword = async () => {
     try {
       const res = await fetch(
-        "http://online-bank-production.up.railway.app/api/user/verify-password",
+        "https://online-bank-server.onrender.com/api/user/verify-password",
         {
           method: "POST",
           headers: {

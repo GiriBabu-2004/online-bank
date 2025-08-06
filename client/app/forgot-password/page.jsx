@@ -9,7 +9,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setSubmitting(true);
     try {
-    const res = await fetch('http://online-bank-production.up.railway.app/api/auth/forgot-password', {
+    const res = await fetch('https://online-bank-server.onrender.com/api/auth/forgot-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),

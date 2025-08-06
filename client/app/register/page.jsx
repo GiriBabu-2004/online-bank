@@ -85,7 +85,7 @@ async function verifyOtp() {
   if (otp.length !== 6) return alert("Enter 6-digit OTP");
   setLoadingVerify(true);
   try {
-    const res = await fetch("http://online-bank-production.up.railway.app/api/auth/verify-otp", {
+    const res = await fetch("https://online-bank-server.onrender.com/api/auth/verify-otp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -229,7 +229,7 @@ function evaluatePasswordStrength(password) {
 
     try {
       const res = await fetch(
-        "http://online-bank-production.up.railway.app/api/register/account-details",
+        "https://online-bank-server.onrender.com/api/register/account-details",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
