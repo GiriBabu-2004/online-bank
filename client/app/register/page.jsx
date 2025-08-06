@@ -62,7 +62,7 @@ const [passwordStrength, setPasswordStrength] = useState("");
   if (!email) return toast.error("Please enter your email");
   setLoadingOtp(true);
   try {
-    const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
+    const res = await fetch(`https://online-bank-server.onrender.com/api/auth/send-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -194,7 +194,7 @@ function evaluatePasswordStrength(password) {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/api/register/personal-details`, {
+      const res = await fetch(`https://online-bank-server.onrender.com/api/register/personal-details`, {
         method: "POST",
         body: formData,
       });
@@ -312,7 +312,7 @@ function evaluatePasswordStrength(password) {
     });
     formData.append("email", personalDetails.email);
 
-    fetch(`${API_BASE}/api/register/video-verification`, {
+    fetch(`https://online-bank-server.onrender.com/api/register/video-verification`, {
       method: "POST",
       body: formData,
     })
